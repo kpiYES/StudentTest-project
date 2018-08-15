@@ -1,6 +1,6 @@
 package com.app.dao.mySQLImpl;
 
-import com.app.dao.IAbstractDAO;
+import com.app.dao.AbstractDAO;
 import com.app.util.ConnectionPool;
 
 import java.io.Serializable;
@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public abstract class AbstractDAOImpl<T extends Serializable> implements IAbstractDAO<T> {
+public abstract class AbstractDAOImpl<T extends Serializable> implements AbstractDAO<T> {
 
     @Override
     public Long insert(T entity) {
@@ -43,9 +43,9 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements IAbstra
     }
 
     @Override
-    public T getById(Long id) {
+    public T findById(Long id) {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = getByIdStatement(connection, id);
+             PreparedStatement preparedStatement = getFindByIdStatement(connection, id);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractFromResultSet(resultSet);
         } catch (SQLException e) {
@@ -59,7 +59,7 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements IAbstra
 
     abstract PreparedStatement getDeleteStatement(Connection connection, T entity) throws SQLException;
 
-    abstract PreparedStatement getByIdStatement(Connection connection, Long entity_id) throws SQLException;
+    abstract PreparedStatement getFindByIdStatement(Connection connection, Long entity_id) throws SQLException;
 
     abstract T extractFromResultSet(ResultSet resultSet) throws SQLException;
 }

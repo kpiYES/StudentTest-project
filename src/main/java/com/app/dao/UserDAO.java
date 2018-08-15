@@ -2,7 +2,7 @@ package com.app.dao;
 
 import com.app.model.User;
 
-public interface IUserDAO {
+public interface UserDAO {
 
     Long insert(User user);
 
@@ -10,8 +10,8 @@ public interface IUserDAO {
 
     void delete(User user);
 
-    User getById(Long user_id);
+    User findById(Long user_id);
 
-    User getByMail(String email);
+    User findByMail(String mail);
 
 }

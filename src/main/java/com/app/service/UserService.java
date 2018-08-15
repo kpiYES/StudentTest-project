@@ -5,9 +5,7 @@ import com.app.model.User;
 
 public interface UserService {
 
-    User getByMail(String mail);
+    User findByMail(String mail);
 
     boolean validateUserPassword(String password, User user);
-
-    UserDTO constructUserDTO(User user);
 }

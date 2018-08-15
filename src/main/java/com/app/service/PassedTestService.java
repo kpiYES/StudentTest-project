@@ -1,14 +1,18 @@
-package com.app.dao;
+package com.app.service;
 
 import com.app.model.PassedTest;
 
-public interface IPassedTestDAO {
+public interface PassedTestService {
 
     Long insert(PassedTest passedTest);
 
+
     void update(PassedTest passedTest);
+
 
     void delete(PassedTest passedTest);
 
+
     PassedTest getById(Long id);
+
 }

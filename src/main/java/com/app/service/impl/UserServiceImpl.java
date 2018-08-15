@@ -1,8 +1,7 @@
 package com.app.service.impl;
 
 import com.app.dao.DAOFactory;
-import com.app.dao.IUserDAO;
-import com.app.dto.UserDTO;
+import com.app.dao.UserDAO;
 import com.app.exceptions.PasswordValidationException;
 import com.app.model.User;
 import com.app.service.UserService;
@@ -14,12 +13,12 @@ import java.security.spec.InvalidKeySpecException;
 public class UserServiceImpl implements UserService {
 
     private DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
-    private IUserDAO userDAO = daoFactory.getUserDAO();
+    private UserDAO userDAO = daoFactory.getUserDAO();
 
     @Override
-    public User getByMail(String mail) {
+    public User findByMail(String mail) {
 
-        User user = userDAO.getByMail(mail);
+        User user = userDAO.findByMail(mail);
 
         //for what assert
 
@@ -31,23 +30,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean validateUserPassword(String password, User user){
+    public boolean validateUserPassword(String password, User user) {
 
         try {
             return PasswordSecurity.validatePassword(password, user.getHash(), user.getSalt());
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new PasswordValidationException( "Invalid password exception",e);
+            throw new PasswordValidationException("Invalid password exception", e);
         }
-    }
-
-
-    public UserDTO constructUserDTO(User user){
-        UserDTO userDTO = new  UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setFistName(user.getFistName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setMail(user.getMail());
-        userDTO.setRole(user.getRole().getName());
-        return userDTO;
     }
 }

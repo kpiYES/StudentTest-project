@@ -13,6 +13,6 @@ public interface QuestionService {
     void delete(Question question);
 
 
-    Question getById(Long question_id);
+    Question getById(Long id);
 
 }

@@ -1,8 +1,8 @@
-package com.app.dao;
+package com.app.service;
 
 import com.app.model.Test;
 
-public interface ITestDAO {
+public interface TestService {
 
     Long insert(Test test);
 
@@ -10,5 +10,6 @@ public interface ITestDAO {
 
     void delete(Test test);
 
-    Test getById(Long id);
+    Test findById(Long id);
+
 }

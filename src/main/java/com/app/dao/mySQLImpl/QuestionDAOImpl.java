@@ -1,6 +1,6 @@
 package com.app.dao.mySQLImpl;
 
-import com.app.dao.IQuestionDAO;
+import com.app.dao.QuestionDAO;
 import com.app.model.Question;
 import com.app.model.Subject;
 
@@ -9,19 +9,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements IQuestionDAO {
+public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements QuestionDAO {
 
-    private static final String INSERT_QUERY = "INSERT INTO studenttest_app.question (question_id, subject_id, query, answer_1, answer_2, answer_3, answer_4, correct_answer)\n" +
-            "VALUES (NULL, ?, ?,?,?,?,?,?)";
+    private static final String INSERT_QUERY = "INSERT INTO studenttest_app.question (question_id, subject_id, query, answer_1, answer_2, answer_3, answer_4, correct_answer)" +
+            " VALUES (NULL, ?, ?,?,?,?,?,?)";
 
     private static final String UPDATE_QUERY = "UPDATE studenttest_app.question SET subject_id = ?, query = ?, answer_1 = ?, answer_2 = ?, answer_3 = ?, answer_4 = ?, correct_answer = ? WHERE question_id = ?";
 
     private static final String DELETE_QUERY = "DELETE FROM studenttest_app.question WHERE question_id = ? AND subject_id = ? AND query = ? AND answer_1 = ? AND answer_2 = ? AND answer_3 = ? AND answer_4 = ? AND correct_answer = ?";
 
-    private static final String GET_BY_ID_QUERY = "SELECT q.question_id, s.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer\n" +
-            "FROM studenttest_app.question q INNER JOIN studenttest_app.subject s\n" +
-            "ON q.subject_id = s.subject_id\n" +
-            "WHERE q.question_id = ?";
+    private static final String FIND_BY_ID_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer" +
+            " FROM studenttest_app.question q INNER JOIN studenttest_app.subject s" +
+            " ON q.subject_id = s.subject_id" +
+            " WHERE q.question_id = ?";
 
     @Override
     public Long insert(Question question) {
@@ -39,13 +39,13 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements IQuest
     }
 
     @Override
-    public Question getById(Long id) {
-        return super.getById(id);
+    public Question findById(Long id) {
+        return super.findById(id);
     }
 
     @Override
     PreparedStatement getInsertStatement(Connection connection, Question question) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY);
+        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
         preparedStatement.setLong(1, question.getSubject().getId());
         preparedStatement.setString(2, question.getQuery());
         preparedStatement.setString(3, question.getAnswer1());
@@ -85,8 +85,8 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements IQuest
     }
 
     @Override
-    PreparedStatement getByIdStatement(Connection connection, Long question_id) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID_QUERY);
+    PreparedStatement getFindByIdStatement(Connection connection, Long question_id) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY);
         preparedStatement.setLong(1, question_id);
         return preparedStatement;
     }
@@ -95,17 +95,14 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements IQuest
     Question extractFromResultSet(ResultSet resultSet) throws SQLException {
         Question question = new Question();
         if (resultSet.next()) {
-            question.setId(resultSet.getLong("question_id"));
-            question.setSubject(new Subject(resultSet.getLong("subject_id"), resultSet.getString("name")));
-            question.setQuery(resultSet.getString("query"));
-            question.setAnswer1(resultSet.getString("answer_1"));
-            question.setAnswer2(resultSet.getString("answer_2"));
-            question.setAnswer3(resultSet.getString("answer_3"));
-            question.setAnswer4(resultSet.getString("answer_4"));
-            question.setCorrectAnswer(resultSet.getInt("correct_answer"));
-
-            //getInt??
-
+            question.setId(resultSet.getLong("q.question_id"));
+            question.setSubject(new Subject(resultSet.getLong("q.subject_id"), resultSet.getString("s.name")));
+            question.setQuery(resultSet.getString("q.query"));
+            question.setAnswer1(resultSet.getString("q.answer_1"));
+            question.setAnswer2(resultSet.getString("q.answer_2"));
+            question.setAnswer3(resultSet.getString("q.answer_3"));
+            question.setAnswer4(resultSet.getString("q.answer_4"));
+            question.setCorrectAnswer(resultSet.getInt("q.correct_answer"));
         }
         return question;
     }

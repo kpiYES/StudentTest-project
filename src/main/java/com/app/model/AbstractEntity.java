@@ -3,9 +3,10 @@ package com.app.model;
 import java.io.Serializable;
 
 abstract class AbstractEntity implements Serializable {
+
     private Long id;
 
-    public AbstractEntity(){}
+    public AbstractEntity() { }
 
     public AbstractEntity(Long id) {
         this.id = id;

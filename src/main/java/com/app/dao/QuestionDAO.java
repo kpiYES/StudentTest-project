@@ -2,7 +2,7 @@ package com.app.dao;
 
 import com.app.model.Question;
 
-public interface IQuestionDAO {
+public interface QuestionDAO {
 
     Long insert(Question question);
 
@@ -10,5 +10,5 @@ public interface IQuestionDAO {
 
     void delete(Question question);
 
-    Question getById(Long question_id);
+    Question findById(Long question_id);
 }

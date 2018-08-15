@@ -20,7 +20,7 @@ public class PasswordSecurity {
 
         char[] chars = password.toCharArray();
         byte[] salt = getSalt();
-        byte[] hash = pbkdf2(chars,salt,HASH_BYTES);
+        byte[] hash = pbkdf2(chars, salt, HASH_BYTES);
         return toHex(salt) + ":" + toHex(hash);
     }
 
@@ -28,7 +28,7 @@ public class PasswordSecurity {
 
         byte[] salt = fromHex(storedSalt);
         byte[] hash = fromHex(storedHash);
-        byte[] testHash = pbkdf2(originalPassword.toCharArray(),salt,hash.length);
+        byte[] testHash = pbkdf2(originalPassword.toCharArray(), salt, hash.length);
         return slowEquals(hash, testHash);
     }
 

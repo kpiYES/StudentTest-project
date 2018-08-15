@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS user (
   role_id   INT UNSIGNED,
   first_name VARCHAR(30),
   last_name  VARCHAR(30),
-  mail       VARCHAR(50) UNIQUE,
+  mail       VARCHAR(50) UNIQUE NOT NULL ,
   salt       VARCHAR(128) NOT NULL,
   hash       VARCHAR(256) NOT NULL,
   FOREIGN KEY (role_id) REFERENCES role (role_id)
@@ -76,10 +76,8 @@ CREATE TABLE IF NOT EXISTS passed_test (
 
 CREATE TABLE IF NOT EXISTS passed_question (
   passed_question_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  passed_test_id INT UNSIGNED,
   question_id INT UNSIGNED,
   user_answer TINYINT(1),
-  FOREIGN KEY (passed_test_id) REFERENCES passed_test(passed_test_id),
   FOREIGN KEY (question_id) REFERENCES question(question_id)
 )
   ENGINE = InnoDB

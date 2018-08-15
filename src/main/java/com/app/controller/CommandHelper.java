@@ -12,6 +12,10 @@ public class CommandHelper {
 
     CommandHelper() {
         commandsMap.put("login", new LoginCommand());
+        commandsMap.put("createPassedTest", new CreatePassedTestCommand());
+        commandsMap.put("createQuestion", new CreateQuestionCommand());
+        commandsMap.put("createTest", new CreateTestCommand());
+        commandsMap.put("getTestForPassing", new GetTestForPassing());
     }
 
     Command chooseCommand(HttpServletRequest request) {

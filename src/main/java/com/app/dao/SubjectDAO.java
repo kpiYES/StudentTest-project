@@ -2,14 +2,15 @@ package com.app.dao;
 
 import com.app.model.Subject;
 
-public interface ISubjectDAO {
+public interface SubjectDAO {
+
     Long insert(Subject subject);
 
     void update(Subject subject);
 
     void delete(Subject subject);
 
-    Subject getById(Long subject_id);
+    Subject findById(Long subject_id);
 
-    Subject getByName(String name);
+    Subject findByName(String name);
 }

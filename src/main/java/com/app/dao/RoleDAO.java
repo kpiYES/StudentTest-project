@@ -2,7 +2,7 @@ package com.app.dao;
 
 import com.app.model.Role;
 
-public interface IRoleDAO {
+public interface RoleDAO {
 
     Long insert(Role role);
 
@@ -10,6 +10,5 @@ public interface IRoleDAO {
 
     void delete(Role role);
 
-    Role getById(Long role_id);
-
+    Role findById(Long role_id);
 }

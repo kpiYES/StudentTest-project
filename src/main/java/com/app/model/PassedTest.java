@@ -8,7 +8,6 @@ public class PassedTest extends AbstractEntity {
     private User user;
     private Test test;
     private Integer mark;
-    private Set<PassedQuestion> passedQuestionSet;
 
     public PassedTest() {
     }
@@ -18,7 +17,6 @@ public class PassedTest extends AbstractEntity {
         this.user = user;
         this.test = test;
         this.mark = mark;
-        this.passedQuestionSet = passedQuestionSet;
     }
 
     public Integer getMark() {
@@ -45,11 +43,4 @@ public class PassedTest extends AbstractEntity {
         this.test = test;
     }
 
-    public Set<PassedQuestion> getPassedQuestionSet() {
-        return passedQuestionSet;
-    }
-
-    public void setPassedQuestionSet(Set<PassedQuestion> passedQuestionSet) {
-        this.passedQuestionSet = passedQuestionSet;
-    }
 }

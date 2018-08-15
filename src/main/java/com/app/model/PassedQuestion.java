@@ -2,26 +2,16 @@ package com.app.model;
 
 public class PassedQuestion extends AbstractEntity {
 
-    private PassedTest passedTest;
     private Question question;
     private Integer userAnswer;
 
-    public PassedQuestion(){
+    public PassedQuestion() {
     }
 
-    public PassedQuestion(Long id, PassedTest passedTest, Question question, Integer userAnswer) {
+    public PassedQuestion(Long id, Question question, Integer userAnswer) {
         super(id);
-        this.passedTest = passedTest;
         this.question = question;
         this.userAnswer = userAnswer;
-    }
-
-    public PassedTest getPassedTest() {
-        return passedTest;
-    }
-
-    public void setPassedTest(PassedTest passedTest) {
-        this.passedTest = passedTest;
     }
 
     public Question getQuestion() {

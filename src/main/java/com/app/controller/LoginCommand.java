@@ -1,5 +1,6 @@
 package com.app.controller;
 
+import com.app.dto.DTOHandler;
 import com.app.dto.UserDTO;
 import com.app.model.User;
 import com.app.service.UserService;
@@ -20,7 +21,7 @@ public class LoginCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-        User user = userService.getByMail(request.getParameter("email"));
+        User user = userService.findByMail(request.getParameter("email"));
 
         if (user == null) {
             request.setAttribute("errorMsg", "Unknown email. Please retry.");
@@ -29,7 +30,7 @@ public class LoginCommand implements Command {
             request.setAttribute("errorMsg", "Incorrect password. Please retry.");
             return "index.jsp";
         }else{
-            UserDTO userDTO = userService.constructUserDTO(user);
+            UserDTO userDTO = DTOHandler.constructUserDTO(user);
             request.getSession().setAttribute("user", userDTO);
 
             switch (userDTO.getRole()) {
