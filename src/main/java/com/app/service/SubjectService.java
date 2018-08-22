@@ -2,6 +2,8 @@ package com.app.service;
 
 import com.app.model.Subject;
 
+import java.util.Set;
+
 public interface SubjectService {
 
     Long insert(Subject subject);
@@ -12,5 +14,8 @@ public interface SubjectService {
 
     Subject findById(Long id);
 
+    Set<Subject> findAll();
+
     Subject findByName(String name);
+
 }

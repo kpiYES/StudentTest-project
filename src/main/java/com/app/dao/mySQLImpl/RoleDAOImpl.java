@@ -1,23 +1,29 @@
 package com.app.dao.mySQLImpl;
 
 import com.app.dao.RoleDAO;
+import com.app.model.Question;
 import com.app.model.Role;
+import com.app.util.DataSource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Set;
 
 public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
 
-    private static final String INSERT_QUERY = "INSERT INTO studenttest_app.role (role_id, name) VALUES (NULL, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO studenttest_app.role  (role_id, name) VALUES (NULL, ?)";
 
-    private static final String UPDATE_QUERY = "UPDATE studenttest_app.role SET name = ? WHERE role_id = ?";
+    private static final String UPDATE_QUERY = "UPDATE studenttest_app.role r SET r.name = ? WHERE r.role_id = ?";
 
-    private static final String DELETE_QUERY = "DELETE FROM studenttest_app.role WHERE role_id = ? AND name = ?";
+    private static final String DELETE_QUERY = "DELETE FROM studenttest_app.role r WHERE r.role_id = ? AND r.name = ?";
 
-    private static final String FIND_BY_ID_QUERY = "SELECT role_id, name FROM studenttest_app.role WHERE role_id = ?";
+    private static final String FIND_BY_ID_QUERY = "SELECT r.role_id, r.name FROM studenttest_app.role r WHERE r.role_id = ?";
 
+    private static final String FIND_ALL_QUERY = "SELECT r.role_id, r.name FROM studenttest_app.role r";
+
+    private static final String FIND_BY_NAME = "SELECT r.role_id, r.name FROM studenttest_app.role r WHERE r.name = ?";
 
     @Override
     public Long insert(Role role) {
@@ -37,6 +43,22 @@ public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
     @Override
     public Role findById(Long id) {
         return super.findById(id);
+    }
+
+    @Override
+    public Set<Role> findAll() {
+        return super.findAll();
+    }
+
+@Override
+    public Role findByName(String name) {
+        try (Connection connection = DataSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = getFindByNameStatement(connection, name);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            return extractEntityFromResultSet(resultSet);
+        } catch (SQLException e) {
+            throw new RuntimeException("Couldn't get role by name", e);
+        }
     }
 
     @Override
@@ -70,12 +92,28 @@ public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
     }
 
     @Override
-    Role extractFromResultSet(ResultSet resultSet) throws SQLException {
+    PreparedStatement getFindAllStatement(Connection connection) throws SQLException {
+        return connection.prepareStatement(FIND_ALL_QUERY);
+    }
+
+   private PreparedStatement getFindByNameStatement(Connection connection, String name) throws SQLException{
+        PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_NAME);
+        preparedStatement.setString(1, name);
+        return preparedStatement;
+    }
+
+    @Override
+    Role extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
         Role role = new Role();
         if (resultSet.next()) {
             role.setId(resultSet.getLong("role_id"));
             role.setName(resultSet.getString("name"));
         }
         return role;
+    }
+
+    @Override
+    Set<Role> extractSetOfEntityFromResultSet(ResultSet resultSet) throws SQLException {
+        return super.extractSetOfEntityFromResultSet(resultSet);
     }
 }

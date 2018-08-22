@@ -3,6 +3,7 @@ package com.app.dao;
 import com.app.dao.mySQLImpl.*;
 
 public class MySQLDAOFactory extends DAOFactory {
+
     @Override
     public UserDAO getUserDAO() {
         return new UserDAOImpl();

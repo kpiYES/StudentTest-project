@@ -1,6 +1,9 @@
 package com.app.dao;
 
 import com.app.model.Role;
+import com.app.model.User;
+
+import java.util.Set;
 
 public interface RoleDAO {
 
@@ -11,4 +14,8 @@ public interface RoleDAO {
     void delete(Role role);
 
     Role findById(Long role_id);
+
+    Set<Role> findAll();
+
+    Role findByName(String name);
 }

@@ -1,0 +1,41 @@
+.vertical-menu {
+    width: 400px;
+    height: 170px;
+    overflow-x: auto;
+    font-size: 14pt;
+    display: inline-block;
+    float: left;
+    margin-right: 150px;
+    margin-left: 60px;
+}
+
+.vertical-menu a {
+    background-color: #eee; /* Grey background color */
+    color: black; /* Black text color */
+    display: block; /* Make the links appear below each other */
+    padding: 12px; /* Add some padding */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.vertical-menu a:hover {
+    background-color: #ccc; /* Dark grey background on mouse-over */
+}
+
+.admin_menu {
+    width: 100px;
+    padding: 20px; /* Поля вокруг текста */
+    border: 5px solid black; /* Параметры границы */
+    background: #66ff66; /* Цвет фона */
+    text-align: center; /* расположение текста*/
+    font-size: 18pt; /* Размер шрифта */
+    display: inline-block;
+    float: left;
+
+}
+
+.user_form {
+    display: inline-block;
+    float: left;
+}
+
+

@@ -1,11 +1,18 @@
 package com.app.dao;
 
+import com.app.model.PassedQuestion;
+import com.app.model.User;
+
+import java.util.Set;
+
 public interface PassedQuestionDAO {
-    Long insert(com.app.model.PassedQuestion passedQuestion);
+    Long insert(PassedQuestion passedQuestion);
 
-    void update(com.app.model.PassedQuestion passedQuestion);
+    void update(PassedQuestion passedQuestion);
 
-    void delete(com.app.model.PassedQuestion passedQuestion);
+    void delete(PassedQuestion passedQuestion);
 
-    com.app.model.PassedQuestion findById(Long id);
+    PassedQuestion findById(Long id);
+
+    Set<PassedQuestion> findAll();
 }

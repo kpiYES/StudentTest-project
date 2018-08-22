@@ -22,8 +22,7 @@ public class LoginCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
         User user = userService.findByMail(request.getParameter("email"));
-
-        if (user == null) {
+        if (user.getMail() == null) {
             request.setAttribute("errorMsg", "Unknown email. Please retry.");
         return "index.jsp";
         }else if (!userService.validateUserPassword(request.getParameter("password"), user)){
@@ -31,9 +30,8 @@ public class LoginCommand implements Command {
             return "index.jsp";
         }else{
             UserDTO userDTO = DTOHandler.constructUserDTO(user);
-            request.getSession().setAttribute("user", userDTO);
-
-            switch (userDTO.getRole()) {
+            request.getSession().setAttribute("currentUser", userDTO);
+            switch (userDTO.getRole().getName()) {
                 case "admin":
                     return "admin.jsp";
                 case "student":

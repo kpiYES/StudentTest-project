@@ -12,11 +12,10 @@ public class Test extends AbstractEntity {
     public Test() {
     }
 
-    public Test(Long id, String name, Subject subject, Set<Question> questionSet) {
+    public Test(Long id, Subject subject, String name) {
         super(id);
         this.name = name;
         this.subject = subject;
-        this.questionSet = questionSet;
     }
 
     public Subject getSubject() {

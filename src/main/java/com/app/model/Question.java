@@ -13,6 +13,34 @@ public class Question extends AbstractEntity {
     private Integer correctAnswer;
     private Set<Test> testSet;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Question)) return false;
+
+        Question question = (Question) o;
+
+        if (!subject.equals(question.subject)) return false;
+        if (!query.equals(question.query)) return false;
+        if (!answer1.equals(question.answer1)) return false;
+        if (!answer2.equals(question.answer2)) return false;
+        if (answer3 != null ? !answer3.equals(question.answer3) : question.answer3 != null) return false;
+        if (answer4 != null ? !answer4.equals(question.answer4) : question.answer4 != null) return false;
+        return correctAnswer.equals(question.correctAnswer);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = subject.hashCode();
+        result = 31 * result + query.hashCode();
+        result = 31 * result + answer1.hashCode();
+        result = 31 * result + answer2.hashCode();
+        result = 31 * result + (answer3 != null ? answer3.hashCode() : 0);
+        result = 31 * result + (answer4 != null ? answer4.hashCode() : 0);
+        result = 31 * result + correctAnswer.hashCode();
+        return result;
+    }
+
     public Question() {
     }
 

@@ -10,8 +10,29 @@
 <html>
 <head>
     <title>Title</title>
+    <link href="css/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-admin
+
+
+
+<div class="admin_menu">
+    <a href="dispatcher?command=toShowListOfUsersFragment">Users</a>
+</div>
+<div class="admin_menu">
+    <a href="dispatcher?command=toShowListOfSubjectsFragment">Tests</a>
+</div>
+<div class="admin_menu">
+    <a href="dispatcher?command=toShowQuestionsFragment">Questions</a>
+</div>
+<c:if test="${requestScope.pageFragment!=null}">
+    <c:import url="${requestScope.pageFragment}"/>
+</c:if>
+
+
+
+
+
+
 </body>
 </html>

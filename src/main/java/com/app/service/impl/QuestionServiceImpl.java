@@ -5,6 +5,8 @@ import com.app.dao.QuestionDAO;
 import com.app.model.Question;
 import com.app.service.QuestionService;
 
+import java.util.Set;
+
 public class QuestionServiceImpl implements QuestionService {
 
     private DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
@@ -26,7 +28,33 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question getById(Long question_id) {
+    public Question findById(Long question_id) {
         return questionDAO.findById(question_id);
     }
+
+    @Override
+    public Set<Question> findAll() {
+        return questionDAO.findAll();
+    }
+
+    @Override
+    public Set<Question> findAllBySubjectIdWithPagination(Long id, int limit, int offset) {
+        return questionDAO.findAllBySubjectIdWithPagination(id, limit, offset);
+    }
+
+    @Override
+    public Set<Question> findAllBySubjectId(Long id) {
+        return questionDAO.findAllBySubjectId(id);
+    }
+
+    @Override
+    public Set<Question> findAllByTestId(Long id){
+        return questionDAO.findAllByTestId(id);
+    }
+
+    @Override
+    public Set<Question> findAllByTestIdWithPagination(Long id, int limit, int offset){
+        return questionDAO.findAllByTestIdWithPagination(id, limit, offset);
+    }
+
 }

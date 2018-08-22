@@ -16,12 +16,27 @@ public class PasswordSecurity {
     private static final int HASH_BYTES = 128;
 
 
-    public static String generetePasswordHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-
+    public static String generateSaltedPasswordHash(String password) {
         char[] chars = password.toCharArray();
-        byte[] salt = getSalt();
-        byte[] hash = pbkdf2(chars, salt, HASH_BYTES);
-        return toHex(salt) + ":" + toHex(hash);
+        byte[] salt = new byte[0];
+        try {
+            salt = getSalt();
+            byte[] hash = pbkdf2(chars, salt, HASH_BYTES);
+            return toHex(salt) + ":" + toHex(hash);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+           throw  new RuntimeException(e);
+        }
+    }
+
+
+    public static String getHashFromSaltedHash(String saltedPassword){
+        String[] strings = saltedPassword.split(":");
+        return strings[1];
+    }
+
+    public static String getSaltFromSaltedHash(String saltedPassword){
+       String[] strings = saltedPassword.split(":");
+        return strings[0];
     }
 
     public static boolean validatePassword(String originalPassword, String storedHash, String storedSalt) throws NoSuchAlgorithmException, InvalidKeySpecException {

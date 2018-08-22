@@ -9,11 +9,41 @@ import com.app.util.PasswordSecurity;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+import java.util.Set;
 
 public class UserServiceImpl implements UserService {
 
     private DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
     private UserDAO userDAO = daoFactory.getUserDAO();
+
+    @Override
+    public Long insert(User user) {
+        return userDAO.insert(user);
+    }
+
+    @Override
+    public void update(User user) {
+        userDAO.update(user);
+    }
+
+    @Override
+    public void delete(User user) {
+        userDAO.delete(user);
+    }
+
+    @Override
+    public User findById(Long id) {
+        return userDAO.findById(id);
+    }
+
+    @Override
+    public Set<User> findAll() {
+        Set<User> userSet = userDAO.findAll();
+
+
+        return userSet;
+    }
 
     @Override
     public User findByMail(String mail) {
@@ -23,15 +53,17 @@ public class UserServiceImpl implements UserService {
         //for what assert
 
 //        Assert.isNotNull(user, "Error - user is null");
-        System.out.println(2.5);
 //        Assert.isNotNull(user.getRole(), "Error - role is null");
-        System.out.println(3);
         return user;
     }
 
+//    @Override
+//    public void updateByRoleName(User user, String roleName) {
+//        userDAO.updateByRoleName(user, roleName);
+//    }
+
     @Override
     public boolean validateUserPassword(String password, User user) {
-
         try {
             return PasswordSecurity.validatePassword(password, user.getHash(), user.getSalt());
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {

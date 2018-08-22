@@ -1,11 +1,14 @@
 package com.app.dto;
 
+import com.app.model.Role;
+
 public class UserDTO {
     private Long id;
-    private String fistName;
+    private String firstName;
     private String lastName;
     private String mail;
-    private String role;
+    private Role role;
+
 
     public Long getId() {
         return id;
@@ -15,12 +18,12 @@ public class UserDTO {
         this.id = id;
     }
 
-    public String getFistName() {
-        return fistName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFistName(String fistName) {
-        this.fistName = fistName;
+    public void setFirstName(String fistName) {
+        this.firstName = fistName;
     }
 
     public String getLastName() {
@@ -39,11 +42,21 @@ public class UserDTO {
         this.mail = mail;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "fistName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", mail='" + mail + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }

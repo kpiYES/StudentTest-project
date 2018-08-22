@@ -10,24 +10,29 @@
 <html>
 <head>
     <title>Title</title>
+    <link href="css/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
-<div class="rightForm">
-    <form method="post" action="dispatcher" enctype="multipart/form-data">
-        <p> Fill out this form, if yot want to add new question </p>
-        <p> All fields are necessary! </p>
-        <select name="subject">
-            <option disabled selected>Choose subject</option>
-            <option value="To dataChange">editor</option>
-            <option value="To mainPage">user</option>
-        </select>
-        <p> Name: <input type="text" placeholder="Frank Darabont" name="name" size="30"></p>
-        <p> Day of birth: <input type="text" placeholder="1965-03-25" name="day_of_birth" size="30"></p>
-        <p> Image: <input type="file"  name="image" size="30"></p>
-        <input type="submit" name="command" value="Create director">
-    </form>
+
+
+<div class="admin_menu">
+    <a href="dispatcher?command=toShowListOfUsersFragment">Users</a>
 </div>
+<div class="admin_menu">
+    <a href="dispatcher?command=toShowListOfSubjectsFragment">Tests</a>
+</div>
+<div class="admin_menu">
+    <a href="dispatcher?command=toShowQuestionsFragment">Questions</a>
+</div>
+<c:if test="${requestScope.pageFragment!=null}">
+    <c:import url="${requestScope.pageFragment}"/>
+</c:if>
+
+
+
+
+
 
 </body>
 </html>

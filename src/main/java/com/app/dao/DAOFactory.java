@@ -1,6 +1,5 @@
 package com.app.dao;
 
-import com.app.model.PassedQuestion;
 
 public abstract class DAOFactory {
 

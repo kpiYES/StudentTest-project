@@ -1,6 +1,9 @@
 package com.app.dao;
 
 import com.app.model.PassedTest;
+import com.app.model.User;
+
+import java.util.Set;
 
 public interface PassedTestDAO {
 
@@ -11,4 +14,8 @@ public interface PassedTestDAO {
     void delete(PassedTest passedTest);
 
     PassedTest findById(Long id);
+
+    Set<PassedTest> findAll();
+
+    Set<PassedTest> findByUserId(Long id);
 }

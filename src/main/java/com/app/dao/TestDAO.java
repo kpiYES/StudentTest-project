@@ -1,6 +1,9 @@
 package com.app.dao;
 
 import com.app.model.Test;
+import com.app.model.User;
+
+import java.util.Set;
 
 public interface TestDAO {
 
@@ -11,4 +14,10 @@ public interface TestDAO {
     void delete(Test test);
 
     Test findById(Long id);
+
+    Set<Test> findAll();
+
+    Set<Test> findAllBySubjectId(Long id);
+
+    void connectTestAndQuestions(Test test);
 }

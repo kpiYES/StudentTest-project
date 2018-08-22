@@ -5,13 +5,19 @@ import java.util.Set;
 public class User extends AbstractEntity {
 
     private Role role;
-    private String fistName;
+    private String firstName;
     private String lastName;
     private String mail;
     private String salt;
     private String hash;
     private Set<PassedTest> passedTestSet;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "mail='" + mail + '\'' +
+                '}';
+    }
 
     public User() {
     }
@@ -19,7 +25,7 @@ public class User extends AbstractEntity {
     public User(Long id, Role role, String fistName, String lastName, String mail, String salt, String hash) {
         super(id);
         this.role = role;
-        this.fistName = fistName;
+        this.firstName = fistName;
         this.lastName = lastName;
         this.mail = mail;
         this.salt = salt;
@@ -34,12 +40,12 @@ public class User extends AbstractEntity {
         this.role = role;
     }
 
-    public String getFistName() {
-        return fistName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFistName(String fistName) {
-        this.fistName = fistName;
+    public void setFirstName(String fistName) {
+        this.firstName = fistName;
     }
 
     public String getLastName() {

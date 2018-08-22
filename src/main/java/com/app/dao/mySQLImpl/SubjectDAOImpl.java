@@ -2,12 +2,13 @@ package com.app.dao.mySQLImpl;
 
 import com.app.dao.SubjectDAO;
 import com.app.model.Subject;
-import com.app.util.ConnectionPool;
+import com.app.util.DataSource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Set;
 
 public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectDAO {
 
@@ -18,6 +19,8 @@ public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectD
     private static final String DELETE_QUERY = "DELETE FROM studenttest_app.subject WHERE subject_id = ? AND name = ?";
 
     private static final String FIND_BY_ID_QUERY = "SELECT subject_id, name FROM studenttest_app.subject WHERE subject_id = ?";
+
+    private static final String FIND_ALL_QUERY = "SELECT subject_id, name FROM studenttest_app.subject";
 
     private static final String FIND_BY_NAME_QUERY = "SELECT subject_id, name FROM studenttest_app.subject WHERE name = ?";
 
@@ -41,13 +44,18 @@ public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectD
         return super.findById(id);
     }
 
+    @Override
+    public Set<Subject> findAll() {
+        return super.findAll();
+    }
+
 
     @Override()
     public Subject findByName(String name) {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        try (Connection connection = DataSource.getInstance().getConnection();
              PreparedStatement preparedStatement = getFindByNameStatement(connection, name);
              ResultSet resultSet = preparedStatement.executeQuery()) {
-            return extractFromResultSet(resultSet);
+            return extractEntityFromResultSet(resultSet);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -77,14 +85,25 @@ public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectD
     }
 
     @Override
-    PreparedStatement getFindByIdStatement(Connection connection, Long subject_id) throws SQLException {
+    PreparedStatement getFindByIdStatement(Connection connection, Long id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY);
-        preparedStatement.setLong(1, subject_id);
+        preparedStatement.setLong(1, id);
         return preparedStatement;
     }
 
     @Override
-    Subject extractFromResultSet(ResultSet resultSet) throws SQLException {
+    PreparedStatement getFindAllStatement(Connection connection) throws SQLException {
+        return connection.prepareStatement(FIND_ALL_QUERY);
+    }
+
+    private PreparedStatement getFindByNameStatement(Connection connection, String name) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_NAME_QUERY);
+        preparedStatement.setString(1, name);
+        return preparedStatement;
+    }
+
+    @Override
+    Subject extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
         Subject subject = new Subject();
         if (resultSet.next()) {
             subject.setId(resultSet.getLong("subject_id"));
@@ -93,9 +112,8 @@ public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectD
         return subject;
     }
 
-    private PreparedStatement getFindByNameStatement(Connection connection, String name) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_NAME_QUERY);
-        preparedStatement.setString(1, name);
-        return preparedStatement;
+    @Override
+    Set<Subject> extractSetOfEntityFromResultSet(ResultSet resultSet) throws SQLException {
+        return super.extractSetOfEntityFromResultSet(resultSet);
     }
 }

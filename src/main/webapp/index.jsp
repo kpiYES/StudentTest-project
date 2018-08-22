@@ -7,9 +7,13 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <title>$Index$</title>
+    <link href="css/main.css" rel="stylesheet" type="text/css">
+    <fmt:setLocale value="ru"/>
+    <fmt:setBundle basename="text" var="s"/>
 </head>
 <body>
 <div>
@@ -22,17 +26,21 @@
     </p>
 </div>
 
-<div class="form">
-    <form class="login" method="post" action="dispatcher">
+<div>
+    <form class="login" method="post" action="dispatcher" >
         <input type="hidden" name="command" value="login">
-        <input type="text" placeholder="email" name="email" size="30">
-        <input type="password" placeholder="********" name="password" size="30">
-        <input type="submit" value="Submit">
+        <input type="email" placeholder="<fmt:message key="login.label.email" bundle="${s}"/>" name="email" size="30" required >
+        <input type="password" placeholder="********" name="password" size="30" required>
+        <input type="submit" value="Sing in">
     </form>
 </div>
-
-<c:if test="${ requestScope.errorMsg!=null}">
-    <c:import url="errorFragment.jsp"/>
+<div>
+<form action="dispatcher" method="get">
+<button name="command" value="toRegistrPage">Registration</button>
+</form>
+</div>
+<c:if test="${requestScope.errorMsg!=null}">
+    <c:out value="${requestScope.errorMsg}"/>
 </c:if>
 
 </body>

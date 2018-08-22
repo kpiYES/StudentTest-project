@@ -3,11 +3,14 @@ package com.app.dao.mySQLImpl;
 import com.app.dao.QuestionDAO;
 import com.app.model.Question;
 import com.app.model.Subject;
+import com.app.util.DataSource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Set;
+import java.util.function.Function;
 
 public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements QuestionDAO {
 
@@ -22,6 +25,34 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
             " FROM studenttest_app.question q INNER JOIN studenttest_app.subject s" +
             " ON q.subject_id = s.subject_id" +
             " WHERE q.question_id = ?";
+
+    private static final String FIND_ALL_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer" +
+            " FROM studenttest_app.question q INNER JOIN studenttest_app.subject s" +
+            " ON q.subject_id = s.subject_id";
+
+    private static final String FIND_ALL_BY_SUBJECT_ID_WITH_PAGINATION_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer" +
+            " FROM studenttest_app.question q INNER JOIN studenttest_app.subject s" +
+            " ON q.subject_id = s.subject_id" +
+            " WHERE s.subject_id = ? LIMIT ? OFFSET ?";
+
+    private static final String FIND_ALL_BY_SUBJECT_ID_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer" +
+            " FROM studenttest_app.question q INNER JOIN studenttest_app.subject s" +
+            " ON q.subject_id = s.subject_id" +
+            " WHERE s.subject_id = ?";
+
+    private static final String FIND_ALL_BY_TEST_ID_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer" +
+            " FROM studenttest_app.question q INNER JOIN studenttest_app.subject s" +
+            " ON q.subject_id = s.subject_id" +
+            " INNER JOIN studenttest_app.test_question tq" +
+            " ON q.question_id = tq.question_id" +
+            " WHERE tq.test_id = ?";
+
+    private static final String FIND_ALL_BY_TEST_ID_WITH_PAGINATION_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer" +
+            " FROM studenttest_app.question q INNER JOIN studenttest_app.subject s" +
+            " ON q.subject_id = s.subject_id" +
+            " INNER JOIN studenttest_app.test_question tq" +
+            " ON q.question_id = tq.question_id" +
+            " WHERE tq.test_id = ? LIMIT ? OFFSET ?";
 
     @Override
     public Long insert(Question question) {
@@ -42,6 +73,73 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
     public Question findById(Long id) {
         return super.findById(id);
     }
+
+    @Override
+    public Set<Question> findAll() {
+        return super.findAll();
+    }
+
+    @Override
+    public Set<Question> findAllBySubjectIdWithPagination(Long id, int limit, int offset) {
+        try (Connection connection = DataSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = getFindAllBySubjectIdWithPaginationStatement(connection, id, limit, offset);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            return extractSetOfEntityFromResultSet(resultSet);
+        } catch (SQLException e) {
+            throw new RuntimeException("Couldn't get user by mail", e);
+        }
+    }
+
+    @Override
+    public Set<Question> findAllBySubjectId(Long id) {
+        try (Connection connection = DataSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = getFindAllBySubjectIdStatement(connection, id);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            return extractSetOfEntityFromResultSet(resultSet);
+        } catch (SQLException e) {
+            throw new RuntimeException("Couldn't get user by mail", e);
+        }
+    }
+
+    @Override
+    public Set<Question> findAllByTestId(Long id){
+        try (Connection connection = DataSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = getFindAllByTestIdStatement(connection, id);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            return extractSetOfEntityFromResultSet(resultSet);
+        } catch (SQLException e) {
+            throw new RuntimeException("Couldn't get user by mail", e);
+        }
+    }
+
+    @Override
+    public Set<Question> findAllByTestIdWithPagination(Long id, int limit, int offset){
+        try (Connection connection = DataSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = getFindAllByTestIdWithPaginationStatement(connection, id, limit, offset);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            return extractSetOfEntityFromResultSet(resultSet);
+        } catch (SQLException e) {
+            throw new RuntimeException("Couldn't get user by mail", e);
+        }
+    }
+
+
+    private PreparedStatement getFindAllByTestIdStatement(Connection connection, Long id) throws SQLException{
+        PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_TEST_ID_QUERY);
+        preparedStatement.setLong(1, id);
+        return preparedStatement;
+    }
+
+
+    private PreparedStatement getFindAllByTestIdWithPaginationStatement(Connection connection, Long id, int limit, int offset) throws SQLException{
+        PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_TEST_ID_WITH_PAGINATION_QUERY, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        System.out.println(id + " " + limit + " " +offset);
+        preparedStatement.setLong(1, id);
+        preparedStatement.setInt(2,limit);
+        preparedStatement.setInt(3,offset);
+        return preparedStatement;
+    }
+
 
     @Override
     PreparedStatement getInsertStatement(Connection connection, Question question) throws SQLException {
@@ -92,7 +190,26 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
     }
 
     @Override
-    Question extractFromResultSet(ResultSet resultSet) throws SQLException {
+    PreparedStatement getFindAllStatement(Connection connection) throws SQLException {
+        return connection.prepareStatement(FIND_ALL_QUERY);
+    }
+
+    private PreparedStatement getFindAllBySubjectIdWithPaginationStatement(Connection connection, Long id, int limit, int offset) throws SQLException{
+        PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_SUBJECT_ID_WITH_PAGINATION_QUERY, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        preparedStatement.setLong(1,id);
+        preparedStatement.setInt(2,limit);
+        preparedStatement.setInt(3,offset);
+        return preparedStatement;
+    }
+
+    private PreparedStatement getFindAllBySubjectIdStatement(Connection connection, Long id) throws SQLException{
+        PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_SUBJECT_ID_QUERY);
+        preparedStatement.setLong(1,id);
+        return preparedStatement;
+    }
+
+    @Override
+    Question extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
         Question question = new Question();
         if (resultSet.next()) {
             question.setId(resultSet.getLong("q.question_id"));
@@ -105,5 +222,10 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
             question.setCorrectAnswer(resultSet.getInt("q.correct_answer"));
         }
         return question;
+    }
+
+    @Override
+    Set<Question> extractSetOfEntityFromResultSet(ResultSet resultSet) throws SQLException {
+        return super.extractSetOfEntityFromResultSet(resultSet);
     }
 }

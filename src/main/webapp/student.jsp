@@ -10,9 +10,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>$Home$</title>
+    <title>$Student$</title>
+    <link href="css/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-$Home$
+$Student$
 </body>
+<c:out value="${sessionScope.currentUserDTO.firstName}"/>
+<a href="dispatcher?command=getPassedTestsCommand">Get my passed tests </a>
 </html>
