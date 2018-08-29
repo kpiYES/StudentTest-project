@@ -4,7 +4,7 @@ import com.app.model.PassedTest;
 
 import java.util.Set;
 
-public interface PassedTestService {
+public interface PassedTestService extends Service {
 
     Long insert(PassedTest passedTest);
 

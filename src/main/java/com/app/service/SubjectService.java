@@ -4,7 +4,7 @@ import com.app.model.Subject;
 
 import java.util.Set;
 
-public interface SubjectService {
+public interface SubjectService extends Service {
 
     Long insert(Subject subject);
 

@@ -2,6 +2,7 @@ package com.app.service.impl;
 
 import com.app.dao.DAOFactory;
 import com.app.dao.PassedTestDAO;
+import com.app.dao.connection.DAOConnection;
 import com.app.model.PassedTest;
 import com.app.service.PassedTestService;
 
@@ -9,36 +10,64 @@ import java.util.Set;
 
 public class PassedTestServiceImpl implements PassedTestService {
 
-    private DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
-    private PassedTestDAO passedTestDAO = daoFactory.getPassedTestDAO();
+    private final DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
+
+    private PassedTestServiceImpl() {
+    }
+
+    public static PassedTestServiceImpl getInstance() {
+        return PassedTestServiceImplHolder.INSTANCE;
+    }
 
     @Override
     public Long insert(PassedTest passedTest) {
-        return passedTestDAO.insert(passedTest);
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            PassedTestDAO passedTestDAO = daoFactory.getPassedTestDAO(daoConnection);
+            return passedTestDAO.insert(passedTest);
+        }
     }
 
     @Override
     public void update(PassedTest passedTest) {
-        passedTestDAO.update(passedTest);
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            PassedTestDAO passedTestDAO = daoFactory.getPassedTestDAO(daoConnection);
+            passedTestDAO.update(passedTest);
+        }
     }
 
     @Override
     public void delete(PassedTest passedTest) {
-        passedTestDAO.delete(passedTest);
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            PassedTestDAO passedTestDAO = daoFactory.getPassedTestDAO(daoConnection);
+            passedTestDAO.delete(passedTest);
+        }
     }
 
     @Override
     public PassedTest findById(Long id) {
-        return passedTestDAO.findById(id);
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            PassedTestDAO passedTestDAO = daoFactory.getPassedTestDAO(daoConnection);
+            return passedTestDAO.findById(id);
+        }
     }
 
     @Override
     public Set<PassedTest> findAll() {
-        return passedTestDAO.findAll();
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            PassedTestDAO passedTestDAO = daoFactory.getPassedTestDAO(daoConnection);
+            return passedTestDAO.findAll();
+        }
     }
 
     @Override
     public Set<PassedTest> findByUserId(Long id) {
-        return passedTestDAO.findByUserId(id);
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            PassedTestDAO passedTestDAO = daoFactory.getPassedTestDAO(daoConnection);
+            return passedTestDAO.findByUserId(id);
+        }
+    }
+
+    private static class PassedTestServiceImplHolder {
+        private final static PassedTestServiceImpl INSTANCE = new PassedTestServiceImpl();
     }
 }

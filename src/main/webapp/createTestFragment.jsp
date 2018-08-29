@@ -22,15 +22,6 @@
             <c:forEach var="question" items="${requestScope.questionSet}">
 
             <ul>
-                    <%--<c:choose>--%>
-                    <%--<c:when test="${sessionScope.chosenQuestionsSet.size()>0}">--%>
-
-                    <%--<c:forEach var="chosenQuestionsSet" items="${sessionScope.chosenQuestionsSet}">--%>
-
-
-                <c:out value="${sessionScope.chosenQuestionsSet}"/>
-                <c:out value="${question.id}"/>
-                        <c:out value="${sessionScope.chosenQuestionsSet.contains(question.id)}"/>
                 <c:choose>
                     <c:when test="${sessionScope.chosenQuestionsSet.contains(question.id)}">
                         <c:out value="2"/>
@@ -46,7 +37,6 @@
                         </li>
                     </c:when>
                     <c:otherwise>
-                        <c:out value="otherwise2"/>
                         <li>
                             <input type="checkbox" id="question" name="question"
                                    value="${question.id}"/>
@@ -61,11 +51,10 @@
                 </c:choose>
                 </c:forEach>
             </ul>
-            <input type="hidden" name="command" value="toCreateTestFragment">
+            <input type="hidden" name="command" value="createTestTestsFragment">
         </form>
     </div>
     <button name="action" value="createTest" form="form">Finish test creating</button>
-
 
     <c:if test="${requestScope.currentPage != 1}">
         <button name="page" value="${requestScope.currentPage-1}" form="form">Previous</button>

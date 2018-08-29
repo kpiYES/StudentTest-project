@@ -4,7 +4,7 @@ import com.app.model.Test;
 
 import java.util.Set;
 
-public interface TestService {
+public interface TestService extends Service {
 
     Long insert(Test test);
 
@@ -17,6 +17,10 @@ public interface TestService {
     Set<Test> findAll();
 
     Set<Test> findAllBySubjectId(Long id);
+
+//    Test findByIdWithQuestions(Long id);
+
+    Set<Test> getFindAllByQuestionId(Long id);
 
     void connectTestAndQuestions(Test test);
 

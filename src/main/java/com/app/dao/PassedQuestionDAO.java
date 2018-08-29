@@ -6,6 +6,7 @@ import com.app.model.User;
 import java.util.Set;
 
 public interface PassedQuestionDAO {
+
     Long insert(PassedQuestion passedQuestion);
 
     void update(PassedQuestion passedQuestion);

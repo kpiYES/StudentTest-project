@@ -13,12 +13,12 @@ CREATE TABLE IF NOT EXISTS subject (
 CREATE TABLE IF NOT EXISTS question (
   question_id    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   subject_id     INT UNSIGNED  NOT NULL,
-  query          VARCHAR(1000) NOT NULL,
+  query          VARCHAR(500) NOT NULL,
   answer_1       VARCHAR(100)  NOT NULL,
   answer_2       VARCHAR(100)  NOT NULL,
   answer_3       VARCHAR(100),
   answer_4       VARCHAR(100),
-  correct_answer TINYINT(1),
+  correct_answer VARCHAR(100) NOT NULL,
   FOREIGN KEY (subject_id) REFERENCES subject (subject_id)
 )
   ENGINE = InnoDB
@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS test (
   test_id    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   subject_id INT UNSIGNED NOT NULL,
   name VARCHAR(50) UNIQUE NOT NULL,
+  time_limit TINYINT(3) NOT NULL,
   FOREIGN KEY (subject_id) REFERENCES subject (subject_id)
 )
   ENGINE = InnoDB
@@ -76,8 +77,10 @@ CREATE TABLE IF NOT EXISTS passed_test (
 
 CREATE TABLE IF NOT EXISTS passed_question (
   passed_question_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  passed_test_id INT UNSIGNED,
   question_id INT UNSIGNED,
   user_answer TINYINT(1),
+  FOREIGN KEY (passed_test_id) REFERENCES passed_test(passed_test_id),
   FOREIGN KEY (question_id) REFERENCES question(question_id)
 )
   ENGINE = InnoDB

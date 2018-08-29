@@ -2,6 +2,7 @@ package com.app.service.impl;
 
 import com.app.dao.DAOFactory;
 import com.app.dao.RoleDAO;
+import com.app.dao.connection.DAOConnection;
 import com.app.model.Role;
 import com.app.service.RoleService;
 
@@ -9,37 +10,65 @@ import java.util.Set;
 
 public class RoleServiceImpl implements RoleService {
 
+
     private DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
-    private RoleDAO roleDAO = daoFactory.getRoleDAO();
+
+    private static class RoleServiceImplHolder {
+        private final static RoleServiceImpl INSTANCE = new RoleServiceImpl();
+    }
+
+    public static RoleServiceImpl getInstance() {
+        return RoleServiceImplHolder.INSTANCE;
+    }
+
+    private RoleServiceImpl() {
+    }
 
     @Override
     public Long insert(Role role) {
-        return roleDAO.insert(role);
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            RoleDAO roleDAO = daoFactory.getRoleDAO(daoConnection);
+           return roleDAO.insert(role);
+        }
     }
 
     @Override
     public void update(Role role) {
-        roleDAO.update(role);
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            RoleDAO roleDAO = daoFactory.getRoleDAO(daoConnection);
+            roleDAO.update(role);
+        }
     }
-
 
     @Override
     public void delete(Role role) {
-roleDAO.delete(role);
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            RoleDAO roleDAO = daoFactory.getRoleDAO(daoConnection);
+            roleDAO.delete(role);
+        }
     }
 
     @Override
-    public Role getById(Long id) {
-        return roleDAO.findById(id);
+    public Role findById(Long id) {
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            RoleDAO roleDAO = daoFactory.getRoleDAO(daoConnection);
+            return roleDAO.findById(id);
+        }
     }
 
     @Override
     public Set<Role> findAll() {
-        return roleDAO.findAll();
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            RoleDAO roleDAO = daoFactory.getRoleDAO(daoConnection);
+            return roleDAO.findAll();
+        }
     }
 
     @Override
     public Role findByName(String name) {
-        return roleDAO.findByName(name);
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            RoleDAO roleDAO = daoFactory.getRoleDAO(daoConnection);
+            return roleDAO.findByName(name);
+        }
     }
 }

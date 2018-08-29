@@ -5,7 +5,7 @@
     font-size: 14pt;
     display: inline-block;
     float: left;
-    margin-right: 150px;
+    margin-right: 100px;
     margin-left: 60px;
 }
 
@@ -21,8 +21,8 @@
     background-color: #ccc; /* Dark grey background on mouse-over */
 }
 
-.admin_menu {
-    width: 100px;
+.admin_item_menu {
+    width: 200px;
     padding: 20px; /* Поля вокруг текста */
     border: 5px solid black; /* Параметры границы */
     background: #66ff66; /* Цвет фона */
@@ -30,12 +30,41 @@
     font-size: 18pt; /* Размер шрифта */
     display: inline-block;
     float: left;
-
 }
 
 .user_form {
     display: inline-block;
     float: left;
+}
+
+.admin_right_menu {
+    height: auto;
+    float: left;
+    width: 150px;
+    margin-right: 50px;
+}
+
+.header_menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100px;
+    width: 200px;
+}
+
+.header {
+    width: 100%;
+    position: relative;
+    height: 100px;
+}
+
+.header_hello{
+
+
+}
+
+.questions {
+
 }
 
 

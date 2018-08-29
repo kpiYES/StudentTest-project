@@ -14,8 +14,22 @@
     <link href="css/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-$Student$
-</body>
 <c:out value="${sessionScope.currentUserDTO.firstName}"/>
-<a href="dispatcher?command=getPassedTestsCommand">Get my passed tests </a>
+
+<div>
+    <div class="admin_right_menu">
+        <div class="admin_item_menu">
+            <a href="dispatcher?command=showListOfSubjectsToPassTestFragment">To pass a test </a>
+
+        </div>
+        <div class="admin_item_menu">
+            <a href="dispatcher?command=getPassedTestsCommand">Get my passed tests </a>
+        </div>
+    </div>
+
+    <c:if test="${requestScope.pageFragment!=null}">
+        <c:import url="${requestScope.pageFragment}"/>
+    </c:if>
+
+</body>
 </html>

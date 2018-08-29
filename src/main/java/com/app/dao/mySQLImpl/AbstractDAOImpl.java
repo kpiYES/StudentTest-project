@@ -1,7 +1,11 @@
 package com.app.dao.mySQLImpl;
 
+import com.app.controller.ServletDispatcher;
 import com.app.dao.AbstractDAO;
+import com.app.exceptions.InteractionDBException;
 import com.app.util.DataSource;
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -13,62 +17,72 @@ import java.util.Set;
 
 public abstract class AbstractDAOImpl<T extends Serializable> implements AbstractDAO<T> {
 
+    private static final Logger logger = Logger.getLogger(AbstractDAOImpl.class);
+
+    protected Connection connection;
+
+    protected AbstractDAOImpl(Connection connection){
+        this.connection = connection;
+    }
+
     @Override
     public Long insert(T entity) {
-        try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement preparedStatement = getInsertStatement(connection, entity)) {
+        try (PreparedStatement preparedStatement = getInsertStatement(connection, entity)) {
+            System.out.println(1);
             preparedStatement.executeUpdate();
+            System.out.println(2);
             try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
-                if (resultSet.next()) {
-                    return resultSet.getLong(1);
-                }
+                System.out.println(3);
+                resultSet.next();
+                System.out.println(4);
+                return resultSet.getLong(1);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("InteractionDBException:Couldn't insert entity");
+            throw new InteractionDBException("Couldn't insert entity", e);
         }
-        return null;
     }
 
     @Override
     public void update(T entity) {
-        try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement preparedStatement = getUpdateStatement(connection, entity)) {
+        try (PreparedStatement preparedStatement = getUpdateStatement(connection, entity)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("InteractionDBException:Couldn't update entity");
+            throw new InteractionDBException("Couldn't update entity", e);
+
         }
     }
 
     @Override
     public void delete(T entity) {
-        try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement preparedStatement = getDeleteStatement(connection, entity)) {
+        try (PreparedStatement preparedStatement = getDeleteStatement(connection, entity)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("InteractionDBException:Couldn't delete entity");
+            throw new InteractionDBException("Couldn't delete entity", e);
         }
     }
 
     @Override
     public T findById(Long id) {
-        try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement preparedStatement = getFindByIdStatement(connection, id);
+        try (PreparedStatement preparedStatement = getFindByIdStatement(connection, id);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractEntityFromResultSet(resultSet);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("InteractionDBException:Couldn't findById entity");
+            throw new InteractionDBException("Couldn't find entity by Id", e);
         }
     }
 
     @Override
     public Set<T> findAll() {
-        try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement preparedStatement = getFindAllStatement(connection);
+        try (PreparedStatement preparedStatement = getFindAllStatement(connection);
              ResultSet resultSet = preparedStatement.executeQuery()) {
-            System.out.println(111);
             return extractSetOfEntityFromResultSet(resultSet);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("InteractionDBException:Couldn't find entity set");
+            throw new InteractionDBException("Couldn't find entity Set", e);
         }
     }
 
@@ -86,7 +100,6 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
 
     Set<T> extractSetOfEntityFromResultSet(ResultSet resultSet) throws SQLException {
         Set<T> entitySet = new HashSet<>();
-
         while (resultSet.next()) {
             resultSet.previous();
             entitySet.add(extractEntityFromResultSet(resultSet));

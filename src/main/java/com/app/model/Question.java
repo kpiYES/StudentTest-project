@@ -7,10 +7,25 @@ public class Question extends AbstractEntity {
     private Subject subject;
     private String query;
     private String answer1;
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "subject=" + subject +
+                ", query='" + query + '\'' +
+                ", answer1='" + answer1 + '\'' +
+                ", answer2='" + answer2 + '\'' +
+                ", answer3='" + answer3 + '\'' +
+                ", answer4='" + answer4 + '\'' +
+                ", correctAnswer='" + correctAnswer + '\'' +
+                ", testSet=" + testSet +
+                '}';
+    }
+
     private String answer2;
     private String answer3;
     private String answer4;
-    private Integer correctAnswer;
+    private String correctAnswer;
     private Set<Test> testSet;
 
     @Override
@@ -44,7 +59,7 @@ public class Question extends AbstractEntity {
     public Question() {
     }
 
-    public Question(Long id, Subject subject, String query, String answer1, String answer2, String answer3, String answer4, Integer correctAnswer) {
+    public Question(Long id, Subject subject, String query, String answer1, String answer2, String answer3, String answer4, String correctAnswer) {
         super(id);
         this.subject = subject;
         this.query = query;
@@ -103,11 +118,11 @@ public class Question extends AbstractEntity {
         this.answer4 = answer4;
     }
 
-    public Integer getCorrectAnswer() {
+    public String getCorrectAnswer() {
         return correctAnswer;
     }
 
-    public void setCorrectAnswer(Integer correctAnswer) {
+    public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
 

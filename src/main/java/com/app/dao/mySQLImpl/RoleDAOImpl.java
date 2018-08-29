@@ -1,9 +1,11 @@
 package com.app.dao.mySQLImpl;
 
 import com.app.dao.RoleDAO;
+import com.app.exceptions.InteractionDBException;
 import com.app.model.Question;
 import com.app.model.Role;
 import com.app.util.DataSource;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +14,8 @@ import java.sql.SQLException;
 import java.util.Set;
 
 public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
+
+    private static final Logger logger = Logger.getLogger(RoleDAOImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.role  (role_id, name) VALUES (NULL, ?)";
 
@@ -25,39 +29,19 @@ public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
 
     private static final String FIND_BY_NAME = "SELECT r.role_id, r.name FROM studenttest_app.role r WHERE r.name = ?";
 
-    @Override
-    public Long insert(Role role) {
-        return super.insert(role);
-    }
 
-    @Override
-    public void update(Role role) {
-        super.update(role);
-    }
-
-    @Override
-    public void delete(Role role) {
-        super.delete(role);
-    }
-
-    @Override
-    public Role findById(Long id) {
-        return super.findById(id);
-    }
-
-    @Override
-    public Set<Role> findAll() {
-        return super.findAll();
+    public RoleDAOImpl(Connection connection){
+        super(connection);
     }
 
 @Override
     public Role findByName(String name) {
-        try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement preparedStatement = getFindByNameStatement(connection, name);
+        try (PreparedStatement preparedStatement = getFindByNameStatement(connection, name);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractEntityFromResultSet(resultSet);
         } catch (SQLException e) {
-            throw new RuntimeException("Couldn't get role by name", e);
+            logger.error("InteractionDBException:Couldn't find Role by name");
+            throw new InteractionDBException("Couldn't find Role by name", e);
         }
     }
 

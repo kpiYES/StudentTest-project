@@ -1,5 +1,8 @@
 package com.app.controller;
 
+import com.app.controller.commands.Command;
+import org.apache.log4j.Logger;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -8,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ServletDispatcher extends HttpServlet {
+
+private static final Logger logger = Logger.getLogger(ServletDispatcher.class);
 
     protected void processRequest(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {

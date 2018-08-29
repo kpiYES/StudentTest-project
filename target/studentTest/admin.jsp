@@ -7,32 +7,36 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ut" uri="/WEB-INF/tagLib.tld" %>
+
 <html>
 <head>
     <title>Title</title>
     <link href="css/main.css" rel="stylesheet" type="text/css">
+    <fmt:setLocale value="${loc}"/>
+    <fmt:setBundle basename="localization"/>
 </head>
 <body>
-
-
-
-<div class="admin_menu">
-    <a href="dispatcher?command=toShowListOfUsersFragment">Users</a>
+<c:import url="headerFragment.jsp"/>
+<div>
+<div class="admin_right_menu">
+<div class="admin_item_menu">
+    <a href="dispatcher?command=toShowListOfUsersFragment"><fmt:message key="admin.menu.users"/></a>
 </div>
-<div class="admin_menu">
-    <a href="dispatcher?command=toShowListOfSubjectsFragment">Tests</a>
+<div class="admin_item_menu">
+    <a href="dispatcher?command=showListOfSubjectsTestsFragment"><fmt:message key="admin.menu.tests"/></a>
 </div>
-<div class="admin_menu">
-    <a href="dispatcher?command=toShowQuestionsFragment">Questions</a>
+<div class="admin_item_menu">
+    <a href="dispatcher?command=showListOfSubjectsQuestionsFragment"><fmt:message key="admin.menu.questions"/></a>
 </div>
+</div>
+
 <c:if test="${requestScope.pageFragment!=null}">
     <c:import url="${requestScope.pageFragment}"/>
 </c:if>
+</div>
 
-
-
-
-
-
+<%--<ut:myTag firstname="${sessionScope.currentUser}"/>--%>
 </body>
 </html>

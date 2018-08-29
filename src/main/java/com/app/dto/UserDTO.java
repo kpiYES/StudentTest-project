@@ -9,7 +9,6 @@ public class UserDTO {
     private String mail;
     private Role role;
 
-
     public Long getId() {
         return id;
     }

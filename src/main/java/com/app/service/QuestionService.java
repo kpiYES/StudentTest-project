@@ -4,13 +4,11 @@ import com.app.model.Question;
 
 import java.util.Set;
 
-public interface QuestionService {
+public interface QuestionService extends Service {
 
     Long insert(Question question);
 
-
     void update(Question question);
-
 
     void delete(Question question);
 

@@ -1,8 +1,10 @@
 package com.app.dao.mySQLImpl;
 
 import com.app.dao.SubjectDAO;
+import com.app.exceptions.InteractionDBException;
 import com.app.model.Subject;
 import com.app.util.DataSource;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +13,8 @@ import java.sql.SQLException;
 import java.util.Set;
 
 public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectDAO {
+
+    private static final Logger logger = Logger.getLogger(SubjectDAOImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.subject (subject_id, name) VALUES (NULL, ?)";
 
@@ -24,40 +28,18 @@ public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectD
 
     private static final String FIND_BY_NAME_QUERY = "SELECT subject_id, name FROM studenttest_app.subject WHERE name = ?";
 
-    @Override
-    public Long insert(Subject subject) {
-        return super.insert(subject);
+    public SubjectDAOImpl(Connection connection){
+        super(connection);
     }
-
-    @Override
-    public void update(Subject subject) {
-        super.update(subject);
-    }
-
-    @Override
-    public void delete(Subject subject) {
-        super.delete(subject);
-    }
-
-    @Override
-    public Subject findById(Long id) {
-        return super.findById(id);
-    }
-
-    @Override
-    public Set<Subject> findAll() {
-        return super.findAll();
-    }
-
 
     @Override()
     public Subject findByName(String name) {
-        try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement preparedStatement = getFindByNameStatement(connection, name);
+        try (PreparedStatement preparedStatement = getFindByNameStatement(connection, name);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractEntityFromResultSet(resultSet);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("InteractionDBException:Couldn't find Subject by name");
+            throw new InteractionDBException("Couldn't find Subject  by name", e);
         }
     }
 

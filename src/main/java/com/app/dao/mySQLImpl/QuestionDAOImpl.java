@@ -1,145 +1,106 @@
 package com.app.dao.mySQLImpl;
 
 import com.app.dao.QuestionDAO;
+import com.app.exceptions.InteractionDBException;
 import com.app.model.Question;
 import com.app.model.Subject;
 import com.app.util.DataSource;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
-import java.util.function.Function;
 
 public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements QuestionDAO {
 
-    private static final String INSERT_QUERY = "INSERT INTO studenttest_app.question (question_id, subject_id, query, answer_1, answer_2, answer_3, answer_4, correct_answer)" +
-            " VALUES (NULL, ?, ?,?,?,?,?,?)";
+    private static final Logger logger = Logger.getLogger(QuestionDAOImpl.class);
+
+
+    private static final String INSERT_QUERY = "INSERT INTO studenttest_app.question (question_id, subject_id, query, answer_1, answer_2, answer_3, answer_4, correct_answer) VALUES (NULL, ?, ?,?,?,?,?,?)";
 
     private static final String UPDATE_QUERY = "UPDATE studenttest_app.question SET subject_id = ?, query = ?, answer_1 = ?, answer_2 = ?, answer_3 = ?, answer_4 = ?, correct_answer = ? WHERE question_id = ?";
 
     private static final String DELETE_QUERY = "DELETE FROM studenttest_app.question WHERE question_id = ? AND subject_id = ? AND query = ? AND answer_1 = ? AND answer_2 = ? AND answer_3 = ? AND answer_4 = ? AND correct_answer = ?";
 
-    private static final String FIND_BY_ID_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer" +
-            " FROM studenttest_app.question q INNER JOIN studenttest_app.subject s" +
-            " ON q.subject_id = s.subject_id" +
-            " WHERE q.question_id = ?";
+    private static final String FIND_BY_ID_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer FROM studenttest_app.question q INNER JOIN studenttest_app.subject s ON q.subject_id = s.subject_id WHERE q.question_id = ?";
 
-    private static final String FIND_ALL_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer" +
-            " FROM studenttest_app.question q INNER JOIN studenttest_app.subject s" +
-            " ON q.subject_id = s.subject_id";
+    private static final String FIND_ALL_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer FROM studenttest_app.question q INNER JOIN studenttest_app.subject s ON q.subject_id = s.subject_id";
 
-    private static final String FIND_ALL_BY_SUBJECT_ID_WITH_PAGINATION_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer" +
-            " FROM studenttest_app.question q INNER JOIN studenttest_app.subject s" +
-            " ON q.subject_id = s.subject_id" +
-            " WHERE s.subject_id = ? LIMIT ? OFFSET ?";
+    private static final String FIND_ALL_BY_SUBJECT_ID_WITH_PAGINATION_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer FROM studenttest_app.question q INNER JOIN studenttest_app.subject s ON q.subject_id = s.subject_id WHERE s.subject_id = ? LIMIT ? OFFSET ?";
 
-    private static final String FIND_ALL_BY_SUBJECT_ID_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer" +
-            " FROM studenttest_app.question q INNER JOIN studenttest_app.subject s" +
-            " ON q.subject_id = s.subject_id" +
-            " WHERE s.subject_id = ?";
+    private static final String FIND_ALL_BY_SUBJECT_ID_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer FROM studenttest_app.question q INNER JOIN studenttest_app.subject s ON q.subject_id = s.subject_id WHERE s.subject_id = ?";
 
-    private static final String FIND_ALL_BY_TEST_ID_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer" +
-            " FROM studenttest_app.question q INNER JOIN studenttest_app.subject s" +
-            " ON q.subject_id = s.subject_id" +
-            " INNER JOIN studenttest_app.test_question tq" +
-            " ON q.question_id = tq.question_id" +
-            " WHERE tq.test_id = ?";
+    private static final String FIND_ALL_BY_TEST_ID_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer FROM studenttest_app.question q INNER JOIN studenttest_app.subject s ON q.subject_id = s.subject_id INNER JOIN studenttest_app.test_question tq ON q.question_id = tq.question_id WHERE tq.test_id = ?";
 
-    private static final String FIND_ALL_BY_TEST_ID_WITH_PAGINATION_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer" +
-            " FROM studenttest_app.question q INNER JOIN studenttest_app.subject s" +
-            " ON q.subject_id = s.subject_id" +
-            " INNER JOIN studenttest_app.test_question tq" +
-            " ON q.question_id = tq.question_id" +
-            " WHERE tq.test_id = ? LIMIT ? OFFSET ?";
+    private static final String FIND_ALL_BY_TEST_ID_WITH_PAGINATION_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer FROM studenttest_app.question q INNER JOIN studenttest_app.subject s ON q.subject_id = s.subject_id INNER JOIN studenttest_app.test_question tq ON q.question_id = tq.question_id WHERE tq.test_id = ? LIMIT ? OFFSET ?";
 
-    @Override
-    public Long insert(Question question) {
-        return super.insert(question);
-    }
 
-    @Override
-    public void update(Question question) {
-        super.update(question);
-    }
 
-    @Override
-    public void delete(Question question) {
-        super.delete(question);
-    }
-
-    @Override
-    public Question findById(Long id) {
-        return super.findById(id);
-    }
-
-    @Override
-    public Set<Question> findAll() {
-        return super.findAll();
+    public QuestionDAOImpl(Connection connection){
+        super(connection);
     }
 
     @Override
     public Set<Question> findAllBySubjectIdWithPagination(Long id, int limit, int offset) {
-        try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement preparedStatement = getFindAllBySubjectIdWithPaginationStatement(connection, id, limit, offset);
+        try (PreparedStatement preparedStatement = getFindAllBySubjectIdWithPaginationStatement(connection, id, limit, offset);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractSetOfEntityFromResultSet(resultSet);
         } catch (SQLException e) {
-            throw new RuntimeException("Couldn't get user by mail", e);
+            logger.error("InteractionDBException:Couldn't find Question Set by Subject Id with pagination");
+            throw new InteractionDBException("Couldn't find Question Set by Subject Id with pagination", e);
         }
     }
 
     @Override
     public Set<Question> findAllBySubjectId(Long id) {
-        try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement preparedStatement = getFindAllBySubjectIdStatement(connection, id);
+        try (PreparedStatement preparedStatement = getFindAllBySubjectIdStatement(connection, id);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractSetOfEntityFromResultSet(resultSet);
         } catch (SQLException e) {
-            throw new RuntimeException("Couldn't get user by mail", e);
+            logger.error("InteractionDBException:Couldn't find Question Set by Subject Id");
+            throw new InteractionDBException("Couldn't find Question Set by Subject Id", e);
         }
     }
 
     @Override
-    public Set<Question> findAllByTestId(Long id){
-        try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement preparedStatement = getFindAllByTestIdStatement(connection, id);
+    public Set<Question> findAllByTestId(Long id) {
+        try (PreparedStatement preparedStatement = getFindAllByTestIdStatement(connection, id);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractSetOfEntityFromResultSet(resultSet);
         } catch (SQLException e) {
-            throw new RuntimeException("Couldn't get user by mail", e);
+            logger.error("InteractionDBException:Couldn't find Question Set by Test Id");
+            throw new InteractionDBException("Couldn't find Question Set by Test Id", e);
         }
     }
 
     @Override
-    public Set<Question> findAllByTestIdWithPagination(Long id, int limit, int offset){
-        try (Connection connection = DataSource.getInstance().getConnection();
-             PreparedStatement preparedStatement = getFindAllByTestIdWithPaginationStatement(connection, id, limit, offset);
+    public Set<Question> findAllByTestIdWithPagination(Long id, int limit, int offset) {
+        try (PreparedStatement preparedStatement = getFindAllByTestIdWithPaginationStatement(connection, id, limit, offset);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractSetOfEntityFromResultSet(resultSet);
         } catch (SQLException e) {
-            throw new RuntimeException("Couldn't get user by mail", e);
+            logger.error("InteractionDBException:Couldn't find Question Set by Test Id with pagination");
+            throw new InteractionDBException("Couldn't find Question Set by Test Id with pagination", e);
         }
     }
 
 
-    private PreparedStatement getFindAllByTestIdStatement(Connection connection, Long id) throws SQLException{
+    private PreparedStatement getFindAllByTestIdStatement(Connection connection, Long id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_TEST_ID_QUERY);
         preparedStatement.setLong(1, id);
         return preparedStatement;
     }
 
-
-    private PreparedStatement getFindAllByTestIdWithPaginationStatement(Connection connection, Long id, int limit, int offset) throws SQLException{
+    private PreparedStatement getFindAllByTestIdWithPaginationStatement(Connection connection, Long id, int limit, int offset) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_TEST_ID_WITH_PAGINATION_QUERY, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        System.out.println(id + " " + limit + " " +offset);
+        System.out.println(id + " " + limit + " " + offset);
         preparedStatement.setLong(1, id);
-        preparedStatement.setInt(2,limit);
-        preparedStatement.setInt(3,offset);
+        preparedStatement.setInt(2, limit);
+        preparedStatement.setInt(3, offset);
         return preparedStatement;
     }
-
 
     @Override
     PreparedStatement getInsertStatement(Connection connection, Question question) throws SQLException {
@@ -150,7 +111,7 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
         preparedStatement.setString(4, question.getAnswer2());
         preparedStatement.setString(5, question.getAnswer3());
         preparedStatement.setString(6, question.getAnswer4());
-        preparedStatement.setInt(7, question.getCorrectAnswer());
+        preparedStatement.setString(7, question.getCorrectAnswer());
         return preparedStatement;
     }
 
@@ -163,7 +124,7 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
         preparedStatement.setString(4, question.getAnswer2());
         preparedStatement.setString(5, question.getAnswer3());
         preparedStatement.setString(6, question.getAnswer4());
-        preparedStatement.setInt(7, question.getCorrectAnswer());
+        preparedStatement.setString(7, question.getCorrectAnswer());
         preparedStatement.setLong(8, question.getId());
         return preparedStatement;
     }
@@ -178,7 +139,7 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
         preparedStatement.setString(5, question.getAnswer2());
         preparedStatement.setString(6, question.getAnswer3());
         preparedStatement.setString(7, question.getAnswer4());
-        preparedStatement.setInt(8, question.getCorrectAnswer());
+        preparedStatement.setString(8, question.getCorrectAnswer());
         return preparedStatement;
     }
 
@@ -194,17 +155,17 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
         return connection.prepareStatement(FIND_ALL_QUERY);
     }
 
-    private PreparedStatement getFindAllBySubjectIdWithPaginationStatement(Connection connection, Long id, int limit, int offset) throws SQLException{
+    private PreparedStatement getFindAllBySubjectIdWithPaginationStatement(Connection connection, Long id, int limit, int offset) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_SUBJECT_ID_WITH_PAGINATION_QUERY, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        preparedStatement.setLong(1,id);
-        preparedStatement.setInt(2,limit);
-        preparedStatement.setInt(3,offset);
+        preparedStatement.setLong(1, id);
+        preparedStatement.setInt(2, limit);
+        preparedStatement.setInt(3, offset);
         return preparedStatement;
     }
 
-    private PreparedStatement getFindAllBySubjectIdStatement(Connection connection, Long id) throws SQLException{
+    private PreparedStatement getFindAllBySubjectIdStatement(Connection connection, Long id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_SUBJECT_ID_QUERY);
-        preparedStatement.setLong(1,id);
+        preparedStatement.setLong(1, id);
         return preparedStatement;
     }
 
@@ -219,7 +180,7 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
             question.setAnswer2(resultSet.getString("q.answer_2"));
             question.setAnswer3(resultSet.getString("q.answer_3"));
             question.setAnswer4(resultSet.getString("q.answer_4"));
-            question.setCorrectAnswer(resultSet.getInt("q.correct_answer"));
+            question.setCorrectAnswer(resultSet.getString("q.correct_answer"));
         }
         return question;
     }

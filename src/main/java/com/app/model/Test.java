@@ -6,16 +6,26 @@ public class Test extends AbstractEntity {
 
     private Subject subject;
     private String name;
+    private Integer timeLimit;
     private Set<Question> questionSet;
     private Set<PassedTest> passedTestSet;
 
     public Test() {
     }
 
-    public Test(Long id, Subject subject, String name) {
+    public Test(Long id, Subject subject, String name, Integer tileLimit) {
         super(id);
         this.name = name;
         this.subject = subject;
+        this.timeLimit = tileLimit;
+    }
+
+    public Integer getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(Integer tileLimit) {
+        this.timeLimit = tileLimit;
     }
 
     public Subject getSubject() {

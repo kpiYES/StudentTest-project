@@ -15,7 +15,6 @@ public class PasswordSecurity {
     private static final int SALT_BYTES = 64;
     private static final int HASH_BYTES = 128;
 
-
     public static String generateSaltedPasswordHash(String password) {
         char[] chars = password.toCharArray();
         byte[] salt = new byte[0];
@@ -28,7 +27,6 @@ public class PasswordSecurity {
         }
     }
 
-
     public static String getHashFromSaltedHash(String saltedPassword){
         String[] strings = saltedPassword.split(":");
         return strings[1];
@@ -40,7 +38,6 @@ public class PasswordSecurity {
     }
 
     public static boolean validatePassword(String originalPassword, String storedHash, String storedSalt) throws NoSuchAlgorithmException, InvalidKeySpecException {
-
         byte[] salt = fromHex(storedSalt);
         byte[] hash = fromHex(storedHash);
         byte[] testHash = pbkdf2(originalPassword.toCharArray(), salt, hash.length);
@@ -86,8 +83,6 @@ public class PasswordSecurity {
             diff |= hash[i] ^ testHash[i];
         return diff == 0;
     }
-
-
 }
 
 

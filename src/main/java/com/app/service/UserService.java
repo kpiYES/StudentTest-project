@@ -5,7 +5,7 @@ import com.app.model.User;
 
 import java.util.Set;
 
-public interface UserService {
+public interface UserService extends Service {
 
     Long insert(User user);
 
@@ -18,8 +18,6 @@ public interface UserService {
     Set<User> findAll();
 
     User findByMail(String mail);
-
-//    void updateByRoleName(User user, String roleName);
 
     boolean validateUserPassword(String password, User user);
 }

@@ -17,12 +17,11 @@ public class DataSource {
     private static final String JNDI_DATA_SOURCE = "java:comp/env/jdbc/studentTest";
     private static final String QUERY_PROPERTIES_LOCATION = "mySQL/queries.properties";
 
-
     private DataSource() {
     }
 
     public static DataSource getInstance() {
-        return DataSourceHolder.instance;
+        return DataSourceHolder.INSTANCE;
     }
 
     public Connection getConnection() {
@@ -38,8 +37,7 @@ public class DataSource {
         return c;
     }
 
-
     private static class DataSourceHolder {
-        private final static DataSource instance = new DataSource();
+        private static final DataSource INSTANCE = new DataSource();
     }
 }

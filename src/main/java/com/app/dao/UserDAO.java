@@ -17,7 +17,4 @@ public interface UserDAO {
     Set<User> findAll();
 
     User findByMail(String mail);
-
-//    void updateByRoleName(User user, String roleName);
-
 }
