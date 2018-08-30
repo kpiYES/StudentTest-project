@@ -4,17 +4,17 @@ import com.app.dao.UserDAO;
 import com.app.exceptions.InteractionDBException;
 import com.app.model.Role;
 import com.app.model.User;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Set;
 
 public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
 
-    private static final Logger logger = Logger.getLogger(UserDAOImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.user (user_id, role_id, first_name, last_name, mail, salt, hash) VALUES (NULL, ?, ?,?,?,?,?)";
 
@@ -38,7 +38,7 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractEntityFromResultSet(resultSet);
         } catch (SQLException e) {
-            logger.error("Couldn't find User by mail");
+            logger.error("Couldn't find User by mail: {}", mail);
             throw new InteractionDBException("Couldn't find User by mail", e);
         }
     }
@@ -110,10 +110,5 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
             user.setHash(resultSet.getString("u.hash"));
         }
         return user;
-    }
-
-    @Override
-    Set<User> extractSetOfEntityFromResultSet(ResultSet resultSet) throws SQLException {
-        return super.extractSetOfEntityFromResultSet(resultSet);
     }
 }
