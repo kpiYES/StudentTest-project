@@ -5,7 +5,6 @@ import com.app.dto.UserDTO;
 import com.app.model.User;
 import com.app.service.ServiceFactory;
 import com.app.service.UserService;
-import com.app.service.impl.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +12,7 @@ import java.util.Set;
 
 public class ToShowListOfUsersFragmentCommand implements Command {
 
-   private UserService userService = ServiceFactory.getUserService();
+    private UserService userService = ServiceFactory.getUserService();
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

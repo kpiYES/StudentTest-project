@@ -1,7 +1,6 @@
 package com.app.dao;
 
 import com.app.model.Subject;
-import com.app.model.User;
 
 import java.util.Set;
 

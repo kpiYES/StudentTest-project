@@ -73,15 +73,15 @@ public class PassedQuestionServiceImpl implements PassedQuestionService {
     public Set<PassedQuestion> constructFromUsersAnswersMap(Map<Long, String> usersAnswersMap) {
         QuestionService questionService = ServiceFactory.getQuestionService();
 
-                Set<PassedQuestion> passedQuestionSet = new HashSet<>(usersAnswersMap.size());
-                for (Map.Entry entry : usersAnswersMap.entrySet()) {
-                    Question question = questionService.findById((Long) entry.getKey());
-                    PassedQuestion passedQuestion = new PassedQuestion();
-                    passedQuestion.setQuestion(question);
-                    passedQuestion.setUserAnswer((String)entry.getValue());
-                }
-                return passedQuestionSet;
-            }
+        Set<PassedQuestion> passedQuestionSet = new HashSet<>(usersAnswersMap.size());
+        for (Map.Entry entry : usersAnswersMap.entrySet()) {
+            Question question = questionService.findById((Long) entry.getKey());
+            PassedQuestion passedQuestion = new PassedQuestion();
+            passedQuestion.setQuestion(question);
+            passedQuestion.setUserAnswer((String) entry.getValue());
+        }
+        return passedQuestionSet;
+    }
 
     //IMPL?
     private static class PassedQuestionServiceImplHolder {

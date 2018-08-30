@@ -4,7 +4,6 @@ import com.app.dao.UserDAO;
 import com.app.exceptions.InteractionDBException;
 import com.app.model.Role;
 import com.app.model.User;
-import com.app.util.DataSource;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -29,7 +28,7 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
 
     private static final String FIND_BY_EMAIL_QUERY = "SELECT u.user_id, u.role_id, r.name, u.first_name, u.last_name, u.mail, u.salt, u.hash FROM studenttest_app.user u INNER JOIN studenttest_app.role r ON u.role_id = r.role_id WHERE u.mail = ?";
 
-    public UserDAOImpl(Connection connection){
+    public UserDAOImpl(Connection connection) {
         super(connection);
     }
 
@@ -40,7 +39,8 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
             return extractEntityFromResultSet(resultSet);
         } catch (SQLException e) {
             logger.error("Couldn't find User by mail");
-            throw new InteractionDBException("Couldn't find User by mail", e);        }
+            throw new InteractionDBException("Couldn't find User by mail", e);
+        }
     }
 
     @Override

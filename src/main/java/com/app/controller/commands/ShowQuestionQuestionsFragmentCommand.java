@@ -20,7 +20,7 @@ public class ShowQuestionQuestionsFragmentCommand implements Command {
 
         Question question = questionService.findById(Long.parseLong(request.getParameter("questionId")));
         request.getSession().setAttribute("question", question);
-        Set<Test> testSet = testService.getFindAllByQuestionId(((Question)request.getSession().getAttribute("question")).getId());
+        Set<Test> testSet = testService.getFindAllByQuestionId(((Question) request.getSession().getAttribute("question")).getId());
 
         request.getSession().setAttribute("testSet", testSet);
         request.setAttribute("pageFragment", "showListOfSubjectsQuestionsFragment.jsp");

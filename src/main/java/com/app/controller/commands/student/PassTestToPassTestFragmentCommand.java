@@ -6,7 +6,6 @@ import com.app.dto.UserDTO;
 import com.app.model.*;
 import com.app.service.PassedQuestionService;
 import com.app.service.PassedTestService;
-import com.app.service.QuestionService;
 import com.app.service.ServiceFactory;
 import com.app.util.PassedTestMark;
 

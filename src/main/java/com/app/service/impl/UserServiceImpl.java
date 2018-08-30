@@ -10,22 +10,17 @@ import com.app.util.PasswordSecurity;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
 import java.util.Set;
 
 public class UserServiceImpl implements UserService {
 
     private DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
 
-    private static class UserServiceImplHolder {
-        private final static UserServiceImpl INSTANCE = new UserServiceImpl();
+    private UserServiceImpl() {
     }
 
     public static UserServiceImpl getInstance() {
         return UserServiceImplHolder.INSTANCE;
-    }
-
-    private UserServiceImpl() {
     }
 
     @Override
@@ -83,5 +78,9 @@ public class UserServiceImpl implements UserService {
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new PasswordValidationException("Invalid password exception", e);
         }
+    }
+
+    private static class UserServiceImplHolder {
+        private final static UserServiceImpl INSTANCE = new UserServiceImpl();
     }
 }

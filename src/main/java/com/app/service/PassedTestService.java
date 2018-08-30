@@ -1,10 +1,7 @@
 package com.app.service;
 
-import com.app.dto.UserDTO;
 import com.app.model.PassedTest;
-import com.app.model.Test;
 
-import java.util.Map;
 import java.util.Set;
 
 public interface PassedTestService extends Service {
@@ -24,4 +21,4 @@ public interface PassedTestService extends Service {
     Long insertWithPassedQuestions(PassedTest passedTest);
 
 
-    }
+}

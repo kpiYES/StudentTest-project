@@ -12,15 +12,11 @@ public class SubjectServiceImpl implements SubjectService {
 
     private DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
 
-    private static class SubjectServiceImplHolder {
-        private final static SubjectServiceImpl INSTANCE = new SubjectServiceImpl();
+    private SubjectServiceImpl() {
     }
 
     public static SubjectServiceImpl getInstance() {
         return SubjectServiceImplHolder.INSTANCE;
-    }
-
-    private SubjectServiceImpl() {
     }
 
     @Override
@@ -69,5 +65,9 @@ public class SubjectServiceImpl implements SubjectService {
             SubjectDAO subjectDAO = daoFactory.getSubjectDAO(daoConnection);
             return subjectDAO.findByName(name);
         }
+    }
+
+    private static class SubjectServiceImplHolder {
+        private final static SubjectServiceImpl INSTANCE = new SubjectServiceImpl();
     }
 }

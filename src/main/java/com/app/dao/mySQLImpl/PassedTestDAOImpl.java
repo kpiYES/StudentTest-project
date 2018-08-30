@@ -3,7 +3,6 @@ package com.app.dao.mySQLImpl;
 import com.app.dao.PassedTestDAO;
 import com.app.exceptions.InteractionDBException;
 import com.app.model.*;
-import com.app.util.DataSource;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;

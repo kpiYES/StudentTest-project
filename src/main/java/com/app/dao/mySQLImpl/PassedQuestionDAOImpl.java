@@ -35,7 +35,7 @@ public class PassedQuestionDAOImpl extends AbstractDAOImpl<PassedQuestion> imple
 
     @Override
     public void insertAll(Set<PassedQuestion> passedQuestionSet) {
-        Set<Long> generatedIdSet = new  HashSet<>();
+        Set<Long> generatedIdSet = new HashSet<>();
         try (PreparedStatement preparedStatement = getInsertAllStatement(connection, passedQuestionSet)) {
             preparedStatement.executeBatch();
             try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {

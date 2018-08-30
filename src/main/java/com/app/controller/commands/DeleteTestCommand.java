@@ -9,13 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 
 public class DeleteTestCommand implements Command {
 
-   private TestService testService = ServiceFactory.getTestService();
+    private TestService testService = ServiceFactory.getTestService();
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        testService.delete((Test)request.getSession().getAttribute("test"));
+        testService.delete((Test) request.getSession().getAttribute("test"));
         String testName = ((Test) request.getSession().getAttribute("test")).getName();
-        String msg = "Test '"  + testName + "' was successfully deleted";
+        String msg = "Test '" + testName + "' was successfully deleted";
         request.getSession().removeAttribute("test");
         request.setAttribute("msg", msg);
 

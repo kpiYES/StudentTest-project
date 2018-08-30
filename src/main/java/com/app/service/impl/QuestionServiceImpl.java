@@ -12,15 +12,11 @@ public class QuestionServiceImpl implements QuestionService {
 
     private DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
 
-    private static class PassedTestServiceImplHolder {
-        private final static QuestionServiceImpl INSTANCE = new QuestionServiceImpl();
+    private QuestionServiceImpl() {
     }
 
     public static QuestionServiceImpl getInstance() {
         return PassedTestServiceImplHolder.INSTANCE;
-    }
-
-    private QuestionServiceImpl() {
     }
 
     @Override
@@ -51,7 +47,7 @@ public class QuestionServiceImpl implements QuestionService {
     public Question findById(Long id) {
         try (DAOConnection daoConnection = daoFactory.getConnection()) {
             QuestionDAO questionDAO = daoFactory.getQuestionDAO(daoConnection);
-           return questionDAO.findById(id);
+            return questionDAO.findById(id);
         }
     }
 
@@ -67,7 +63,7 @@ public class QuestionServiceImpl implements QuestionService {
     public Set<Question> findAllBySubjectIdWithPagination(Long id, int limit, int offset) {
         try (DAOConnection daoConnection = daoFactory.getConnection()) {
             QuestionDAO questionDAO = daoFactory.getQuestionDAO(daoConnection);
-           return questionDAO.findAllBySubjectIdWithPagination(id, limit, offset);
+            return questionDAO.findAllBySubjectIdWithPagination(id, limit, offset);
         }
     }
 
@@ -75,23 +71,27 @@ public class QuestionServiceImpl implements QuestionService {
     public Set<Question> findAllBySubjectId(Long id) {
         try (DAOConnection daoConnection = daoFactory.getConnection()) {
             QuestionDAO questionDAO = daoFactory.getQuestionDAO(daoConnection);
-           return questionDAO.findAllBySubjectId(id);
+            return questionDAO.findAllBySubjectId(id);
         }
     }
 
     @Override
-    public Set<Question> findAllByTestId(Long id){
+    public Set<Question> findAllByTestId(Long id) {
         try (DAOConnection daoConnection = daoFactory.getConnection()) {
             QuestionDAO questionDAO = daoFactory.getQuestionDAO(daoConnection);
-           return questionDAO.findAllByTestId(id);
+            return questionDAO.findAllByTestId(id);
         }
     }
 
     @Override
-    public Set<Question> findAllByTestIdWithPagination(Long id, int limit, int offset){
+    public Set<Question> findAllByTestIdWithPagination(Long id, int limit, int offset) {
         try (DAOConnection daoConnection = daoFactory.getConnection()) {
             QuestionDAO questionDAO = daoFactory.getQuestionDAO(daoConnection);
-           return questionDAO.findAllByTestIdWithPagination(id, limit, offset);
+            return questionDAO.findAllByTestIdWithPagination(id, limit, offset);
         }
+    }
+
+    private static class PassedTestServiceImplHolder {
+        private final static QuestionServiceImpl INSTANCE = new QuestionServiceImpl();
     }
 }

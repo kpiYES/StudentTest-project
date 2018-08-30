@@ -1,11 +1,8 @@
 package com.app.dao.mySQLImpl;
 
-import com.app.controller.ServletDispatcher;
 import com.app.dao.AbstractDAO;
 import com.app.exceptions.InteractionDBException;
-import com.app.util.DataSource;
 import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerFactory;
 
 import java.io.Serializable;
 import java.sql.Connection;

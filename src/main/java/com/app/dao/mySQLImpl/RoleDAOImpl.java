@@ -2,9 +2,7 @@ package com.app.dao.mySQLImpl;
 
 import com.app.dao.RoleDAO;
 import com.app.exceptions.InteractionDBException;
-import com.app.model.Question;
 import com.app.model.Role;
-import com.app.util.DataSource;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -30,11 +28,11 @@ public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
     private static final String FIND_BY_NAME = "SELECT r.role_id, r.name FROM studenttest_app.role r WHERE r.name = ?";
 
 
-    public RoleDAOImpl(Connection connection){
+    public RoleDAOImpl(Connection connection) {
         super(connection);
     }
 
-@Override
+    @Override
     public Role findByName(String name) {
         try (PreparedStatement preparedStatement = getFindByNameStatement(connection, name);
              ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -80,7 +78,7 @@ public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
         return connection.prepareStatement(FIND_ALL_QUERY);
     }
 
-   private PreparedStatement getFindByNameStatement(Connection connection, String name) throws SQLException{
+    private PreparedStatement getFindByNameStatement(Connection connection, String name) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_NAME);
         preparedStatement.setString(1, name);
         return preparedStatement;

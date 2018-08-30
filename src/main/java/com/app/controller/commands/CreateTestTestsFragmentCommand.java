@@ -35,15 +35,15 @@ public class CreateTestTestsFragmentCommand implements Command {
                     if (request.getParameterMap().containsKey("question")) {
 //                        for (String questionId : request.getParameterValues("question")) {
 //                            if (!chosenQuestionsSet.contains(Long.parseLong(questionId))) {
-                            if (!Arrays.asList(request.getParameterValues("question")).contains(question.getId().toString())) {
-                                chosenQuestionsSet.remove(question.getId());
-                            }
+                        if (!Arrays.asList(request.getParameterValues("question")).contains(question.getId().toString())) {
+                            chosenQuestionsSet.remove(question.getId());
+                        }
                     } else {
                         chosenQuestionsSet.remove(question.getId());
                     }
                 }
-            }}
-
+            }
+        }
 
 
         if (request.getParameter("page") != null) {
@@ -70,7 +70,7 @@ public class CreateTestTestsFragmentCommand implements Command {
             Test test = new Test();
             test.setSubject(subject);
             test.setName((String) request.getSession().getAttribute("newTestName"));
-            test.setTimeLimit(Integer.parseInt((String)request.getSession().getAttribute("newTimeLimit")));
+            test.setTimeLimit(Integer.parseInt((String) request.getSession().getAttribute("newTimeLimit")));
             Set<Question> questionSet = new HashSet<>();
             for (Long id : chosenQuestionsSet) {
                 Question question = questionService.findById(id);

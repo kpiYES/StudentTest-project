@@ -3,7 +3,6 @@ package com.app.dao.mySQLImpl;
 import com.app.dao.SubjectDAO;
 import com.app.exceptions.InteractionDBException;
 import com.app.model.Subject;
-import com.app.util.DataSource;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -28,7 +27,7 @@ public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectD
 
     private static final String FIND_BY_NAME_QUERY = "SELECT subject_id, name FROM studenttest_app.subject WHERE name = ?";
 
-    public SubjectDAOImpl(Connection connection){
+    public SubjectDAOImpl(Connection connection) {
         super(connection);
     }
 

@@ -7,8 +7,6 @@ import com.app.model.User;
 import com.app.service.RoleService;
 import com.app.service.ServiceFactory;
 import com.app.service.UserService;
-import com.app.service.impl.RoleServiceImpl;
-import com.app.service.impl.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

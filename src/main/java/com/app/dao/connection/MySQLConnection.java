@@ -20,7 +20,7 @@ public class MySQLConnection implements DAOConnection {
             connection.setAutoCommit(false);
             isTransactionActive = true;
         } catch (SQLException e) {
-            throw new InteractionDBException("sdfgg",e);
+            throw new InteractionDBException("sdfgg", e);
         }
     }
 
@@ -31,7 +31,7 @@ public class MySQLConnection implements DAOConnection {
             connection.setAutoCommit(false);
             isTransactionActive = true;
         } catch (SQLException e) {
-            throw new InteractionDBException("jhfjke",e);
+            throw new InteractionDBException("jhfjke", e);
         }
     }
 
@@ -42,7 +42,7 @@ public class MySQLConnection implements DAOConnection {
             connection.setAutoCommit(true);
             isTransactionActive = false;
         } catch (SQLException e) {
-            throw new InteractionDBException("jhfjf",e);
+            throw new InteractionDBException("jhfjf", e);
         }
     }
 
@@ -53,13 +53,13 @@ public class MySQLConnection implements DAOConnection {
             connection.setAutoCommit(true);
             isTransactionActive = false;
         } catch (SQLException e) {
-            throw new InteractionDBException("dsfsdf",e);
+            throw new InteractionDBException("dsfsdf", e);
         }
     }
 
     @Override
     public void close() {
-        if(isTransactionActive) {
+        if (isTransactionActive) {
             rollback();
         }
         try {

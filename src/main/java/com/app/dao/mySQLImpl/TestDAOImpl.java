@@ -41,7 +41,7 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
 
 
     @Override
-    public Long insert(Test test){
+    public Long insert(Test test) {
         Long id = super.insert(test);
         test.setId(id);
         connectTestAndQuestions(test);

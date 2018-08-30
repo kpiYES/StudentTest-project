@@ -13,22 +13,18 @@ public class RoleServiceImpl implements RoleService {
 
     private DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
 
-    private static class RoleServiceImplHolder {
-        private final static RoleServiceImpl INSTANCE = new RoleServiceImpl();
+    private RoleServiceImpl() {
     }
 
     public static RoleServiceImpl getInstance() {
         return RoleServiceImplHolder.INSTANCE;
     }
 
-    private RoleServiceImpl() {
-    }
-
     @Override
     public Long insert(Role role) {
         try (DAOConnection daoConnection = daoFactory.getConnection()) {
             RoleDAO roleDAO = daoFactory.getRoleDAO(daoConnection);
-           return roleDAO.insert(role);
+            return roleDAO.insert(role);
         }
     }
 
@@ -70,5 +66,9 @@ public class RoleServiceImpl implements RoleService {
             RoleDAO roleDAO = daoFactory.getRoleDAO(daoConnection);
             return roleDAO.findByName(name);
         }
+    }
+
+    private static class RoleServiceImplHolder {
+        private final static RoleServiceImpl INSTANCE = new RoleServiceImpl();
     }
 }

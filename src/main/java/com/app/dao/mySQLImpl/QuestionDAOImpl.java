@@ -4,7 +4,6 @@ import com.app.dao.QuestionDAO;
 import com.app.exceptions.InteractionDBException;
 import com.app.model.Question;
 import com.app.model.Subject;
-import com.app.util.DataSource;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -37,8 +36,7 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
     private static final String FIND_ALL_BY_TEST_ID_WITH_PAGINATION_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer FROM studenttest_app.question q INNER JOIN studenttest_app.subject s ON q.subject_id = s.subject_id INNER JOIN studenttest_app.test_question tq ON q.question_id = tq.question_id WHERE tq.test_id = ? LIMIT ? OFFSET ?";
 
 
-
-    public QuestionDAOImpl(Connection connection){
+    public QuestionDAOImpl(Connection connection) {
         super(connection);
     }
 

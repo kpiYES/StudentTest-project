@@ -13,12 +13,12 @@ public class ShowListOfSubjectsToPassTestFragmentCommand implements Command {
 
     private SubjectService subjectService = ServiceFactory.getSubjectService();
 
-        @Override
-        public String execute(HttpServletRequest request, HttpServletResponse response) {
-            Set<Subject> subjectSet = subjectService.findAll();
-            request.getSession().setAttribute("subjectSet", subjectSet);
-            request.setAttribute("pageFragment", "showListOfSubjectsToPassTestFragment.jsp");
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
+        Set<Subject> subjectSet = subjectService.findAll();
+        request.getSession().setAttribute("subjectSet", subjectSet);
+        request.setAttribute("pageFragment", "showListOfSubjectsToPassTestFragment.jsp");
 
-            return "student.jsp";
-        }
+        return "student.jsp";
     }
+}

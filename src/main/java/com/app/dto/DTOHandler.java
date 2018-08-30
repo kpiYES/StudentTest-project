@@ -27,9 +27,9 @@ public class DTOHandler {
         return user;
     }
 
-    public static Set<UserDTO> constructSetUserDTO(Set<User> usersSet){
+    public static Set<UserDTO> constructSetUserDTO(Set<User> usersSet) {
         Set<UserDTO> usersDTOSet = new HashSet<>();
-        for(User user : usersSet){
+        for (User user : usersSet) {
             usersDTOSet.add(constructUserDTO(user));
         }
         return usersDTOSet;
