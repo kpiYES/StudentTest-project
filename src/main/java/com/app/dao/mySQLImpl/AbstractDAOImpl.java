@@ -3,6 +3,7 @@ package com.app.dao.mySQLImpl;
 import com.app.dao.AbstractDAO;
 import com.app.exceptions.InteractionDBException;
 import com.app.model.AbstractEntity;
+import com.app.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +26,7 @@ public abstract class AbstractDAOImpl<T extends AbstractEntity> implements Abstr
 
     @Override
     public Long insert(T entity) {
+        Assert.isNotNull(entity, "entity must not be null");
         try (PreparedStatement preparedStatement = getInsertStatement(connection, entity)) {
             preparedStatement.executeUpdate();
             try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
@@ -43,6 +45,7 @@ public abstract class AbstractDAOImpl<T extends AbstractEntity> implements Abstr
 
     @Override
     public void update(T entity) {
+        Assert.isNotNull(entity, "entity must not be null");
         try (PreparedStatement preparedStatement = getUpdateStatement(connection, entity)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -54,6 +57,7 @@ public abstract class AbstractDAOImpl<T extends AbstractEntity> implements Abstr
 
     @Override
     public void delete(T entity) {
+        Assert.isNotNull(entity, "entity must not be null");
         try (PreparedStatement preparedStatement = getDeleteStatement(connection, entity)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -64,6 +68,7 @@ public abstract class AbstractDAOImpl<T extends AbstractEntity> implements Abstr
 
     @Override
     public T findById(Long id) {
+        Assert.isNotNull(id, "id must not be null");
         try (PreparedStatement preparedStatement = getFindByIdStatement(connection, id);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractEntityFromResultSet(resultSet);

@@ -4,6 +4,7 @@ import com.app.dao.UserDAO;
 import com.app.exceptions.InteractionDBException;
 import com.app.model.Role;
 import com.app.model.User;
+import com.app.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,7 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
 
     @Override
     public User findByMail(String mail) {
+        Assert.isNotNull(mail, "mail must not be null");
         try (PreparedStatement preparedStatement = getFindByMailStatement(connection, mail);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractEntityFromResultSet(resultSet);
