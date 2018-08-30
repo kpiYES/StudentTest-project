@@ -1,4 +1,4 @@
-package com.app.dao.mySQLImpl;
+package com.app.dao.mysql;
 
 import com.app.dao.TestDAO;
 import com.app.exceptions.InteractionDBException;
@@ -13,9 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
+public class MySQLTestDAOImpl extends MySQLAbstractDAOImpl<Test> implements TestDAO {
 
-    private static final Logger logger = Logger.getLogger(TestDAOImpl.class);
+    private static final Logger logger = Logger.getLogger(MySQLTestDAOImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.test (test_id, subject_id, name, time_limit) VALUES (NULL , ?, ?, ?)";
 
@@ -35,7 +35,7 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
 
     private static final String FIND_ALL_BY_QUESTION_ID_QUERY = "SELECT t.test_id, t.subject_id, s.name, t.name, t.time_limit FROM studenttest_app.test t INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id INNER JOIN studenttest_app.test_question tq ON t.test_id = tq.test_id WHERE tq.question_id = ?";
 
-    public TestDAOImpl(Connection connection) {
+    public MySQLTestDAOImpl(Connection connection) {
         super(connection);
     }
 

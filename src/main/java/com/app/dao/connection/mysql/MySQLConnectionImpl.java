@@ -1,16 +1,17 @@
-package com.app.dao.connection;
+package com.app.dao.connection.mysql;
 
+import com.app.dao.connection.DAOConnection;
 import com.app.exceptions.InteractionDBException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class MySQLConnection implements DAOConnection {
+public class MySQLConnectionImpl implements DAOConnection {
 
     private final Connection connection;
     private boolean isTransactionActive;
 
-    public MySQLConnection(Connection connection) {
+    public MySQLConnectionImpl(Connection connection) {
         this.connection = connection;
     }
 

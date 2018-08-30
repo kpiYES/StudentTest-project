@@ -1,6 +1,6 @@
 package com.app.service.impl;
 
-import com.app.dao.DAOFactory;
+import com.app.dao.factory.DAOFactory;
 import com.app.dao.PassedQuestionDAO;
 import com.app.dao.connection.DAOConnection;
 import com.app.model.PassedQuestion;

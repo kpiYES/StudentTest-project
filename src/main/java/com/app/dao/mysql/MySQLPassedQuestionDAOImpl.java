@@ -1,4 +1,4 @@
-package com.app.dao.mySQLImpl;
+package com.app.dao.mysql;
 
 import com.app.dao.PassedQuestionDAO;
 import com.app.exceptions.InteractionDBException;
@@ -14,9 +14,9 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PassedQuestionDAOImpl extends AbstractDAOImpl<PassedQuestion> implements PassedQuestionDAO {
+public class MySQLPassedQuestionDAOImpl extends MySQLAbstractDAOImpl<PassedQuestion> implements PassedQuestionDAO {
 
-    private static final Logger logger = Logger.getLogger(PassedQuestionDAOImpl.class);
+    private static final Logger logger = Logger.getLogger(MySQLPassedQuestionDAOImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.passed_question (passed_question_id, passed_test_id, question_id, user_answer) VALUES (NULL, ?, ?, ?)";
 
@@ -28,7 +28,7 @@ public class PassedQuestionDAOImpl extends AbstractDAOImpl<PassedQuestion> imple
 
     private static final String FIND_ALL_QUERY = "SELECT p.passed_question_id, p.question_id, p.user_answer, q.subject_id, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer, s.name FROM studenttest_app.passed_question p INNER JOIN studenttest_app.question q ON p.question_id = q.question_id INNER JOIN studenttest_app.subject s ON q.subject_id = s.subject_id";
 
-    public PassedQuestionDAOImpl(Connection connection) {
+    public MySQLPassedQuestionDAOImpl(Connection connection) {
         super(connection);
     }
 

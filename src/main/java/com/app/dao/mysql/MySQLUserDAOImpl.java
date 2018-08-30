@@ -1,4 +1,4 @@
-package com.app.dao.mySQLImpl;
+package com.app.dao.mysql;
 
 import com.app.dao.UserDAO;
 import com.app.exceptions.InteractionDBException;
@@ -13,9 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
+public class MySQLUserDAOImpl extends MySQLAbstractDAOImpl<User> implements UserDAO {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MySQLUserDAOImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.user (user_id, role_id, first_name, last_name, mail, salt, hash) VALUES (NULL, ?, ?,?,?,?,?)";
 
@@ -29,7 +29,7 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
 
     private static final String FIND_BY_EMAIL_QUERY = "SELECT u.user_id, u.role_id, r.name, u.first_name, u.last_name, u.mail, u.salt, u.hash FROM studenttest_app.user u INNER JOIN studenttest_app.role r ON u.role_id = r.role_id WHERE u.mail = ?";
 
-    public UserDAOImpl(Connection connection) {
+    public MySQLUserDAOImpl(Connection connection) {
         super(connection);
     }
 
