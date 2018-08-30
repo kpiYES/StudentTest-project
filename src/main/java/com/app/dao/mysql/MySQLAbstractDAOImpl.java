@@ -1,10 +1,12 @@
-package com.app.dao.mySQLImpl;
+package com.app.dao.mysql;
 
 import com.app.dao.AbstractDAO;
 import com.app.exceptions.InteractionDBException;
-import org.apache.log4j.Logger;
+import com.app.model.AbstractEntity;
+import com.app.util.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,32 +14,38 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class AbstractDAOImpl<T extends Serializable> implements AbstractDAO<T> {
+public abstract class MySQLAbstractDAOImpl<T extends AbstractEntity> implements AbstractDAO<T> {
 
-    private static final Logger logger = Logger.getLogger(AbstractDAOImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MySQLAbstractDAOImpl.class);
 
     protected Connection connection;
 
-    protected AbstractDAOImpl(Connection connection){
+    protected MySQLAbstractDAOImpl(Connection connection){
         this.connection = connection;
     }
 
     @Override
     public Long insert(T entity) {
+        Assert.isNotNull(entity, "entity must not be null");
         try (PreparedStatement preparedStatement = getInsertStatement(connection, entity)) {
             preparedStatement.executeUpdate();
             try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
-                resultSet.next();
-                return resultSet.getLong(1);
+                if (resultSet.next()) {
+                    long generatedId = resultSet.getLong(1);
+                    logger.debug("Inserted entity with id: {}", generatedId);
+                    return generatedId;
+                }
             }
         } catch (SQLException e) {
             logger.error("InteractionDBException:Couldn't insert entity");
             throw new InteractionDBException("Couldn't insert entity", e);
         }
+        return null;
     }
 
     @Override
     public void update(T entity) {
+        Assert.isNotNull(entity, "entity must not be null");
         try (PreparedStatement preparedStatement = getUpdateStatement(connection, entity)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -49,6 +57,7 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
 
     @Override
     public void delete(T entity) {
+        Assert.isNotNull(entity, "entity must not be null");
         try (PreparedStatement preparedStatement = getDeleteStatement(connection, entity)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -59,11 +68,12 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
 
     @Override
     public T findById(Long id) {
+        Assert.isNotNull(id, "id must not be null");
         try (PreparedStatement preparedStatement = getFindByIdStatement(connection, id);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractEntityFromResultSet(resultSet);
         } catch (SQLException e) {
-            logger.error("InteractionDBException:Couldn't findById entity");
+            logger.error("Failed to fetch entity by id: {}", id);
             throw new InteractionDBException("Couldn't find entity by Id", e);
         }
     }

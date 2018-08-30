@@ -3,14 +3,17 @@ package com.app.controller.commands;
 import com.app.dto.DTOHandler;
 import com.app.dto.UserDTO;
 import com.app.model.User;
-import com.app.service.ServiceFactory;
 import com.app.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class DeleteUserCommand implements Command {
-    private UserService userService = ServiceFactory.getUserService();
+    private UserService userService;
+
+    public DeleteUserCommand(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

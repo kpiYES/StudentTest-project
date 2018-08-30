@@ -1,7 +1,6 @@
 package com.app.controller.commands;
 
 import com.app.model.Test;
-import com.app.service.ServiceFactory;
 import com.app.service.TestService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 
 public class DeleteTestCommand implements Command {
 
-    private TestService testService = ServiceFactory.getTestService();
+    private TestService testService;
+
+    public DeleteTestCommand(TestService testService) {
+        this.testService = testService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

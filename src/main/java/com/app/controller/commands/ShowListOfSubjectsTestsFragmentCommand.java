@@ -1,7 +1,6 @@
 package com.app.controller.commands;
 
 import com.app.model.Subject;
-import com.app.service.ServiceFactory;
 import com.app.service.SubjectService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +9,11 @@ import java.util.Set;
 
 public class ShowListOfSubjectsTestsFragmentCommand implements Command {
 
-    private SubjectService subjectService = ServiceFactory.getSubjectService();
+    private SubjectService subjectService;
+
+    public ShowListOfSubjectsTestsFragmentCommand(SubjectService subjectService) {
+        this.subjectService = subjectService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

@@ -5,7 +5,6 @@ import com.app.dto.UserDTO;
 import com.app.model.Role;
 import com.app.model.User;
 import com.app.service.RoleService;
-import com.app.service.ServiceFactory;
 import com.app.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,9 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 public class ToShowUserFragmentCommand implements Command {
-    private UserService userService = ServiceFactory.getUserService();
-    private RoleService roleService = ServiceFactory.getRoleService();
 
+    private UserService userService;
+    private RoleService roleService;
+
+    public ToShowUserFragmentCommand(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

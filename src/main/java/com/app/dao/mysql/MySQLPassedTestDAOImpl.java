@@ -1,4 +1,4 @@
-package com.app.dao.mySQLImpl;
+package com.app.dao.mysql;
 
 import com.app.dao.PassedTestDAO;
 import com.app.exceptions.InteractionDBException;
@@ -11,9 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-public class PassedTestDAOImpl extends AbstractDAOImpl<PassedTest> implements PassedTestDAO {
+public class MySQLPassedTestDAOImpl extends MySQLAbstractDAOImpl<PassedTest> implements PassedTestDAO {
 
-    private static final Logger logger = Logger.getLogger(PassedTestDAOImpl.class);
+    private static final Logger logger = Logger.getLogger(MySQLPassedTestDAOImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.passed_test (passed_test_id, user_id, test_id, mark) VALUES (NULL, ?, ?, ?)";
 
@@ -27,7 +27,7 @@ public class PassedTestDAOImpl extends AbstractDAOImpl<PassedTest> implements Pa
 
     private static final String FIND_BY_USER_ID_QUERY = "SELECT pt.passed_test_id, pt.user_id, u.role_id, u.first_name, u.last_name, u.mail, u.salt, u.hash, r.name,  pt.test_id, t.subject_id, s.name, t.name, pt.mark FROM studenttest_app.passed_test pt INNER JOIN studenttest_app.user u ON pt.user_id = u.user_id INNER JOIN studenttest_app.role r ON u.role_id = r.role_id INNER JOIN studenttest_app.test t ON pt.test_id = t.test_id INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id WHERE pt.user_id = ?";
 
-    public PassedTestDAOImpl(Connection connection){
+    public MySQLPassedTestDAOImpl(Connection connection){
         super(connection);
     }
 

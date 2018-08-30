@@ -3,7 +3,6 @@ package com.app.controller.commands;
 import com.app.model.Question;
 import com.app.model.Subject;
 import com.app.service.QuestionService;
-import com.app.service.ServiceFactory;
 import com.app.service.SubjectService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,8 +11,13 @@ import java.util.Set;
 
 public class ShowListOfQuestionsQuestionsFragmentCommand implements Command {
 
-    private QuestionService questionService = ServiceFactory.getQuestionService();
-    private SubjectService subjectService = ServiceFactory.getSubjectService();
+    private QuestionService questionService;
+    private SubjectService subjectService;
+
+    public ShowListOfQuestionsQuestionsFragmentCommand(QuestionService questionService, SubjectService subjectService) {
+        this.questionService = questionService;
+        this.subjectService = subjectService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

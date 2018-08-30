@@ -1,20 +1,21 @@
-package com.app.dao.mySQLImpl;
+package com.app.dao.mysql;
 
 import com.app.dao.UserDAO;
 import com.app.exceptions.InteractionDBException;
 import com.app.model.Role;
 import com.app.model.User;
-import org.apache.log4j.Logger;
+import com.app.util.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Set;
 
-public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
+public class MySQLUserDAOImpl extends MySQLAbstractDAOImpl<User> implements UserDAO {
 
-    private static final Logger logger = Logger.getLogger(UserDAOImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MySQLUserDAOImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.user (user_id, role_id, first_name, last_name, mail, salt, hash) VALUES (NULL, ?, ?,?,?,?,?)";
 
@@ -28,17 +29,18 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
 
     private static final String FIND_BY_EMAIL_QUERY = "SELECT u.user_id, u.role_id, r.name, u.first_name, u.last_name, u.mail, u.salt, u.hash FROM studenttest_app.user u INNER JOIN studenttest_app.role r ON u.role_id = r.role_id WHERE u.mail = ?";
 
-    public UserDAOImpl(Connection connection) {
+    public MySQLUserDAOImpl(Connection connection) {
         super(connection);
     }
 
     @Override
     public User findByMail(String mail) {
+        Assert.isNotNull(mail, "mail must not be null");
         try (PreparedStatement preparedStatement = getFindByMailStatement(connection, mail);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractEntityFromResultSet(resultSet);
         } catch (SQLException e) {
-            logger.error("Couldn't find User by mail");
+            logger.error("Couldn't find User by mail: {}", mail);
             throw new InteractionDBException("Couldn't find User by mail", e);
         }
     }
@@ -110,10 +112,5 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
             user.setHash(resultSet.getString("u.hash"));
         }
         return user;
-    }
-
-    @Override
-    Set<User> extractSetOfEntityFromResultSet(ResultSet resultSet) throws SQLException {
-        return super.extractSetOfEntityFromResultSet(resultSet);
     }
 }

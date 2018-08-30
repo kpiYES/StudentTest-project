@@ -1,4 +1,4 @@
-package com.app.dao.mySQLImpl;
+package com.app.dao.mysql;
 
 import com.app.dao.SubjectDAO;
 import com.app.exceptions.InteractionDBException;
@@ -11,9 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectDAO {
+public class MySQLSubjectDAOImpl extends MySQLAbstractDAOImpl<Subject> implements SubjectDAO {
 
-    private static final Logger logger = Logger.getLogger(SubjectDAOImpl.class);
+    private static final Logger logger = Logger.getLogger(MySQLSubjectDAOImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.subject (subject_id, name) VALUES (NULL, ?)";
 
@@ -27,7 +27,7 @@ public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectD
 
     private static final String FIND_BY_NAME_QUERY = "SELECT subject_id, name FROM studenttest_app.subject WHERE name = ?";
 
-    public SubjectDAOImpl(Connection connection) {
+    public MySQLSubjectDAOImpl(Connection connection) {
         super(connection);
     }
 

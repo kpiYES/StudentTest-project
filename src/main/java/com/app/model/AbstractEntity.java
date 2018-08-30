@@ -2,7 +2,7 @@ package com.app.model;
 
 import java.io.Serializable;
 
-abstract class AbstractEntity implements Serializable {
+public abstract class AbstractEntity implements Serializable {
 
     private Long id;
 

@@ -1,6 +1,7 @@
 package com.app.service.impl;
 
-import com.app.dao.DAOFactory;
+import com.app.dao.AbstractDAO;
+import com.app.dao.factory.DAOFactory;
 import com.app.dao.UserDAO;
 import com.app.dao.connection.DAOConnection;
 import com.app.exceptions.PasswordValidationException;
@@ -10,9 +11,8 @@ import com.app.util.PasswordSecurity;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Set;
 
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends CrudServiceImpl<User> implements UserService {
 
     private DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
 
@@ -21,46 +21,6 @@ public class UserServiceImpl implements UserService {
 
     public static UserServiceImpl getInstance() {
         return UserServiceImplHolder.INSTANCE;
-    }
-
-    @Override
-    public Long insert(User user) {
-        try (DAOConnection daoConnection = daoFactory.getConnection()) {
-            UserDAO userDAO = daoFactory.getUserDAO(daoConnection);
-            return userDAO.insert(user);
-        }
-    }
-
-    @Override
-    public void update(User user) {
-        try (DAOConnection daoConnection = daoFactory.getConnection()) {
-            UserDAO userDAO = daoFactory.getUserDAO(daoConnection);
-            userDAO.update(user);
-        }
-    }
-
-    @Override
-    public void delete(User user) {
-        try (DAOConnection daoConnection = daoFactory.getConnection()) {
-            UserDAO userDAO = daoFactory.getUserDAO(daoConnection);
-            userDAO.delete(user);
-        }
-    }
-
-    @Override
-    public User findById(Long id) {
-        try (DAOConnection daoConnection = daoFactory.getConnection()) {
-            UserDAO userDAO = daoFactory.getUserDAO(daoConnection);
-            return userDAO.findById(id);
-        }
-    }
-
-    @Override
-    public Set<User> findAll() {
-        try (DAOConnection daoConnection = daoFactory.getConnection()) {
-            UserDAO userDAO = daoFactory.getUserDAO(daoConnection);
-            return userDAO.findAll();
-        }
     }
 
     @Override
@@ -78,6 +38,19 @@ public class UserServiceImpl implements UserService {
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new PasswordValidationException("Invalid password exception", e);
         }
+    }
+
+    @Override
+    public User assembleCredentials(User user, String rawPassword) {
+        String saltedHash = PasswordSecurity.generateSaltedPasswordHash(rawPassword);
+        user.setHash(PasswordSecurity.getHashFromSaltedHash(saltedHash));
+        user.setSalt(PasswordSecurity.getSaltFromSaltedHash(saltedHash));
+        return user;
+    }
+
+    @Override
+    protected AbstractDAO<User> getConcreteDAO(DAOConnection daoConnection) {
+        return daoFactory.getUserDAO(daoConnection);
     }
 
     private static class UserServiceImplHolder {

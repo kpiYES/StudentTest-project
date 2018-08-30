@@ -7,13 +7,16 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
-public class PasswordSecurity {
+public final class PasswordSecurity {
 
     private static final int ITERATIONS = 1000;
     private static final String SALT_ALGORITHM = "SHA1PRNG";
     private static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
     private static final int SALT_BYTES = 64;
     private static final int HASH_BYTES = 128;
+
+    private PasswordSecurity() {
+    }
 
     public static String generateSaltedPasswordHash(String password) {
         char[] chars = password.toCharArray();
@@ -23,17 +26,17 @@ public class PasswordSecurity {
             byte[] hash = pbkdf2(chars, salt, HASH_BYTES);
             return toHex(salt) + ":" + toHex(hash);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-           throw  new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 
-    public static String getHashFromSaltedHash(String saltedPassword){
+    public static String getHashFromSaltedHash(String saltedPassword) {
         String[] strings = saltedPassword.split(":");
         return strings[1];
     }
 
-    public static String getSaltFromSaltedHash(String saltedPassword){
-       String[] strings = saltedPassword.split(":");
+    public static String getSaltFromSaltedHash(String saltedPassword) {
+        String[] strings = saltedPassword.split(":");
         return strings[0];
     }
 
@@ -84,5 +87,3 @@ public class PasswordSecurity {
         return diff == 0;
     }
 }
-
-

@@ -4,7 +4,6 @@ import com.app.controller.commands.Command;
 import com.app.model.Question;
 import com.app.model.Test;
 import com.app.service.QuestionService;
-import com.app.service.ServiceFactory;
 import com.app.service.TestService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +12,13 @@ import java.util.Set;
 
 public class ShowTestToPassTestFragmentCommand implements Command {
 
-    private TestService testService = ServiceFactory.getTestService();
-    private QuestionService questionService = ServiceFactory.getQuestionService();
+    private TestService testService;
+    private QuestionService questionService;
+
+    public ShowTestToPassTestFragmentCommand(TestService testService, QuestionService questionService) {
+        this.testService = testService;
+        this.questionService = questionService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

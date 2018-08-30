@@ -1,4 +1,4 @@
-package com.app.dao.mySQLImpl;
+package com.app.dao.mysql;
 
 import com.app.dao.RoleDAO;
 import com.app.exceptions.InteractionDBException;
@@ -11,9 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
+public class MySQLRoleDAOImpl extends MySQLAbstractDAOImpl<Role> implements RoleDAO {
 
-    private static final Logger logger = Logger.getLogger(RoleDAOImpl.class);
+    private static final Logger logger = Logger.getLogger(MySQLRoleDAOImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.role  (role_id, name) VALUES (NULL, ?)";
 
@@ -28,7 +28,7 @@ public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
     private static final String FIND_BY_NAME = "SELECT r.role_id, r.name FROM studenttest_app.role r WHERE r.name = ?";
 
 
-    public RoleDAOImpl(Connection connection) {
+    public MySQLRoleDAOImpl(Connection connection) {
         super(connection);
     }
 
