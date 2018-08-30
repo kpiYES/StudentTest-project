@@ -2,7 +2,6 @@ package com.app.controller.commands;
 
 import com.app.model.Subject;
 import com.app.model.Test;
-import com.app.service.ServiceFactory;
 import com.app.service.SubjectService;
 import com.app.service.TestService;
 
@@ -12,8 +11,13 @@ import java.util.Set;
 
 public class ShowListOfTestsTestsFragmentCommand implements Command {
 
-    private TestService testService = ServiceFactory.getTestService();
-    private SubjectService subjectService = ServiceFactory.getSubjectService();
+    private TestService testService;
+    private SubjectService subjectService;
+
+    public ShowListOfTestsTestsFragmentCommand(TestService testService, SubjectService subjectService) {
+        this.testService = testService;
+        this.subjectService = subjectService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

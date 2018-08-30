@@ -1,13 +1,13 @@
 package com.app.service.impl;
 
-import com.app.dao.factory.DAOFactory;
 import com.app.dao.PassedQuestionDAO;
 import com.app.dao.connection.DAOConnection;
+import com.app.dao.factory.DAOFactory;
 import com.app.model.PassedQuestion;
 import com.app.model.Question;
 import com.app.service.PassedQuestionService;
 import com.app.service.QuestionService;
-import com.app.service.ServiceFactory;
+import com.app.service.factory.ServiceFactory;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -17,14 +17,17 @@ public class PassedQuestionServiceImpl implements PassedQuestionService {
 
     private final DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
 
+    private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
+    private QuestionService questionService;
+
     private PassedQuestionServiceImpl() {
+        questionService = serviceFactory.getQuestionService();
     }
 
     //IMPL?
     public static PassedQuestionServiceImpl getInstance() {
         return PassedQuestionServiceImplHolder.INSTANCE;
     }
-
 
     @Override
     public Long insert(PassedQuestion passedQuestion) {
@@ -71,14 +74,12 @@ public class PassedQuestionServiceImpl implements PassedQuestionService {
 
     @Override
     public Set<PassedQuestion> constructFromUsersAnswersMap(Map<Long, String> usersAnswersMap) {
-        QuestionService questionService = ServiceFactory.getQuestionService();
-
         Set<PassedQuestion> passedQuestionSet = new HashSet<>(usersAnswersMap.size());
-        for (Map.Entry entry : usersAnswersMap.entrySet()) {
-            Question question = questionService.findById((Long) entry.getKey());
+        for (Map.Entry<Long, String> entry : usersAnswersMap.entrySet()) {
+            Question question = questionService.findById(entry.getKey());
             PassedQuestion passedQuestion = new PassedQuestion();
             passedQuestion.setQuestion(question);
-            passedQuestion.setUserAnswer((String) entry.getValue());
+            passedQuestion.setUserAnswer(entry.getValue());
         }
         return passedQuestionSet;
     }

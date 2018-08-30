@@ -3,11 +3,14 @@ package com.app.controller.commands.student;
 import com.app.controller.commands.Command;
 import com.app.dto.DTOHandler;
 import com.app.dto.UserDTO;
-import com.app.model.*;
+import com.app.model.PassedQuestion;
+import com.app.model.PassedTest;
+import com.app.model.Question;
+import com.app.model.Test;
+import com.app.model.User;
 import com.app.service.PassedQuestionService;
 import com.app.service.PassedTestService;
-import com.app.service.ServiceFactory;
-import com.app.util.PassedTestMark;
+import com.app.service.RatingService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,9 +21,17 @@ import java.util.Set;
 
 public class PassTestToPassTestFragmentCommand implements Command {
 
-    private PassedTestService passedTestService = ServiceFactory.getPassedTestService();
-    private PassedQuestionService passedQuestionService = ServiceFactory.getPassedQuestionService();
+    private PassedTestService passedTestService;
+    private PassedQuestionService passedQuestionService;
+    private RatingService ratingService;
 
+    public PassTestToPassTestFragmentCommand(PassedTestService passedTestService,
+                                             PassedQuestionService passedQuestionService,
+                                             RatingService ratingService) {
+        this.passedTestService = passedTestService;
+        this.passedQuestionService = passedQuestionService;
+        this.ratingService = ratingService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
@@ -54,7 +65,7 @@ public class PassTestToPassTestFragmentCommand implements Command {
             Test test = (Test) request.getSession().getAttribute("test");
             UserDTO userDTO = (UserDTO) request.getSession().getAttribute("currentUser");
             User user = DTOHandler.constructUser(userDTO);
-            Integer mark = PassedTestMark.toRateMark(answerMap);
+            Integer mark = ratingService.rateAnswer(answerMap);
             PassedTest passedTest = new PassedTest();
             passedTest.setTest(test);
             passedTest.setUser(user);
