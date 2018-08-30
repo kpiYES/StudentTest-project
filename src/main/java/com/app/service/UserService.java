@@ -7,4 +7,6 @@ public interface UserService extends CrudService<User> {
     User findByMail(String mail);
 
     boolean validateUserPassword(String password, User user);
+
+    User assembleCredentials(User user, String rawPassword);
 }

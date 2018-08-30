@@ -41,6 +41,14 @@ public class UserServiceImpl extends CrudServiceImpl<User> implements UserServic
     }
 
     @Override
+    public User assembleCredentials(User user, String rawPassword) {
+        String saltedHash = PasswordSecurity.generateSaltedPasswordHash(rawPassword);
+        user.setHash(PasswordSecurity.getHashFromSaltedHash(saltedHash));
+        user.setSalt(PasswordSecurity.getSaltFromSaltedHash(saltedHash));
+        return user;
+    }
+
+    @Override
     protected AbstractDAO<User> getConcreteDAO(DAOConnection daoConnection) {
         return daoFactory.getUserDAO(daoConnection);
     }
