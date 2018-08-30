@@ -1,10 +1,8 @@
 package com.app.service.impl;
 
 import com.app.dao.DAOFactory;
-import com.app.dao.QuestionDAO;
 import com.app.dao.TestDAO;
 import com.app.dao.connection.DAOConnection;
-import com.app.model.Question;
 import com.app.model.Test;
 import com.app.service.TestService;
 
@@ -93,13 +91,6 @@ public class TestServiceImpl implements TestService {
 //        }
 //    }
 
-    @Override
-    public void connectTestAndQuestions(Test test) {
-        try (DAOConnection daoConnection = daoFactory.getConnection()) {
-            TestDAO testDAO = daoFactory.getTestDAO(daoConnection);
-            testDAO.connectTestAndQuestions(test);
-        }
-    }
 
     private static class TestServiceImplHolder {
         private final static TestServiceImpl INSTANCE = new TestServiceImpl();

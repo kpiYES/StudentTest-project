@@ -21,5 +21,4 @@ public interface TestDAO {
 
     Set<Test> findAllByQuestionId(Long id);
 
-    void connectTestAndQuestions(Test test);
 }

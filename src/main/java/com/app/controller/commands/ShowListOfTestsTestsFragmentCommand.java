@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 public class ShowListOfTestsTestsFragmentCommand implements Command {
-//Transactions or not
+
    private TestService testService = ServiceFactory.getTestService();
    private SubjectService subjectService = ServiceFactory.getSubjectService();
 

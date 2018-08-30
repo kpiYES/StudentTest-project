@@ -17,7 +17,7 @@ public class ShowQuestionQuestionsFragmentCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-//Transactions?
+
         Question question = questionService.findById(Long.parseLong(request.getParameter("questionId")));
         request.getSession().setAttribute("question", question);
         Set<Test> testSet = testService.getFindAllByQuestionId(((Question)request.getSession().getAttribute("question")).getId());

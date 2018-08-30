@@ -1,11 +1,17 @@
 package com.app.service.impl;
 
 import com.app.dao.DAOFactory;
+import com.app.dao.PassedQuestionDAO;
 import com.app.dao.PassedTestDAO;
 import com.app.dao.connection.DAOConnection;
-import com.app.model.PassedTest;
+import com.app.dto.UserDTO;
+import com.app.model.*;
 import com.app.service.PassedTestService;
+import com.app.service.QuestionService;
+import com.app.service.ServiceFactory;
 
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class PassedTestServiceImpl implements PassedTestService {
@@ -64,6 +70,17 @@ public class PassedTestServiceImpl implements PassedTestService {
         try (DAOConnection daoConnection = daoFactory.getConnection()) {
             PassedTestDAO passedTestDAO = daoFactory.getPassedTestDAO(daoConnection);
             return passedTestDAO.findByUserId(id);
+        }
+    }
+
+    @Override
+    public Long insertWithPassedQuestions(PassedTest passedTest) {
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            PassedTestDAO passedTestDAO = daoFactory.getPassedTestDAO(daoConnection);
+            PassedQuestionDAO passedQuestionDAO = daoFactory.getPassedQuestionDAO(daoConnection);
+            passedTestDAO.insert(passedTest);
+
+            return passedTestDAO.insert(passedTest);
         }
     }
 

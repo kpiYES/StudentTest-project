@@ -28,13 +28,9 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
     @Override
     public Long insert(T entity) {
         try (PreparedStatement preparedStatement = getInsertStatement(connection, entity)) {
-            System.out.println(1);
             preparedStatement.executeUpdate();
-            System.out.println(2);
             try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
-                System.out.println(3);
                 resultSet.next();
-                System.out.println(4);
                 return resultSet.getLong(1);
             }
         } catch (SQLException e) {

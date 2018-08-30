@@ -1,6 +1,7 @@
 package com.app.controller;
 
 import com.app.controller.commands.*;
+import com.app.controller.commands.student.PassTestToPassTestFragmentCommand;
 import com.app.controller.commands.student.ShowListOfSubjectsToPassTestFragmentCommand;
 import com.app.controller.commands.student.ShowListOfTestsToPassTestFragmentCommand;
 import com.app.controller.commands.student.ShowTestToPassTestFragmentCommand;
@@ -41,6 +42,7 @@ public class CommandHelper {
         commandsMap.put("showListOfSubjectsToPassTestFragment", new ShowListOfSubjectsToPassTestFragmentCommand());
         commandsMap.put("showListOfTestsToPassTestFragment", new ShowListOfTestsToPassTestFragmentCommand());
         commandsMap.put("showTestToPassTestFragment", new ShowTestToPassTestFragmentCommand());
+        commandsMap.put("passTestToPassTestFragment", new PassTestToPassTestFragmentCommand());
     }
 
     Command chooseCommand(HttpServletRequest request) {

@@ -21,6 +21,8 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
 
     private static final String CONNECT_TEST_AND_QUESTIONS_QUERY = "INSERT INTO studenttest_app.test_question  (test_id, question_id) VALUES (?,?)";
 
+    private static final String DISCONNECT_TEST_AND_QUESTIONS_QUERY = "DELETE FROM studenttest_app.test_question WHERE test_id = ?";
+
     private static final String UPDATE_QUERY = "UPDATE studenttest_app.test SET subject_id = ?, name = ?, time_limit = ? WHERE test_id = ?";
 
     private static final String DELETE_QUERY = "DELETE FROM studenttest_app.test WHERE test_id = ? AND subject_id = ? AND name = ? AND time_limit = ?";
@@ -35,6 +37,21 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
 
     public TestDAOImpl(Connection connection) {
         super(connection);
+    }
+
+
+    @Override
+    public Long insert(Test test){
+        Long id = super.insert(test);
+        test.setId(id);
+        connectTestAndQuestions(test);
+        return id;
+    }
+
+    @Override
+    public void delete(Test test) {
+        disconnectTestAndQuestions(test);
+        super.delete(test);
     }
 
     @Override
@@ -59,18 +76,24 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
         }
     }
 
-    @Override
-    public void connectTestAndQuestions(Test test) {
+
+    private void connectTestAndQuestions(Test test) {
         try (PreparedStatement preparedStatement = getConnectTestAndQuestionsStatement(connection, test)) {
             preparedStatement.executeBatch();
         } catch (SQLException e) {
-            logger.error("Couldn't connect Test And Questions");
+            logger.error("Couldn't connect Test and Questions");
             throw new InteractionDBException("Couldn't connect Test And Questions", e);
         }
     }
 
-    public void disconnectTestAndQuestions(Test test) {
 
+    private void disconnectTestAndQuestions(Test test) {
+        try (PreparedStatement preparedStatement = getDisconnectTestAndQuestionsStatement(connection, test)) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Couldn't disconnect Test and Questions");
+            throw new InteractionDBException("Couldn't disconnect Test and Questions", e);
+        }
     }
 
     public PreparedStatement getFindAllByQuestionIdStatement(Connection connection, Long id) throws SQLException {
@@ -89,12 +112,18 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
         return preparedStatement;
     }
 
+    public PreparedStatement getDisconnectTestAndQuestionsStatement(Connection connection, Test test) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(DISCONNECT_TEST_AND_QUESTIONS_QUERY);
+        preparedStatement.setLong(1, test.getId());
+        return preparedStatement;
+    }
+
     @Override
     PreparedStatement getInsertStatement(Connection connection, Test test) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
         preparedStatement.setLong(1, test.getSubject().getId());
         preparedStatement.setString(2, test.getName());
-        preparedStatement.setInt(3,test.getTimeLimit());
+        preparedStatement.setInt(3, test.getTimeLimit());
         return preparedStatement;
     }
 

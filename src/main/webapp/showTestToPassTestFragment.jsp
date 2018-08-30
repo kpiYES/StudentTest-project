@@ -21,8 +21,8 @@
 <p> Time limit <c:out value="${sessionScope.test.timeLimit}"/></p>
 
 <form>
-    <input type="hidden" name="command" value="deleteQuestion">
-    <input type="submit" value="Delete question">
+    <input type="hidden" name="command" value="passTestToPassTestFragment">
+    <input type="submit" value="Pass test">
 </form>
 
 </body>

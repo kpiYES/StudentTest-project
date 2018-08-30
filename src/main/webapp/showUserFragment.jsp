@@ -33,9 +33,7 @@
         <input type="hidden" name="command" value="deleteUser">
         <input type="submit" value="Delete user">
     </form>
-    <c:if test="${requestScope.msg!=null}">
-        <c:out value="${requestScope.msg}"/>
-    </c:if>
+
 </div>
 </body>
 </html>

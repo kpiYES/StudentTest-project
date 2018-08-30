@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS passed_test (
   passed_test_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id        INT UNSIGNED,
   test_id        INT UNSIGNED,
-  mark           TINYINT(2) NOT NULL,
+  mark           TINYINT(3) NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user (user_id),
   FOREIGN KEY (test_id) REFERENCES test (test_id)
 )
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS passed_question (
   passed_question_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   passed_test_id INT UNSIGNED,
   question_id INT UNSIGNED,
-  user_answer TINYINT(1),
+  user_answer VARCHAR(100) NULL,
   FOREIGN KEY (passed_test_id) REFERENCES passed_test(passed_test_id),
   FOREIGN KEY (question_id) REFERENCES question(question_id)
 )

@@ -22,6 +22,5 @@ public interface TestService extends Service {
 
     Set<Test> getFindAllByQuestionId(Long id);
 
-    void connectTestAndQuestions(Test test);
 
 }

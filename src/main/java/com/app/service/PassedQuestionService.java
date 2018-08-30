@@ -1,12 +1,11 @@
-package com.app.dao;
+package com.app.service;
 
 import com.app.model.PassedQuestion;
-import com.app.model.User;
 
+import java.util.Map;
 import java.util.Set;
 
-public interface PassedQuestionDAO {
-
+public interface PassedQuestionService {
     Long insert(PassedQuestion passedQuestion);
 
     void update(PassedQuestion passedQuestion);
@@ -17,6 +16,6 @@ public interface PassedQuestionDAO {
 
     Set<PassedQuestion> findAll();
 
-    void insertAll(Set<PassedQuestion> passedQuestionSet);
+    Set<PassedQuestion> constructFromUsersAnswersMap(Map<Long, String> usersAnswersMap);
 
-    }
+}

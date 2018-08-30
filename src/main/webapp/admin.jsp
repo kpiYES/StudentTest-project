@@ -35,6 +35,9 @@
 <c:if test="${requestScope.pageFragment!=null}">
     <c:import url="${requestScope.pageFragment}"/>
 </c:if>
+    <c:if test="${requestScope.msg!=null}">
+        <c:out value="${requestScope.msg}"/>
+    </c:if>
 </div>
 
 <%--<ut:myTag firstname="${sessionScope.currentUser}"/>--%>

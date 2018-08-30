@@ -40,4 +40,5 @@ public class ServiceFactory {
         return PassedTestServiceImpl.getInstance();
     }
 
+    public static PassedQuestionService getPassedQuestionService() {return PassedQuestionServiceImpl.getInstance();}
 }
