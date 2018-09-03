@@ -1,7 +1,6 @@
 package com.app.service.impl;
 
 import com.app.dao.DAOFactory;
-import com.app.dao.PassedQuestionDAO;
 import com.app.dao.PassedTestDAO;
 import com.app.dao.connection.TransactionManager;
 import com.app.exceptions.InteractionDBException;
@@ -17,10 +16,12 @@ import java.util.Set;
 public class PassedTestServiceImpl implements PassedTestService {
 
     private PassedTestDAO passedTestDAO;
+    private PassedQuestionService passedQuestionService;
 
     private PassedTestServiceImpl() {
         DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
         passedTestDAO = daoFactory.getPassedTestDAO();
+        passedQuestionService = ServiceFactory.getPassedQuestionService();
     }
 
     public static PassedTestServiceImpl getInstance() {
@@ -44,7 +45,6 @@ public class PassedTestServiceImpl implements PassedTestService {
 
     @Override
     public void insertWithPassedQuestions(PassedTest passedTest) {
-        PassedQuestionService passedQuestionService = ServiceFactory.getPassedQuestionService();
         try {
             TransactionManager.beginTransaction();
             passedTest.setId(passedTestDAO.insert(passedTest));
