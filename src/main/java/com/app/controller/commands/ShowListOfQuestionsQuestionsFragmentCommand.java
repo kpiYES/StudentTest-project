@@ -17,7 +17,7 @@ public class ShowListOfQuestionsQuestionsFragmentCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        Subject subject = subjectService.findByName(request.getParameter("subjectName"));
+        Subject subject = subjectService.findById(Long.parseLong(request.getParameter("subjectId")));
         request.getSession().setAttribute("subject", subject);
         Set<Question> questionSet = questionService.findAllBySubjectId(subject.getId());
         request.getSession().setAttribute("questionSet", questionSet);

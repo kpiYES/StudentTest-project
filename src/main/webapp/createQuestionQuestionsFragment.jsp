@@ -13,16 +13,21 @@
 </head>
 <body>
 
-<div>
+<div class="question-form">
     <form method="post" action="dispatcher">
         <p>Subject: <c:out value="${sessionScope.subject.name}"/></p>
         <p>Query<Br>
-            <textarea name="query" cols="40" rows="5" required></textarea></p>
+            <textarea name="query" cols="40" rows="7" required></textarea></p>
         <p> Answer 1: <input type="text" name="answer1" size="40" required></p>
         <p> Answer 2: <input type="text" name="answer2" size="40" required></p>
-        <p> Answer 3: <input type="text" name="answer3" size="40" required></p>
+        <p> Answer 3: <input type="text" name="answer3" size="40"></p>
         <p> Answer 4:<input type="text" name="answer4" size="40"></p>
-        <p> Correct answer:<input type="text" name="correctAnswer" size="40" required></p>
+        <select name="correctAnswer" required>
+            <option value="answer1">Answer 1</option>
+            <option value="answer2">Answer 2</option>
+            <option value="answer3">Answer 3</option>
+            <option value="answer4">Answer 4</option>
+        </select>
         <input type="hidden" name="command" value="createQuestion" >
         <input type="submit" value="Create question">
     </form>

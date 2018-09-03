@@ -13,7 +13,12 @@
         <body-content>empty</body-content>
 
         <attribute>
-            <name>firstname</name>
+            <name>firstName</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>lastName</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

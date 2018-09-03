@@ -1,9 +1,11 @@
 package com.app.dao.mySQLImpl;
 
 import com.app.dao.AbstractDAO;
+import com.app.dao.connection.ConnectionSource;
 import com.app.exceptions.InteractionDBException;
 import org.apache.log4j.Logger;
 
+import javax.sql.DataSource;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,20 +18,15 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
 
     private static final Logger logger = Logger.getLogger(AbstractDAOImpl.class);
 
-    protected Connection connection;
-
-    protected AbstractDAOImpl(Connection connection){
-        this.connection = connection;
-    }
 
     @Override
     public Long insert(T entity) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getInsertStatement(connection, entity)) {
             preparedStatement.executeUpdate();
-            try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
                 resultSet.next();
                 return resultSet.getLong(1);
-            }
         } catch (SQLException e) {
             logger.error("InteractionDBException:Couldn't insert entity");
             throw new InteractionDBException("Couldn't insert entity", e);
@@ -79,7 +76,7 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
         }
     }
 
-    abstract PreparedStatement getUpdateStatement(Connection connection, T entity) throws SQLException;
+   abstract PreparedStatement getUpdateStatement(Connection connection, T entity) throws SQLException;
 
     abstract PreparedStatement getInsertStatement(Connection connection, T entity) throws SQLException;
 

@@ -15,15 +15,14 @@
 
 </head>
 <body>
-
-<p> Test name <c:out value="${sessionScope.test.name}"/></p>
-<p> Count of questions <c:out value="${sessionScope.test.questionSet.size()}"/></p>
-<p> Time limit <c:out value="${sessionScope.test.timeLimit}"/></p>
+<div class="test-description">
+<p> Test name: <c:out value="${sessionScope.test.name}"/></p>
+<p> Count of questions: <c:out value="${sessionScope.test.questionSet.size()}"/></p>
 
 <form>
     <input type="hidden" name="command" value="passTestToPassTestFragment">
     <input type="submit" value="Pass test">
 </form>
-
+</div>
 </body>
 </html>

@@ -3,6 +3,7 @@ package com.app.dao;
 
 import com.app.dao.connection.DAOConnection;
 import com.app.exceptions.InteractionDBException;
+import com.app.model.PassedTest;
 
 public abstract class DAOFactory {
 
@@ -12,24 +13,21 @@ public abstract class DAOFactory {
                 return new MySQLFactory();
             default:
                 throw new InteractionDBException("Could not find the corresponding factory instance");
-            ////exception
         }
     }
-    public abstract DAOConnection getConnection();
+    public abstract UserDAO getUserDAO();
 
-    public abstract UserDAO getUserDAO(DAOConnection connection);
+    public abstract TestDAO getTestDAO();
 
-    public abstract TestDAO getTestDAO(DAOConnection connection);
+    public abstract SubjectDAO getSubjectDAO();
 
-    public abstract SubjectDAO getSubjectDAO(DAOConnection connection);
+    public abstract RoleDAO getRoleDAO();
 
-    public abstract RoleDAO getRoleDAO(DAOConnection connection);
+    public abstract PassedTestDAO getPassedTestDAO();
 
-    public abstract PassedTestDAO getPassedTestDAO(DAOConnection connection);
+    public abstract PassedQuestionDAO getPassedQuestionDAO();
 
-    public abstract PassedQuestionDAO getPassedQuestionDAO(DAOConnection connection);
-
-    public abstract QuestionDAO getQuestionDAO(DAOConnection connection);
+    public abstract QuestionDAO getQuestionDAO();
 
     public enum TypeDB {
         mySQL

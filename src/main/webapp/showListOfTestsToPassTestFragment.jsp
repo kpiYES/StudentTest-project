@@ -6,7 +6,7 @@
   Time: 10:59
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title>Title</title>
@@ -14,20 +14,17 @@
 <body>
 
 <div class="vertical-menu">
-    <p class="active">Tests</p>
-
-    <ul>
+    <p class="list-title">Tests</p>
+    <ul class="scroll-list">
         <c:forEach var="test" items="${sessionScope.testSet}">
             <li>
-                <a href="dispatcher?command=showTestToPassTestFragment&testId=${test.id}"><c:out value="${test.name}"/></a>
+                <a href="dispatcher?command=showTestToPassTestFragment&testId=${test.id}"><c:out
+                        value="${test.name}"/></a>
             </li>
         </c:forEach>
     </ul>
 </div>
 
-<c:if test="${requestScope.subSubPageFragment!=null}">
-    <c:import url="${requestScope.subSubPageFragment}"/>
-</c:if>
 
 </body>
 </html>

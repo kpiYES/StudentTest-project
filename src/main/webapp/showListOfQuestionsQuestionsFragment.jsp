@@ -11,13 +11,13 @@
 <head>
     <title>Title</title>
     <link href="css/main.css" rel="stylesheet" type="text/css">
-
 </head>
 <body>
-
+<div>
 <div class="vertical-menu">
-    <ul>
-        <p class="active"><c:out value="${sessionScope.subject.name}"/></p>
+    <p class="list-title"><c:out value="${sessionScope.subject.name}"/></p>
+
+    <ul class="scroll-list">
         <c:forEach var="question" items="${sessionScope.questionSet}">
             <li>
                 <a href="dispatcher?command=showQuestionQuestionsFragment&questionId=${question.id}"><c:out value="${question.query}"/></a>
@@ -31,18 +31,13 @@
         <button name="command" value="createQuestionQuestionsFragment">Create new question</button>
     </form>
 </div>
+</div>
 
-<c:if test="${requestScope.subSubPageFragment!=null}">
-    <c:import url="${requestScope.subSubPageFragment}"/>
-</c:if>
-
-<c:if test="${requestScope.msg!=null}">
-    <c:out value="${requestScope.msg}"/>
-</c:if>
 
 <c:if test="${requestScope.errorMsg!=null}">
     <c:out value="${requestScope.errorMsg}"/>
 </c:if>
+
 
 </body>
 </html>

@@ -27,17 +27,28 @@ public class PassedTestDAOImpl extends AbstractDAOImpl<PassedTest> implements Pa
 
     private static final String FIND_BY_USER_ID_QUERY = "SELECT pt.passed_test_id, pt.user_id, u.role_id, u.first_name, u.last_name, u.mail, u.salt, u.hash, r.name,  pt.test_id, t.subject_id, s.name, t.name, pt.mark FROM studenttest_app.passed_test pt INNER JOIN studenttest_app.user u ON pt.user_id = u.user_id INNER JOIN studenttest_app.role r ON u.role_id = r.role_id INNER JOIN studenttest_app.test t ON pt.test_id = t.test_id INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id WHERE pt.user_id = ?";
 
-    public PassedTestDAOImpl(Connection connection){
-        super(connection);
-    }
+    private static final String FIND_BY_USER_ID_AND_SUBJECT_ID_QUERY = "SELECT pt.passed_test_id, pt.user_id, u.role_id, u.first_name, u.last_name, u.mail, u.salt, u.hash, r.name,  pt.test_id, t.subject_id, s.name, t.name, pt.mark FROM studenttest_app.passed_test pt INNER JOIN studenttest_app.user u ON pt.user_id = u.user_id INNER JOIN studenttest_app.role r ON u.role_id = r.role_id INNER JOIN studenttest_app.test t ON pt.test_id = t.test_id INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id WHERE pt.user_id = ? AND t.subject_id = ?";
 
-    public Set<PassedTest> findByUserId(Long id) {
+
+    @Override
+    public Set<PassedTest> findAllByUserId(Long id) {
         try (PreparedStatement preparedStatement = getFindByUserIdStatement(connection, id);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractSetOfEntityFromResultSet(resultSet);
         } catch (SQLException e) {
-            logger.error("InteractionDBException:Couldn't find PassedTest bu User Id");
+            logger.error("InteractionDBException:Couldn't find PassedTest by User Id");
             throw new InteractionDBException("Couldn't find PassedTest by User Id", e);
+        }
+    }
+
+    @Override
+    public Set<PassedTest> findAllByUserIdAndSubjectId(Long userId, Long subjectId) {
+        try (PreparedStatement preparedStatement = getFindByUserIdAndSubjectIdStatement(connection, userId, subjectId);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            return extractSetOfEntityFromResultSet(resultSet);
+        } catch (SQLException e) {
+            logger.error("InteractionDBException:Couldn't find PassedTest by User Id and Subject Id ");
+            throw new InteractionDBException("Couldn't find PassedTest by User Id and Subject Id", e);
         }
     }
 
@@ -82,20 +93,29 @@ public class PassedTestDAOImpl extends AbstractDAOImpl<PassedTest> implements Pa
         return connection.prepareStatement(FIND_ALL_QUERY);
     }
 
+
     private PreparedStatement getFindByUserIdStatement(Connection connection, Long id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_USER_ID_QUERY);
         preparedStatement.setLong(1, id);
         return preparedStatement;
     }
 
+    private PreparedStatement getFindByUserIdAndSubjectIdStatement(Connection connection, Long userId, Long subjectId) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_USER_ID_AND_SUBJECT_ID_QUERY);
+        preparedStatement.setLong(1, userId);
+        preparedStatement.setLong(2, subjectId);
+        return preparedStatement;
+    }
+
+    ///// Юзера доставать не полностью, для этого сделать билдер юзера
     @Override
     PassedTest extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
         PassedTest passedTest = new PassedTest();
         if (resultSet.next()) {
             passedTest.setId(resultSet.getLong("pt.passed_test_id"));
             passedTest.setUser(new User(resultSet.getLong("pt.user_id"), new Role(resultSet.getLong("u.role_id"), resultSet.getString("r.name")), resultSet.getString("u.first_name"), resultSet.getString("u.last_name"), resultSet.getString("u.mail"), resultSet.getString("u.salt"), resultSet.getString("u.hash")));
-            passedTest.setTest(new Test(resultSet.getLong("pt.test_id"), new Subject(resultSet.getLong("t.subject_id"), resultSet.getString("s.name")), resultSet.getString("t.name"),resultSet.getInt("t.time_limit")));
-            passedTest.setMark(resultSet.getInt("pt_mark"));
+            passedTest.setTest(new Test(resultSet.getLong("pt.test_id"), new Subject(resultSet.getLong("t.subject_id"), resultSet.getString("s.name")), resultSet.getString("t.name")));
+            passedTest.setMark(resultSet.getInt("pt.mark"));
         }
         return passedTest;
     }

@@ -14,22 +14,24 @@
 </head>
 <body>
 
-<c:if test="${requestScope.subPageFragment!=null}">
-    <c:import url="${requestScope.subPageFragment}"/>
-</c:if>
 
+<div>
 <div class="vertical-menu">
-    <p class="active">Subjects</p>
+    <p class="list-title">Subjects</p>
+
     <ul>
         <c:forEach var="subject" items="${sessionScope.subjectSet}">
             <li>
-                <a href="dispatcher?command=showListOfTestsTestsFragment&subjectName=${subject.name}"><c:out
+                <a href="dispatcher?command=showListOfTestsTestsFragment&subjectId=${subject.id}"><c:out
                         value="${subject.name}"/></a>
             </li>
         </c:forEach>
     </ul>
 </div>
-
+</div>
+<c:if test="${requestScope.subPageFragment!=null}">
+    <c:import url="${requestScope.subPageFragment}"/>
+</c:if>
 
 
 </body>

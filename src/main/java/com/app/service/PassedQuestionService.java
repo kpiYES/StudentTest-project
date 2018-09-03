@@ -16,6 +16,8 @@ public interface PassedQuestionService {
 
     Set<PassedQuestion> findAll();
 
+    Set<PassedQuestion> findAllByPassedTestId(Long id);
+
     Set<PassedQuestion> constructFromUsersAnswersMap(Map<Long, String> usersAnswersMap);
 
 }

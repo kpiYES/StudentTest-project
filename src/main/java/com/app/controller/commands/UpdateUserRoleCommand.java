@@ -19,24 +19,23 @@ public class UpdateUserRoleCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-       if (request.getParameter("userRole")!=null) {
+
+
+       if (request.getParameter("userRole")==null) {
+           request.setAttribute("message", "You should choose different user role");
+       }else {
            String newUserRole = request.getParameter("userRole");
            Role role = roleService.findByName(newUserRole);
-           UserDTO userDTO = (UserDTO)request.getSession().getAttribute("userDTO");
+           UserDTO userDTO = (UserDTO) request.getSession().getAttribute("userDTO");
            User user = userService.findById(userDTO.getId());
            user.setRole(role);
-//           User user = DTOHandler.constructUser( userDTO);
-//           userService.updateByRoleName(user, newUserRole);
            userService.update(user);
-           User updatedUser = userService.findById(user.getId());
-           UserDTO updatedUserDTO = DTOHandler.constructUserDTO(updatedUser);
+           UserDTO updatedUserDTO = DTOHandler.constructUserDTO(user);
            request.getSession().setAttribute("userDTO", updatedUserDTO);
-           request.setAttribute("msg","User role was successfully updated");
-       }else{
-           request.setAttribute("msg", "You should choose different user role");
+           request.setAttribute("message", "User role was successfully updated");
        }
-        request.setAttribute("pageFragment", "showListOfUsersFragment.jsp");
-        request.setAttribute("subPageFragment", "showUserFragment.jsp");
+       request.setAttribute("pageFragment","showListOfUsersFragment.jsp");
+       request.setAttribute("subPageFragment", "showUserFragment.jsp");
         return "admin.jsp";
     }
 }

@@ -1,4 +1,4 @@
-package com.app.util;
+package com.app.service.util;
 
 import com.app.model.Question;
 import com.app.service.QuestionService;
@@ -6,7 +6,7 @@ import com.app.service.ServiceFactory;
 
 import java.util.Map;
 
-public class PassedTestMark {
+public class TestMarkRating {
 
 
     public static Integer toRateMark(Map<Long, String> answersMap) {

@@ -14,20 +14,20 @@
     <link href="css/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-
 <div class="vertical-menu">
-    <p class="active">Tests</p>
-    <ul>
-        <c:forEach var="test" items="${sessionScope.testSet}">
-            <li>
-                <a href="dispatcher?command=showTestTestsFragment&testId=${test.id}"><c:out value="${test.name}"/></a>
-            </li>
-        </c:forEach>
-    </ul>
+    <p class="list-title">Tests</p>
 
 
-</div>
+        <ul class="scroll-list">
+            <c:forEach var="test" items="${sessionScope.testSet}">
+                <li>
+                    <a href="dispatcher?command=showTestTestsFragment&testId=${test.id}"><c:out
+                            value="${test.name}"/></a>
+                </li>
+            </c:forEach>
+        </ul>
 
+    </div>
 <div>
     <form action="dispatcher" method="get">
         <button name="command" value="createTestTestsFragment">Create new test</button>

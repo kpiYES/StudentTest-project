@@ -17,28 +17,13 @@ public class ShowTestTestsFragmentCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        int page = 1;
-        int recordsPerPage = 3;
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
-        }
-        if (request.getParameterMap().containsKey("testId")) {
-            Test test = testService.findById(Long.parseLong(request.getParameter("testId")));
-            request.getSession().setAttribute("test", test);
-        }
-        Set<Question> questionSetWithPagination = questionService.findAllByTestIdWithPagination(((Test) request.getSession().getAttribute("test")).getId(), recordsPerPage, (page - 1) * recordsPerPage);
 
-        Set<Question> questionSet = questionService.findAllByTestId(((Test) request.getSession().getAttribute("test")).getId());
-        long numberOfRecords = questionSet.size();
-        long numberOfPages = (long) Math.ceil(numberOfRecords * 1.0 / recordsPerPage);
+        Test test = testService.findById(Long.parseLong(request.getParameter("testId")));
+        Set<Question> questionSet = questionService.findAllByTestId(test.getId());
+        test.setQuestionSet(questionSet);
+        request.getSession().setAttribute("test",test);
+        request.setAttribute("pageFragment", "showTestTestsFragment.jsp");
 
-        request.setAttribute("questionSet", questionSetWithPagination);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("numberOfPages", numberOfPages);
-
-        request.setAttribute("pageFragment", "showListOfSubjectsTestsFragment.jsp");
-        request.setAttribute("subPageFragment", "showListOfTestsTestsFragment.jsp");
-        request.setAttribute("subSubPageFragment", "showTestTestsFragment.jsp");
         return "admin.jsp";
     }
 }

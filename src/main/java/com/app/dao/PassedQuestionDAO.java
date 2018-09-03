@@ -3,6 +3,9 @@ package com.app.dao;
 import com.app.model.PassedQuestion;
 import com.app.model.User;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Set;
 
 public interface PassedQuestionDAO {
@@ -17,6 +20,9 @@ public interface PassedQuestionDAO {
 
     Set<PassedQuestion> findAll();
 
-    void insertAll(Set<PassedQuestion> passedQuestionSet);
+    List<Long> insertAll(Set<PassedQuestion> passedQuestionSet);
+
+    Set<PassedQuestion> findAllByPassedTestId(Long id);
+
 
     }

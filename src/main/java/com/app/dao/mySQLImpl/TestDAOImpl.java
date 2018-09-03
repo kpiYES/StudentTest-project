@@ -17,27 +17,23 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
 
     private static final Logger logger = Logger.getLogger(TestDAOImpl.class);
 
-    private static final String INSERT_QUERY = "INSERT INTO studenttest_app.test (test_id, subject_id, name, time_limit) VALUES (NULL , ?, ?, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO studenttest_app.test (test_id, subject_id, name) VALUES (NULL , ?, ?)";
 
     private static final String CONNECT_TEST_AND_QUESTIONS_QUERY = "INSERT INTO studenttest_app.test_question  (test_id, question_id) VALUES (?,?)";
 
     private static final String DISCONNECT_TEST_AND_QUESTIONS_QUERY = "DELETE FROM studenttest_app.test_question WHERE test_id = ?";
 
-    private static final String UPDATE_QUERY = "UPDATE studenttest_app.test SET subject_id = ?, name = ?, time_limit = ? WHERE test_id = ?";
+    private static final String UPDATE_QUERY = "UPDATE studenttest_app.test SET subject_id = ?, name = ? WHERE test_id = ?";
 
-    private static final String DELETE_QUERY = "DELETE FROM studenttest_app.test WHERE test_id = ? AND subject_id = ? AND name = ? AND time_limit = ?";
+    private static final String DELETE_QUERY = "DELETE FROM studenttest_app.test WHERE test_id = ? AND subject_id = ? AND name = ?";
 
-    private static final String FIND_BY_ID_QUERY = "SELECT t.test_id, t.subject_id, s.name, t.name, t.time_limit  FROM studenttest_app.test t INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id WHERE t.test_id = ?";
+    private static final String FIND_BY_ID_QUERY = "SELECT t.test_id, t.subject_id, s.name, t.name  FROM studenttest_app.test t INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id WHERE t.test_id = ?";
 
-    private static final String FIND_ALL_QUERY = "SELECT t.test_id, t.subject_id, s.name, t.name, t.time_limit FROM studenttest_app.test t INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id";
+    private static final String FIND_ALL_QUERY = "SELECT t.test_id, t.subject_id, s.name, t.name FROM studenttest_app.test t INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id";
 
-    private static final String FIND_ALL_BY_SUBJECT_ID_QUERY = "SELECT t.test_id, t.subject_id, s.name, t.name, t.time_limit FROM studenttest_app.test t INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id WHERE s.subject_id = ?";
+    private static final String FIND_ALL_BY_SUBJECT_ID_QUERY = "SELECT t.test_id, t.subject_id, s.name, t.name FROM studenttest_app.test t INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id WHERE s.subject_id = ?";
 
-    private static final String FIND_ALL_BY_QUESTION_ID_QUERY = "SELECT t.test_id, t.subject_id, s.name, t.name, t.time_limit FROM studenttest_app.test t INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id INNER JOIN studenttest_app.test_question tq ON t.test_id = tq.test_id WHERE tq.question_id = ?";
-
-    public TestDAOImpl(Connection connection) {
-        super(connection);
-    }
+    private static final String FIND_ALL_BY_QUESTION_ID_QUERY = "SELECT t.test_id, t.subject_id, s.name, t.name FROM studenttest_app.test t INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id INNER JOIN studenttest_app.test_question tq ON t.test_id = tq.test_id WHERE tq.question_id = ?";
 
 
     @Override
@@ -96,13 +92,13 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
         }
     }
 
-    public PreparedStatement getFindAllByQuestionIdStatement(Connection connection, Long id) throws SQLException {
+    private PreparedStatement getFindAllByQuestionIdStatement(Connection connection, Long id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_QUESTION_ID_QUERY);
         preparedStatement.setLong(1, id);
         return preparedStatement;
     }
 
-    public PreparedStatement getConnectTestAndQuestionsStatement(Connection connection, Test test) throws SQLException {
+    private PreparedStatement getConnectTestAndQuestionsStatement(Connection connection, Test test) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(CONNECT_TEST_AND_QUESTIONS_QUERY);
         for (Question question : test.getQuestionSet()) {
             preparedStatement.setLong(1, test.getId());
@@ -112,7 +108,7 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
         return preparedStatement;
     }
 
-    public PreparedStatement getDisconnectTestAndQuestionsStatement(Connection connection, Test test) throws SQLException {
+    private PreparedStatement getDisconnectTestAndQuestionsStatement(Connection connection, Test test) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(DISCONNECT_TEST_AND_QUESTIONS_QUERY);
         preparedStatement.setLong(1, test.getId());
         return preparedStatement;
@@ -123,7 +119,6 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
         preparedStatement.setLong(1, test.getSubject().getId());
         preparedStatement.setString(2, test.getName());
-        preparedStatement.setInt(3, test.getTimeLimit());
         return preparedStatement;
     }
 
@@ -132,8 +127,7 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY);
         preparedStatement.setLong(1, test.getSubject().getId());
         preparedStatement.setString(2, test.getName());
-        preparedStatement.setInt(3, test.getTimeLimit());
-        preparedStatement.setLong(4, test.getId());
+        preparedStatement.setLong(3, test.getId());
         return preparedStatement;
     }
 
@@ -143,7 +137,6 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
         preparedStatement.setLong(1, test.getId());
         preparedStatement.setLong(2, test.getSubject().getId());
         preparedStatement.setString(3, test.getName());
-        preparedStatement.setInt(4, test.getTimeLimit());
         return preparedStatement;
     }
 
@@ -172,7 +165,6 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
             test.setId(resultSet.getLong("t.test_id"));
             test.setSubject(new Subject(resultSet.getLong("t.subject_id"), resultSet.getString("s.name")));
             test.setName(resultSet.getString("t.name"));
-            test.setTimeLimit(resultSet.getInt("t.time_limit"));
         }
         return test;
     }

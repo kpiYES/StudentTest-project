@@ -27,9 +27,6 @@ public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectD
 
     private static final String FIND_BY_NAME_QUERY = "SELECT subject_id, name FROM studenttest_app.subject WHERE name = ?";
 
-    public SubjectDAOImpl(Connection connection) {
-        super(connection);
-    }
 
     @Override()
     public Subject findByName(String name) {

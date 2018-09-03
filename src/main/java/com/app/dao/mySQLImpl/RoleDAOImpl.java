@@ -28,10 +28,6 @@ public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
     private static final String FIND_BY_NAME = "SELECT r.role_id, r.name FROM studenttest_app.role r WHERE r.name = ?";
 
 
-    public RoleDAOImpl(Connection connection) {
-        super(connection);
-    }
-
     @Override
     public Role findByName(String name) {
         try (PreparedStatement preparedStatement = getFindByNameStatement(connection, name);

@@ -10,7 +10,6 @@ import java.util.Set;
 
 public class RoleServiceImpl implements RoleService {
 
-
     private DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactory.TypeDB.mySQL);
 
     private RoleServiceImpl() {

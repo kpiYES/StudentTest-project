@@ -14,9 +14,10 @@
     <link href="css/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<div>
 <div class="vertical-menu">
+    <p class="list-title">Users</p>
     <ul>
-        <p class="active">Users</p>
         <c:forEach var="userDTO" items="${sessionScope.userDTOSet}">
             <li>
                 <a href="dispatcher?command=toShowUserFragment&userMail=${userDTO.mail}"><c:out
@@ -25,7 +26,7 @@
         </c:forEach>
     </ul>
 </div>
-
+</div>
 <c:if test="${requestScope.subPageFragment!=null}">
     <c:import url="${requestScope.subPageFragment}"/>
 </c:if>

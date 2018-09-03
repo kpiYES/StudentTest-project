@@ -18,7 +18,6 @@
     <div>
         <form method="post" action="dispatcher" name="form" id="form">
             <p> Test name: <input type="text" value="${sessionScope.newTestName}" name="newTestName" size="30"></p>
-            <p> Time limit: <input type="text" value="${sessionScope.newTimeLimit}" name="newTimeLimit" size="30"></p>
 
             <c:forEach var="question" items="${sessionScope.questionSet}">
 

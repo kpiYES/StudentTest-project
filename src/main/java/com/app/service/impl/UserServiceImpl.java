@@ -6,7 +6,7 @@ import com.app.dao.connection.DAOConnection;
 import com.app.exceptions.PasswordValidationException;
 import com.app.model.User;
 import com.app.service.UserService;
-import com.app.util.PasswordSecurity;
+import com.app.service.util.PasswordSecurity;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;

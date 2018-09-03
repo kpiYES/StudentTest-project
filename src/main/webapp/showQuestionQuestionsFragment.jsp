@@ -14,41 +14,84 @@
     <link href="css/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-
+<div class="question-description">
 <table>
 
+    <p><c:out value="${sessionScope.question.query}"/></p>
+<c:choose>
+    <c:when test="${sessionScope.question.answer1 eq sessionScope.question.correctAnswer}">
     <tr>
         <td>
-            <c:out value="${sessionScope.question.query}"/>
+        <p><input type="checkbox" checked disabled><c:out
+            value="${sessionScope.question.answer1}"/></p>
         </td>
     </tr>
-    <tr>
-        <td>
-            <c:out value="${sessionScope.question.answer1}"/>
-        </td>
-        <td>
-            <c:out value="${sessionScope.question.answer2}"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <c:out value="${sessionScope.question.answer3}"/>
-        </td>
-        <td>
-            <c:out value="${sessionScope.question.answer4}"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <c:out value="${sessionScope.question.correctAnswer}"/>
-        </td>
-    </tr>
+    </c:when>
+    <c:otherwise>
+        <tr>
+            <td>
+                <p><input type="checkbox" disabled><c:out value="${sessionScope.question.answer1}"/></p>
+            </td>
+        </tr>
+    </c:otherwise>
+</c:choose>
+    <c:choose>
+        <c:when test="${sessionScope.question.answer2 eq sessionScope.question.correctAnswer}">
+            <tr>
+                <td>
+                    <p><input type="checkbox" checked disabled><c:out
+                            value="${sessionScope.question.answer2}"/></p>
+                </td>
+            </tr>
+        </c:when>
+        <c:otherwise>
+            <tr>
+                <td>
+                    <p><input type="checkbox" disabled><c:out value="${sessionScope.question.answer2}"/></p>
+                </td>
+            </tr>
+        </c:otherwise>
+    </c:choose>
+    <c:choose>
+        <c:when test="${sessionScope.question.answer3 eq sessionScope.question.correctAnswer}">
+            <tr>
+                <td>
+                    <p><input type="checkbox" checked disabled><c:out
+                            value="${sessionScope.question.answer3}"/></p>
+                </td>
+            </tr>
+        </c:when>
+        <c:otherwise>
+            <tr>
+                <td>
+                    <p><input type="checkbox" disabled><c:out value="${sessionScope.question.answer3}"/></p>
+                </td>
+            </tr>
+        </c:otherwise>
+    </c:choose>
+    <c:choose>
+        <c:when test="${sessionScope.question.answer4 eq sessionScope.question.correctAnswer}">
+            <tr>
+                <td>
+                    <p><input type="checkbox" checked disabled><c:out
+                            value="${sessionScope.question.answer4}"/></p>
+                </td>
+            </tr>
+        </c:when>
+        <c:otherwise>
+            <tr>
+                <td>
+                    <p><input type="checkbox" disabled><c:out value="${sessionScope.question.answer4}"/></p>
+                </td>
+            </tr>
+        </c:otherwise>
+    </c:choose>
 </table>
 
 <c:if test="${not empty sessionScope.testSet}">
     <p><c:out value="Tests that contain this question:"/></p>
     <c:forEach var="test" items="${sessionScope.testSet}">
-        <c:out value="${test.name}"/>
+        <p><c:out value="${test.name}"/></p>
     </c:forEach>
     <form>
         <input type="submit" title="First you need to remove the tests that contain this question."
@@ -64,8 +107,7 @@
         <input type="submit" value="Delete question">
     </form>
 </c:if>
-
-
+</div>
 
 </body>
 </html>

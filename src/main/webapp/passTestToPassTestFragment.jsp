@@ -12,14 +12,13 @@
     <title>Title</title>
 </head>
 <body>
-
+<div class="questions">
 <div>
     <form method="post" action="dispatcher" id="form">
 <c:set var="currentQuestionIndex" value="${sessionScope.currentQuestionIndex}" scope="request"/>
         <c:set var="questionsList" value="${requestScope.questionsList}" scope="request"/>
 
         <p><b><c:out value="${questionsList.get(currentQuestionIndex).query}"/></b></p>
-        <c:out value="${sessionScope.answerMap.get(questionsList.get(currentQuestionIndex).id)}"/>
         <c:choose>
             <c:when test="${questionsList.get(currentQuestionIndex).answer1 eq sessionScope.answerMap.get(questionsList.get(currentQuestionIndex).id)}">
                 <p><input name="usersAnswer" type="radio" value="${questionsList.get(currentQuestionIndex).answer1}" checked>
@@ -62,15 +61,15 @@
         </c:choose>
         <input type="hidden" name="command" value="passTestToPassTestFragment">
     </form>
-    <button name="action" value="finishPassing" form="form">Submit</button>
-
-    <c:if test="${currentQuestionIndex != 0}">
-        <button name="currentQuestionIndex" value="${currentQuestionIndex-1}" form="form">Previous</button>
-    </c:if>
+    <button name="action" value="finishPassingToPassTestFragment" form="form">Finish</button>
 
 </div>
+<div>
 <table border="1" cellpadding="5" cellspacing="5">
     <tr>
+        <c:if test="${currentQuestionIndex != 0}">
+            <button name="currentQuestionIndex" value="${currentQuestionIndex-1}" form="form">Previous</button>
+        </c:if>
         <c:forEach begin="1" end="${questionsList.size()}" var="i">
             <c:choose>
                 <c:when test="${currentQuestionIndex eq i-1}">
@@ -81,11 +80,13 @@
                 </c:otherwise>
             </c:choose>
         </c:forEach>
+
         <c:if test="${currentQuestionIndex lt questionsList.size()-1}">
             <button name="currentQuestionIndex" value="${currentQuestionIndex+1}" form="form">Next</button>
         </c:if>
     </tr>
 </table>
-
+</div>
+</div>
 </body>
 </html>

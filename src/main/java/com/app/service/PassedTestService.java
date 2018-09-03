@@ -16,9 +16,12 @@ public interface PassedTestService extends Service {
 
     Set<PassedTest> findAll();
 
-    Set<PassedTest> findByUserId(Long id);
+    Set<PassedTest> findAllByUserId(Long id);
 
-    Long insertWithPassedQuestions(PassedTest passedTest);
+    Set<PassedTest> findAllByUserIdAndSubjectId(Long userId, Long subjectId );
 
+    void insertWithPassedQuestions(PassedTest passedTest);
+
+    void sendResult(PassedTest passedTest);
 
 }

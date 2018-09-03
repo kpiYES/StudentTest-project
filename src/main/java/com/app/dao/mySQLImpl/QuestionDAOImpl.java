@@ -16,7 +16,6 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
 
     private static final Logger logger = Logger.getLogger(QuestionDAOImpl.class);
 
-
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.question (question_id, subject_id, query, answer_1, answer_2, answer_3, answer_4, correct_answer) VALUES (NULL, ?, ?,?,?,?,?,?)";
 
     private static final String UPDATE_QUERY = "UPDATE studenttest_app.question SET subject_id = ?, query = ?, answer_1 = ?, answer_2 = ?, answer_3 = ?, answer_4 = ?, correct_answer = ? WHERE question_id = ?";
@@ -35,10 +34,6 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
 
     private static final String FIND_ALL_BY_TEST_ID_WITH_PAGINATION_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer FROM studenttest_app.question q INNER JOIN studenttest_app.subject s ON q.subject_id = s.subject_id INNER JOIN studenttest_app.test_question tq ON q.question_id = tq.question_id WHERE tq.test_id = ? LIMIT ? OFFSET ?";
 
-
-    public QuestionDAOImpl(Connection connection) {
-        super(connection);
-    }
 
     @Override
     public Set<Question> findAllBySubjectIdWithPagination(Long id, int limit, int offset) {

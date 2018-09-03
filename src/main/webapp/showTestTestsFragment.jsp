@@ -1,64 +1,107 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Misha
-  Date: 22.08.2018
-  Time: 4:09
+  Date: 01.09.2018
+  Time: 17:35
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
     <title>Title</title>
     <link href="css/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div class="questions">
-    <form method="post" action="dispatcher" name="form" id="form">
-        <p> Test name <c:out value="${sessionScope.test.name}"/></p>
 
-        <c:forEach var="question" items="${requestScope.questionSet}">
+<div class="result">
+    <h3>
+        <p><c:out value="${sessionScope.test.name}"/></p>
+    </h3>
+    <c:forEach var="question" items="${sessionScope.test.questionSet}">
+        <div>
             <table>
+                <p><c:out value="${question.query}"/></p>
+                <c:choose>
+                    <c:when test="${question.answer1 eq question.correctAnswer}">
+                        <tr>
+                            <td>
+                                <p><input type="checkbox" checked disabled><c:out value="${question.answer1}"/></p>
+                            </td>
+                        </tr>
+                    </c:when>
+                    <c:otherwise>
+                        <tr>
+                            <td>
+                                <p><input type="checkbox" disabled><c:out value="${question.answer1}"/></p>
+                            </td>
+                        </tr>
+                    </c:otherwise>
+                </c:choose>
                 <tr>
-                    <p><c:out value="${question.query}"/></p>
-                    <td><c:out value="${question.answer1}"/></td>
-                    <td><c:out value="${question.answer2}"/></td>
-                    <td><c:out value="${question.answer3}"/></td>
-                    <td><c:out value="${question.answer4}"/></td>
-                    <td><c:out value="${question.correctAnswer}"/></td>
+                    <c:choose>
+                    <c:when test="${question.answer2 eq question.correctAnswer}">
+                <tr>
+                    <td>
+                        <p><input type="checkbox" checked disabled><c:out value="${question.answer2}"/></p>
+                    </td>
                 </tr>
+                </c:when>
+                <c:otherwise>
+                    <tr>
+                        <td>
+                            <p><input type="checkbox" disabled><c:out value="${question.answer2}"/></p>
+                        </td>
+                    </tr>
+                </c:otherwise>
+                </c:choose>
+                <tr>
+                    <c:choose>
+                    <c:when test="${question.answer3 eq question.correctAnswer}">
+                <tr>
+                    <td>
+                        <p><input type="checkbox" checked disabled><c:out value="${question.answer3}"/></p>
+                    </td>
+                </tr>
+                </c:when>
+                <c:otherwise>
+                    <tr>
+                        <td>
+                            <p><input type="checkbox" disabled><c:out value="${question.answer3}"/></p>
+                        </td>
+                    </tr>
+                </c:otherwise>
+                </c:choose>
+                <tr>
+                    <c:choose>
+                    <c:when test="${question.answer4 eq question.correctAnswer}">
+                <tr>
+                    <td>
+                        <p><input type="checkbox" checked disabled><c:out value="${question.answer4}"/></p>
+                    </td>
+                </tr>
+                </c:when>
+                <c:otherwise>
+                    <tr>
+                        <td>
+                            <p><input type="checkbox" disabled><c:out value="${question.answer4}"/></p>
+                        </td>
+                    </tr>
+                </c:otherwise>
+                </c:choose>
             </table>
-        </c:forEach>
-        <input type="hidden" name="command" value="showTestTestsFragment">
-    </form>
-
+        </div>
+    </c:forEach>
     <form>
         <input type="hidden" name="command" value="deleteTest">
         <input type="submit" value="Delete test">
     </form>
-
-    <c:if test="${requestScope.currentPage != 1}">
-        <button name="page" value="${requestScope.currentPage-1}" form="form">Previous</button>
-    </c:if>
-
-    <table border="1" cellpadding="5" cellspacing="5">
-        <tr>
-            <c:forEach begin="1" end="${requestScope.numberOfPages}" var="i">
-                <c:choose>
-                    <c:when test="${requestScope.currentPage eq i}">
-                        <td>${i}</td>
-                    </c:when>
-                    <c:otherwise>
-                        <button name="page" value="${i}" form="form">${i}</button>
-                    </c:otherwise>
-                </c:choose>
-            </c:forEach>
-            <c:if test="${requestScope.currentPage lt requestScope.numberOfPages}">
-                <button name="page" value="${requestScope.currentPage + 1}" form="form">Next</button>
-            </c:if>
-        </tr>
-    </table>
+    <form>
+        <input type="hidden" name="command" value="showListOfTestsTestsFragment">
+        <button name="subjectId" value="${sessionScope.test.subject.id}">Back</button>
+    </form>
 </div>
-</body>
 
+
+</body>
 </html>

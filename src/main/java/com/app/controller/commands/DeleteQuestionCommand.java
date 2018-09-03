@@ -16,8 +16,6 @@ public class DeleteQuestionCommand implements Command {
         questionService.delete((Question) request.getSession().getAttribute("question"));
         request.setAttribute("msg", "The question was successfully deleted.");
         request.getSession().removeAttribute("question");
-        request.setAttribute("pageFragment", "showListOfSubjectsQuestionsFragment.jsp");
-        request.setAttribute("subPageFragment", "showListOfQuestionsQuestionsFragment.jsp");
         return "admin.jsp";
     }
 }

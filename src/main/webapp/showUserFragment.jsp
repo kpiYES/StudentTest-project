@@ -30,10 +30,14 @@
         <input type="submit" value="Update user role">
     </form>
     <form method="post" action="dispatcher">
-        <input type="hidden" name="command" value="deleteUser">
-        <input type="submit" value="Delete user">
+        <input type="hidden" name="command" value="showListOfSubjectsUsersFragment">
+        <input type="submit" value="Show users passed tests">
     </form>
-
 </div>
+<c:if test="${requestScope.message!=null}">
+    <div class="message">
+        <c:out value="${requestScope.message}"/>
+    </div>
+</c:if>
 </body>
 </html>

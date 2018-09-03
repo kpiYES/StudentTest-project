@@ -20,8 +20,7 @@ public class PassedQuestionServiceImpl implements PassedQuestionService {
     private PassedQuestionServiceImpl() {
     }
 
-    //IMPL?
-    public static PassedQuestionServiceImpl getInstance() {
+    public static PassedQuestionService getInstance() {
         return PassedQuestionServiceImplHolder.INSTANCE;
     }
 
@@ -69,6 +68,16 @@ public class PassedQuestionServiceImpl implements PassedQuestionService {
         }
     }
 
+
+    @Override
+   public Set<PassedQuestion> findAllByPassedTestId(Long id){
+        try (DAOConnection daoConnection = daoFactory.getConnection()) {
+            PassedQuestionDAO passedQuestionDAO = daoFactory.getPassedQuestionDAO(daoConnection);
+            return passedQuestionDAO.findAllByPassedTestId(id);
+        }
+    }
+
+
     @Override
     public Set<PassedQuestion> constructFromUsersAnswersMap(Map<Long, String> usersAnswersMap) {
         QuestionService questionService = ServiceFactory.getQuestionService();
@@ -79,12 +88,13 @@ public class PassedQuestionServiceImpl implements PassedQuestionService {
             PassedQuestion passedQuestion = new PassedQuestion();
             passedQuestion.setQuestion(question);
             passedQuestion.setUserAnswer((String) entry.getValue());
+            passedQuestionSet.add(passedQuestion);
         }
         return passedQuestionSet;
     }
 
     //IMPL?
     private static class PassedQuestionServiceImplHolder {
-        private final static PassedQuestionServiceImpl INSTANCE = new PassedQuestionServiceImpl();
+        private final static PassedQuestionService INSTANCE = new PassedQuestionServiceImpl();
     }
 }

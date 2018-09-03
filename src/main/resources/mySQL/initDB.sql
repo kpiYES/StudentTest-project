@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS test (
   test_id    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   subject_id INT UNSIGNED NOT NULL,
   name VARCHAR(50) UNIQUE NOT NULL,
-  time_limit TINYINT(3) NOT NULL,
   FOREIGN KEY (subject_id) REFERENCES subject (subject_id)
 )
   ENGINE = InnoDB

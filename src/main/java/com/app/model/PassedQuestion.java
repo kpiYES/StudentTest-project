@@ -6,6 +6,15 @@ public class PassedQuestion extends AbstractEntity {
     private PassedTest passedTest;
     private String userAnswer;
 
+    @Override
+    public String toString() {
+        return "PassedQuestion{" +
+                "question=" + question +
+                ", passedTest=" + passedTest +
+                ", userAnswer='" + userAnswer + '\'' +
+                '}';
+    }
+
     public PassedQuestion() {
     }
 

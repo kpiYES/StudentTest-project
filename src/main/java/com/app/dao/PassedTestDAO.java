@@ -17,5 +17,7 @@ public interface PassedTestDAO {
 
     Set<PassedTest> findAll();
 
-    Set<PassedTest> findByUserId(Long id);
+    Set<PassedTest> findAllByUserId(Long id);
+
+    Set<PassedTest> findAllByUserIdAndSubjectId(Long userId, Long subjectId);
 }

@@ -4,66 +4,48 @@ import com.app.dao.connection.DAOConnection;
 import com.app.dao.connection.MySQLConnection;
 import com.app.dao.mySQLImpl.*;
 import com.app.exceptions.InteractionDBException;
-import com.app.util.DataSource;
+import com.app.dao.connection.ConnectionSource;
 
 import java.sql.Connection;
 
 public class MySQLFactory extends DAOFactory {
 
 
-    private DataSource dataSource = DataSource.getInstance();
+    private ConnectionSource connectionSource = ConnectionSource.getInstance();
 
-    public DAOConnection getConnection() {
-        return new MySQLConnection(dataSource.getConnection());
+
+    @Override
+    public UserDAO getUserDAO() {
+        return new UserDAOImpl();
     }
 
     @Override
-    public UserDAO getUserDAO(DAOConnection connection) {
-        return new UserDAOImpl(getSqlConnection(connection));
+    public TestDAO getTestDAO() {
+        return new TestDAOImpl();
     }
 
     @Override
-    public TestDAO getTestDAO(DAOConnection connection) {
-        return new TestDAOImpl(getSqlConnection(connection));
+    public SubjectDAO getSubjectDAO() {
+        return new SubjectDAOImpl();
     }
 
     @Override
-    public SubjectDAO getSubjectDAO(DAOConnection connection) {
-        return new SubjectDAOImpl(getSqlConnection(connection));
+    public RoleDAO getRoleDAO() {
+        return new RoleDAOImpl();
     }
 
     @Override
-    public RoleDAO getRoleDAO(DAOConnection connection) {
-        return new RoleDAOImpl(getSqlConnection(connection));
+    public PassedTestDAO getPassedTestDAO() {
+        return new PassedTestDAOImpl();
     }
 
     @Override
-    public PassedTestDAO getPassedTestDAO(DAOConnection connection) {
-        return new PassedTestDAOImpl(getSqlConnection(connection));
+    public PassedQuestionDAO getPassedQuestionDAO() {
+        return new PassedQuestionDAOImpl();
     }
 
     @Override
-    public PassedQuestionDAO getPassedQuestionDAO(DAOConnection connection) {
-        return new PassedQuestionDAOImpl(getSqlConnection(connection));
+    public QuestionDAO getQuestionDAO() {
+        return new QuestionDAOImpl();
     }
-
-    @Override
-    public QuestionDAO getQuestionDAO(DAOConnection connection) {
-        return new QuestionDAOImpl(getSqlConnection(connection));
-    }
-
-    private Connection getSqlConnection(DAOConnection connection) {
-        checkDaoConnection(connection);
-        return (Connection) connection.getNativeConnection();
-    }
-
-    private void checkDaoConnection(DAOConnection connection) {
-        if(connection == null || connection.getNativeConnection() == null) {
-            throw new InteractionDBException("sdfs");
-        }
-        if(! (connection instanceof MySQLConnection)) {
-            throw new InteractionDBException("sdafasf");
-        }
-    }
-
 }

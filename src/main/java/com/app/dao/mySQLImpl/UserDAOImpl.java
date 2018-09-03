@@ -28,9 +28,6 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
 
     private static final String FIND_BY_EMAIL_QUERY = "SELECT u.user_id, u.role_id, r.name, u.first_name, u.last_name, u.mail, u.salt, u.hash FROM studenttest_app.user u INNER JOIN studenttest_app.role r ON u.role_id = r.role_id WHERE u.mail = ?";
 
-    public UserDAOImpl(Connection connection) {
-        super(connection);
-    }
 
     @Override
     public User findByMail(String mail) {

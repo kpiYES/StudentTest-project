@@ -1,16 +1,53 @@
+.login-form {
+    position: fixed;
+    top: 15%;
+    left: 25%;
+    border: solid steelblue;
+    padding: 25px;
+}
+
+.registration-form {
+    position: fixed;
+    top: 15%;
+    left: 30%;
+    border: solid steelblue;
+    padding: 25px;
+}
+
+.field-form {
+    text-align: right;
+    margin: 15px;
+}
+
+.label-form {
+    float: left;
+    padding-right: 15px;
+}
+
 .vertical-menu {
-    width: 400px;
-    height: 170px;
+
+    font-size: 14pt;
+    border: solid steelblue;
+    height: 220px;
+}
+
+.scroll-list {
     overflow-x: auto;
+    height: 190px;
+}
+
+.vertical-menus-block {
+    width: 40%;
+    position: inherit;
+    height: 170px;
     font-size: 14pt;
     display: inline-block;
     float: left;
-    margin-right: 100px;
     margin-left: 60px;
 }
 
 .vertical-menu a {
-    background-color: #eee; /* Grey background color */
+
     color: black; /* Black text color */
     display: block; /* Make the links appear below each other */
     padding: 12px; /* Add some padding */
@@ -18,18 +55,38 @@
 }
 
 .vertical-menu a:hover {
-    background-color: #ccc; /* Dark grey background on mouse-over */
+    background-color: lightblue;
 }
 
 .admin_item_menu {
     width: 200px;
-    padding: 20px; /* Поля вокруг текста */
-    border: 5px solid black; /* Параметры границы */
-    background: #66ff66; /* Цвет фона */
-    text-align: center; /* расположение текста*/
-    font-size: 18pt; /* Размер шрифта */
+    padding: 20px;
+    border: 5px solid steelblue;
+    background: lightblue;
+    text-align: center;
+    font-size: 18pt;
     display: inline-block;
     float: left;
+}
+
+.admin_item_menu a {
+    text-decoration: none;
+}
+
+.list-title {
+    margin-left: 17%;
+    position: absolute;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.test-description {
+    position: absolute;
+    margin-top: 12%;
+    margin-left: 75%;
+    font-size: 19px;
 }
 
 .user_form {
@@ -38,7 +95,7 @@
 }
 
 .admin_right_menu {
-    height: auto;
+    height: 85%;
     float: left;
     width: 150px;
     margin-right: 50px;
@@ -48,23 +105,52 @@
     position: absolute;
     top: 0;
     right: 0;
-    height: 100px;
+    height: 75px;
     width: 200px;
+}
+
+.header_menu a {
+    text-decoration: none;
 }
 
 .header {
     width: 100%;
-    position: relative;
-    height: 100px;
+    height: 80px;
+    border-bottom: solid steelblue;
+    margin-bottom: 10px;
+    position: inherit;
 }
 
-.header_hello{
-
-
+.header_hello {
+    width: 300px;
+    margin-left: 40%;
+    position: absolute;
 }
 
 .questions {
-
+    width: 800px;
+    padding-left: 100px;
 }
 
+.result {
+    padding-left: 200px;
+    width: 700px;
+}
+
+.message {
+    position: absolute;
+    padding-left: 300px;
+    padding-top: 80px;
+}
+
+.question-form {
+    position: absolute;
+    padding-left: 200px;
+}
+.question-description{
+    position: absolute;
+    margin-top: 2%;
+    margin-left: 75%;
+    font-size: 19px;
+}
 

@@ -20,26 +20,23 @@
 <body>
 
 <div class="header">
-
     <div class="header_hello">
-        <c:if test="${sessionScope.currentUser!=null}">
-            <ut:myTag firstname="${sessionScope.currentUser.firstName}"/>
-        </c:if>
+        <h2>Welcome <ut:myTag firstName="${sessionScope.currentUser.firstName}"
+                      lastName="${sessionScope.currentUser.lastName}"/></h2>
     </div>
-
-<div class="header_menu">
-    <ul>
-        <li>
-            <a href="dispatcher?command=logOut"><fmt:message key="header.logout"/></a>
-        </li>
-        <li>
-            <a href="dispatcher?command=locale&locale=ru"><fmt:message key="header.ru"/></a>
-        </li>
-        <li>
-            <a href="dispatcher?command=locale&locale=en"><fmt:message key="header.en"/></a>
-        </li>
-    </ul>
-</div>
+    <div class="header_menu">
+        <ul>
+            <li>
+                <a href="dispatcher?command=logOut"><fmt:message key="header.logout"/></a>
+            </li>
+            <li>
+                <a href="dispatcher?command=locale&locale=ru"><fmt:message key="header.ru"/></a>
+            </li>
+            <li>
+                <a href="dispatcher?command=locale&locale=en"><fmt:message key="header.en"/></a>
+            </li>
+        </ul>
+    </div>
 
 </div>
 </body>

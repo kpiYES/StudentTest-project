@@ -13,23 +13,21 @@
     <title>Title</title>
     <link href="css/main.css" rel="stylesheet" type="text/css">
 </head>
-<body>
-
+<div>
+    <div class="vertical-menu">
+        <p class="list-title">Subjects</p>
+        <ul>
+            <c:forEach var="subject" items="${sessionScope.subjectSet}">
+                <li>
+                    <a href="dispatcher?command=showListOfQuestionsQuestionsFragment&subjectId=${subject.id}"><c:out
+                            value="${subject.name}"/></a>
+                </li>
+            </c:forEach>
+        </ul>
+    </div>
+</div>
 <c:if test="${requestScope.subPageFragment!=null}">
     <c:import url="${requestScope.subPageFragment}"/>
 </c:if>
-
-<div class="vertical-menu">
-    <ul>
-        <p class="active">Subjects</p>
-        <c:forEach var="subject" items="${sessionScope.subjectSet}">
-            <li>
-                <a href="dispatcher?command=showListOfQuestionsQuestionsFragment&subjectName=${subject.name}"><c:out
-                        value="${subject.name}"/></a>
-            </li>
-        </c:forEach>
-    </ul>
-</div>
-
 </body>
 </html>

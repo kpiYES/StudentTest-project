@@ -12,13 +12,39 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/dispatcher</url-pattern>
     </servlet-mapping>
-
+<!--<servlet-mapping>-->
+    <!--<servlet-name>dispatcher</servlet-name>-->
+    <!--<url-pattern>/index.jsp</url-pattern>-->
+<!--</servlet-mapping>-->
     <resource-ref>
         <description>DB Connection</description>
         <res-ref-name>jdbc/studentTest</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
         <res-auth>Container</res-auth>
     </resource-ref>
+<welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+</welcome-file-list>
+    <!--<filter>-->
+        <!--<filter-name>PathFilter</filter-name>-->
+        <!--<filter-class>com.app.controller.filter.PathFilter</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>PathFilter</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
+
+
+
+    <filter>
+        <filter-name>CommandFilter</filter-name>
+        <filter-class>com.app.controller.filter.CommandFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>CommandFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <filter>
         <filter-name>EncodingFilter</filter-name>
@@ -27,7 +53,10 @@
 
     <filter-mapping>
         <filter-name>EncodingFilter</filter-name>
-        <url-pattern>/dispatcher</url-pattern>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
 </web-app>
