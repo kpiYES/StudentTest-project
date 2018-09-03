@@ -1,6 +1,7 @@
 package com.app.dao.mySQLImpl;
 
 import com.app.dao.PassedTestDAO;
+import com.app.dao.connection.ConnectionSource;
 import com.app.exceptions.InteractionDBException;
 import com.app.model.*;
 import org.apache.log4j.Logger;
@@ -11,9 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-public class PassedTestDAOImpl extends AbstractDAOImpl<PassedTest> implements PassedTestDAO {
+public class PassedTestDAOMySQLImpl extends AbstractDAOMySQLImpl<PassedTest> implements PassedTestDAO {
 
-    private static final Logger logger = Logger.getLogger(PassedTestDAOImpl.class);
+    private static final Logger logger = Logger.getLogger(PassedTestDAOMySQLImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.passed_test (passed_test_id, user_id, test_id, mark) VALUES (NULL, ?, ?, ?)";
 
@@ -29,9 +30,16 @@ public class PassedTestDAOImpl extends AbstractDAOImpl<PassedTest> implements Pa
 
     private static final String FIND_BY_USER_ID_AND_SUBJECT_ID_QUERY = "SELECT pt.passed_test_id, pt.user_id, u.role_id, u.first_name, u.last_name, u.mail, u.salt, u.hash, r.name,  pt.test_id, t.subject_id, s.name, t.name, pt.mark FROM studenttest_app.passed_test pt INNER JOIN studenttest_app.user u ON pt.user_id = u.user_id INNER JOIN studenttest_app.role r ON u.role_id = r.role_id INNER JOIN studenttest_app.test t ON pt.test_id = t.test_id INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id WHERE pt.user_id = ? AND t.subject_id = ?";
 
+    private PassedTestDAOMySQLImpl() {
+    }
+
+    public static PassedTestDAOMySQLImpl getInstance() {
+        return PassedTestDAOMySQLImplHolder.INSTANCE;
+    }
 
     @Override
     public Set<PassedTest> findAllByUserId(Long id) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getFindByUserIdStatement(connection, id);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractSetOfEntityFromResultSet(resultSet);
@@ -43,6 +51,7 @@ public class PassedTestDAOImpl extends AbstractDAOImpl<PassedTest> implements Pa
 
     @Override
     public Set<PassedTest> findAllByUserIdAndSubjectId(Long userId, Long subjectId) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getFindByUserIdAndSubjectIdStatement(connection, userId, subjectId);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractSetOfEntityFromResultSet(resultSet);
@@ -53,7 +62,7 @@ public class PassedTestDAOImpl extends AbstractDAOImpl<PassedTest> implements Pa
     }
 
     @Override
-    PreparedStatement getInsertStatement(Connection connection, PassedTest passedTest) throws SQLException {
+    protected PreparedStatement getInsertStatement(Connection connection, PassedTest passedTest) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
         preparedStatement.setLong(1, passedTest.getUser().getId());
         preparedStatement.setLong(2, passedTest.getTest().getId());
@@ -62,7 +71,7 @@ public class PassedTestDAOImpl extends AbstractDAOImpl<PassedTest> implements Pa
     }
 
     @Override
-    PreparedStatement getUpdateStatement(Connection connection, PassedTest passedTest) throws SQLException {
+    protected PreparedStatement getUpdateStatement(Connection connection, PassedTest passedTest) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY);
         preparedStatement.setLong(1, passedTest.getUser().getId());
         preparedStatement.setLong(2, passedTest.getTest().getId());
@@ -72,7 +81,7 @@ public class PassedTestDAOImpl extends AbstractDAOImpl<PassedTest> implements Pa
     }
 
     @Override
-    PreparedStatement getDeleteStatement(Connection connection, PassedTest passedTest) throws SQLException {
+    protected PreparedStatement getDeleteStatement(Connection connection, PassedTest passedTest) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(DELETE_QUERY);
         preparedStatement.setLong(1, passedTest.getId());
         preparedStatement.setLong(2, passedTest.getUser().getId());
@@ -82,17 +91,16 @@ public class PassedTestDAOImpl extends AbstractDAOImpl<PassedTest> implements Pa
     }
 
     @Override
-    PreparedStatement getFindByIdStatement(Connection connection, Long id) throws SQLException {
+    protected PreparedStatement getFindByIdStatement(Connection connection, Long id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY);
         preparedStatement.setLong(1, id);
         return preparedStatement;
     }
 
     @Override
-    PreparedStatement getFindAllStatement(Connection connection) throws SQLException {
+    protected PreparedStatement getFindAllStatement(Connection connection) throws SQLException {
         return connection.prepareStatement(FIND_ALL_QUERY);
     }
-
 
     private PreparedStatement getFindByUserIdStatement(Connection connection, Long id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_USER_ID_QUERY);
@@ -109,7 +117,7 @@ public class PassedTestDAOImpl extends AbstractDAOImpl<PassedTest> implements Pa
 
     ///// Юзера доставать не полностью, для этого сделать билдер юзера
     @Override
-    PassedTest extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
+    protected PassedTest extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
         PassedTest passedTest = new PassedTest();
         if (resultSet.next()) {
             passedTest.setId(resultSet.getLong("pt.passed_test_id"));
@@ -120,8 +128,8 @@ public class PassedTestDAOImpl extends AbstractDAOImpl<PassedTest> implements Pa
         return passedTest;
     }
 
-    @Override
-    Set<PassedTest> extractSetOfEntityFromResultSet(ResultSet resultSet) throws SQLException {
-        return super.extractSetOfEntityFromResultSet(resultSet);
+    private static class PassedTestDAOMySQLImplHolder {
+        private final static PassedTestDAOMySQLImpl INSTANCE = new PassedTestDAOMySQLImpl();
     }
+
 }

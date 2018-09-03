@@ -1,6 +1,7 @@
 package com.app.dao.mySQLImpl;
 
 import com.app.dao.RoleDAO;
+import com.app.dao.connection.ConnectionSource;
 import com.app.exceptions.InteractionDBException;
 import com.app.model.Role;
 import org.apache.log4j.Logger;
@@ -9,11 +10,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Set;
 
-public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
+public class RoleDAOMySQLImpl extends AbstractDAOMySQLImpl<Role> implements RoleDAO {
 
-    private static final Logger logger = Logger.getLogger(RoleDAOImpl.class);
+    private static final Logger logger = Logger.getLogger(RoleDAOMySQLImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.role  (role_id, name) VALUES (NULL, ?)";
 
@@ -27,9 +27,16 @@ public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
 
     private static final String FIND_BY_NAME = "SELECT r.role_id, r.name FROM studenttest_app.role r WHERE r.name = ?";
 
+    private RoleDAOMySQLImpl() {
+    }
+
+    public static RoleDAOMySQLImpl getInstance() {
+        return RoleDAOMySQLImplHolder.INSTANCE;
+    }
 
     @Override
     public Role findByName(String name) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getFindByNameStatement(connection, name);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractEntityFromResultSet(resultSet);
@@ -40,14 +47,14 @@ public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
     }
 
     @Override
-    PreparedStatement getInsertStatement(Connection connection, Role role) throws SQLException {
+    protected PreparedStatement getInsertStatement(Connection connection, Role role) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, role.getName());
         return preparedStatement;
     }
 
     @Override
-    PreparedStatement getUpdateStatement(Connection connection, Role role) throws SQLException {
+    protected PreparedStatement getUpdateStatement(Connection connection, Role role) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY);
         preparedStatement.setString(1, role.getName());
         preparedStatement.setLong(2, role.getId());
@@ -55,7 +62,7 @@ public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
     }
 
     @Override
-    PreparedStatement getDeleteStatement(Connection connection, Role role) throws SQLException {
+    protected PreparedStatement getDeleteStatement(Connection connection, Role role) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(DELETE_QUERY);
         preparedStatement.setLong(1, role.getId());
         preparedStatement.setString(2, role.getName());
@@ -63,14 +70,14 @@ public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
     }
 
     @Override
-    PreparedStatement getFindByIdStatement(Connection connection, Long role_id) throws SQLException {
+    protected PreparedStatement getFindByIdStatement(Connection connection, Long role_id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY);
         preparedStatement.setLong(1, role_id);
         return preparedStatement;
     }
 
     @Override
-    PreparedStatement getFindAllStatement(Connection connection) throws SQLException {
+    protected PreparedStatement getFindAllStatement(Connection connection) throws SQLException {
         return connection.prepareStatement(FIND_ALL_QUERY);
     }
 
@@ -81,7 +88,7 @@ public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
     }
 
     @Override
-    Role extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
+    protected Role extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
         Role role = new Role();
         if (resultSet.next()) {
             role.setId(resultSet.getLong("role_id"));
@@ -90,8 +97,7 @@ public class RoleDAOImpl extends AbstractDAOImpl<Role> implements RoleDAO {
         return role;
     }
 
-    @Override
-    Set<Role> extractSetOfEntityFromResultSet(ResultSet resultSet) throws SQLException {
-        return super.extractSetOfEntityFromResultSet(resultSet);
+    private static class RoleDAOMySQLImplHolder {
+        private final static RoleDAOMySQLImpl INSTANCE = new RoleDAOMySQLImpl();
     }
 }

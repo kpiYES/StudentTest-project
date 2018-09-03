@@ -2,9 +2,11 @@ package com.app.controller;
 
 import com.app.controller.commands.*;
 import com.app.controller.commands.student.*;
+import com.app.dao.connection.ConnectionSource;
 import com.app.exceptions.UnsupportedCommandException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +19,6 @@ public class CommandHelper {
         commandsMap.put("logOut", new LogOutCommand());
         commandsMap.put("toRegistrPage", new ToRegistrPageCommand());
         commandsMap.put("registration", new RegistrationCommand());
-        commandsMap.put("createPassedTest", new CreatePassedTestCommand());
         commandsMap.put("createQuestion", new CreateQuestionCommand());
         commandsMap.put("deleteQuestion", new DeleteQuestionCommand());
         commandsMap.put("deleteTest", new DeleteTestCommand());
@@ -49,12 +50,24 @@ public class CommandHelper {
         commandsMap.put("showPassedTestUsersFragment", new ShowPassedTestUsersFragmentCommand());
     }
 
-    Command chooseCommand(HttpServletRequest request) {
+    Command chooseCommand(HttpServletRequest request, HttpServletResponse response) {
         final String commandSignature = (String) request.getAttribute("command");
         if (!commandsMap.containsKey(commandSignature)) {
             throw new UnsupportedCommandException(commandSignature);
         }
         return commandsMap.get(commandSignature);
+    }
+
+    String startCommand(HttpServletRequest request, HttpServletResponse response){
+        Command command = chooseCommand(request, response);
+        String result = null;
+        try {
+            ConnectionSource.bindConnection();
+            result = command.execute(request, response);
+        }finally {
+            ConnectionSource.unbindConnection();
+        }
+        return result;
     }
 }
 

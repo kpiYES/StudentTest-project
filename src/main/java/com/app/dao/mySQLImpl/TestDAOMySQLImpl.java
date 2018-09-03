@@ -1,6 +1,7 @@
 package com.app.dao.mySQLImpl;
 
 import com.app.dao.TestDAO;
+import com.app.dao.connection.ConnectionSource;
 import com.app.exceptions.InteractionDBException;
 import com.app.model.Question;
 import com.app.model.Subject;
@@ -13,9 +14,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
+public class TestDAOMySQLImpl extends AbstractDAOMySQLImpl<Test> implements TestDAO {
 
-    private static final Logger logger = Logger.getLogger(TestDAOImpl.class);
+    private static final Logger logger = Logger.getLogger(TestDAOMySQLImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.test (test_id, subject_id, name) VALUES (NULL , ?, ?)";
 
@@ -35,6 +36,12 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
 
     private static final String FIND_ALL_BY_QUESTION_ID_QUERY = "SELECT t.test_id, t.subject_id, s.name, t.name FROM studenttest_app.test t INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id INNER JOIN studenttest_app.test_question tq ON t.test_id = tq.test_id WHERE tq.question_id = ?";
 
+    private TestDAOMySQLImpl() {
+    }
+
+    public static TestDAOMySQLImpl getInstance() {
+        return TestDAOMySQLImpl.TestDAOMySQLImplHolder.INSTANCE;
+    }
 
     @Override
     public Long insert(Test test) {
@@ -52,6 +59,7 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
 
     @Override
     public Set<Test> findAllBySubjectId(Long id) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getFindAllBySubjectIdStatement(connection, id);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractSetOfEntityFromResultSet(resultSet);
@@ -63,6 +71,7 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
 
     @Override
     public Set<Test> findAllByQuestionId(Long id) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getFindAllByQuestionIdStatement(connection, id);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractSetOfEntityFromResultSet(resultSet);
@@ -72,8 +81,8 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
         }
     }
 
-
     private void connectTestAndQuestions(Test test) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getConnectTestAndQuestionsStatement(connection, test)) {
             preparedStatement.executeBatch();
         } catch (SQLException e) {
@@ -82,8 +91,8 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
         }
     }
 
-
     private void disconnectTestAndQuestions(Test test) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getDisconnectTestAndQuestionsStatement(connection, test)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -115,7 +124,7 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
     }
 
     @Override
-    PreparedStatement getInsertStatement(Connection connection, Test test) throws SQLException {
+    protected PreparedStatement getInsertStatement(Connection connection, Test test) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
         preparedStatement.setLong(1, test.getSubject().getId());
         preparedStatement.setString(2, test.getName());
@@ -123,7 +132,7 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
     }
 
     @Override
-    PreparedStatement getUpdateStatement(Connection connection, Test test) throws SQLException {
+    protected PreparedStatement getUpdateStatement(Connection connection, Test test) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY);
         preparedStatement.setLong(1, test.getSubject().getId());
         preparedStatement.setString(2, test.getName());
@@ -132,7 +141,7 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
     }
 
     @Override
-    PreparedStatement getDeleteStatement(Connection connection, Test test) throws SQLException {
+    protected PreparedStatement getDeleteStatement(Connection connection, Test test) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(DELETE_QUERY);
         preparedStatement.setLong(1, test.getId());
         preparedStatement.setLong(2, test.getSubject().getId());
@@ -141,14 +150,14 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
     }
 
     @Override
-    PreparedStatement getFindByIdStatement(Connection connection, Long id) throws SQLException {
+    protected PreparedStatement getFindByIdStatement(Connection connection, Long id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY);
         preparedStatement.setLong(1, id);
         return preparedStatement;
     }
 
     @Override
-    PreparedStatement getFindAllStatement(Connection connection) throws SQLException {
+    protected PreparedStatement getFindAllStatement(Connection connection) throws SQLException {
         return connection.prepareStatement(FIND_ALL_QUERY);
     }
 
@@ -159,7 +168,7 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
     }
 
     @Override
-    Test extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
+    protected Test extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
         Test test = new Test();
         if (resultSet.next()) {
             test.setId(resultSet.getLong("t.test_id"));
@@ -169,8 +178,7 @@ public class TestDAOImpl extends AbstractDAOImpl<Test> implements TestDAO {
         return test;
     }
 
-    @Override
-    Set<Test> extractSetOfEntityFromResultSet(ResultSet resultSet) throws SQLException {
-        return super.extractSetOfEntityFromResultSet(resultSet);
+    private static class TestDAOMySQLImplHolder {
+        private final static TestDAOMySQLImpl INSTANCE = new TestDAOMySQLImpl();
     }
 }

@@ -13,19 +13,20 @@ public class ConnectionSource {
 
 
     private static final String JNDI_DATA_SOURCE = "java:comp/env/jdbc/studentTest";
-    private static final String QUERY_PROPERTIES_LOCATION = "mySQL/queries.properties";
+//    private static final String QUERY_PROPERTIES_LOCATION = "mySQL/queries.properties";
     private static ThreadLocal<Connection> threadLocalConnection = new ThreadLocal<>();
     private static DataSource dataSource;
 
-    private ConnectionSource() {
-        initialConnection();
+    static {
+        try {
+            Context ctx = new InitialContext();
+            dataSource = (javax.sql.DataSource) ctx.lookup(JNDI_DATA_SOURCE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public static ConnectionSource getInstance() {
-        return DataSourceHolder.INSTANCE;
-    }
-
-    public static void bindConnection() {
+   static public void bindConnection() {
         try {
             if (threadLocalConnection.get() == null)
                 threadLocalConnection.set(dataSource.getConnection());
@@ -48,16 +49,7 @@ public class ConnectionSource {
         }
     }
 
-    private void initialConnection() {
-        try {
-            Context ctx = new InitialContext();
-            dataSource = (javax.sql.DataSource) ctx.lookup(JNDI_DATA_SOURCE);
-        } catch (NamingException e) {
-            throw new ConnectionException("Couldn't initial connection", e);
-        }
-    }
-
-    private static class DataSourceHolder {
+    public static class DataSourceHolder {
         private static final ConnectionSource INSTANCE = new ConnectionSource();
     }
 }

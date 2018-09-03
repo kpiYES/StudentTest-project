@@ -20,10 +20,5 @@ public interface QuestionDAO {
 
     Set<Question> findAllBySubjectIdWithPagination(Long id, int limit, int offset);
 
-
-
     Set<Question> findAllByTestId(Long id);
-
-    Set<Question> findAllByTestIdWithPagination(Long id, int limit, int offset);
-
 }

@@ -1,6 +1,7 @@
 package com.app.dao.mySQLImpl;
 
 import com.app.dao.QuestionDAO;
+import com.app.dao.connection.ConnectionSource;
 import com.app.exceptions.InteractionDBException;
 import com.app.model.Question;
 import com.app.model.Subject;
@@ -12,9 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
-public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements QuestionDAO {
+public class QuestionDAOMySQLImpl extends AbstractDAOMySQLImpl<Question> implements QuestionDAO {
 
-    private static final Logger logger = Logger.getLogger(QuestionDAOImpl.class);
+    private static final Logger logger = Logger.getLogger(QuestionDAOMySQLImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.question (question_id, subject_id, query, answer_1, answer_2, answer_3, answer_4, correct_answer) VALUES (NULL, ?, ?,?,?,?,?,?)";
 
@@ -32,11 +33,16 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
 
     private static final String FIND_ALL_BY_TEST_ID_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer FROM studenttest_app.question q INNER JOIN studenttest_app.subject s ON q.subject_id = s.subject_id INNER JOIN studenttest_app.test_question tq ON q.question_id = tq.question_id WHERE tq.test_id = ?";
 
-    private static final String FIND_ALL_BY_TEST_ID_WITH_PAGINATION_QUERY = "SELECT q.question_id, q.subject_id, s.name, q.query, q.answer_1, q.answer_2, q.answer_3, q.answer_4, q.correct_answer FROM studenttest_app.question q INNER JOIN studenttest_app.subject s ON q.subject_id = s.subject_id INNER JOIN studenttest_app.test_question tq ON q.question_id = tq.question_id WHERE tq.test_id = ? LIMIT ? OFFSET ?";
+    private QuestionDAOMySQLImpl() {
+    }
 
+    public static QuestionDAOMySQLImpl getInstance() {
+        return QuestionDAOMySQLImplHolder.INSTANCE;
+    }
 
     @Override
     public Set<Question> findAllBySubjectIdWithPagination(Long id, int limit, int offset) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getFindAllBySubjectIdWithPaginationStatement(connection, id, limit, offset);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractSetOfEntityFromResultSet(resultSet);
@@ -48,6 +54,7 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
 
     @Override
     public Set<Question> findAllBySubjectId(Long id) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getFindAllBySubjectIdStatement(connection, id);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractSetOfEntityFromResultSet(resultSet);
@@ -59,6 +66,7 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
 
     @Override
     public Set<Question> findAllByTestId(Long id) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getFindAllByTestIdStatement(connection, id);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractSetOfEntityFromResultSet(resultSet);
@@ -68,35 +76,14 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
         }
     }
 
-    @Override
-    public Set<Question> findAllByTestIdWithPagination(Long id, int limit, int offset) {
-        try (PreparedStatement preparedStatement = getFindAllByTestIdWithPaginationStatement(connection, id, limit, offset);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            return extractSetOfEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
-            logger.error("InteractionDBException:Couldn't find Question Set by Test Id with pagination");
-            throw new InteractionDBException("Couldn't find Question Set by Test Id with pagination", e);
-        }
-    }
-
-
     private PreparedStatement getFindAllByTestIdStatement(Connection connection, Long id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_TEST_ID_QUERY);
         preparedStatement.setLong(1, id);
         return preparedStatement;
     }
 
-    private PreparedStatement getFindAllByTestIdWithPaginationStatement(Connection connection, Long id, int limit, int offset) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_TEST_ID_WITH_PAGINATION_QUERY, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        System.out.println(id + " " + limit + " " + offset);
-        preparedStatement.setLong(1, id);
-        preparedStatement.setInt(2, limit);
-        preparedStatement.setInt(3, offset);
-        return preparedStatement;
-    }
-
     @Override
-    PreparedStatement getInsertStatement(Connection connection, Question question) throws SQLException {
+    protected PreparedStatement getInsertStatement(Connection connection, Question question) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
         preparedStatement.setLong(1, question.getSubject().getId());
         preparedStatement.setString(2, question.getQuery());
@@ -109,7 +96,7 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
     }
 
     @Override
-    PreparedStatement getUpdateStatement(Connection connection, Question question) throws SQLException {
+    protected PreparedStatement getUpdateStatement(Connection connection, Question question) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY);
         preparedStatement.setLong(1, question.getSubject().getId());
         preparedStatement.setString(2, question.getQuery());
@@ -123,7 +110,7 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
     }
 
     @Override
-    PreparedStatement getDeleteStatement(Connection connection, Question question) throws SQLException {
+    protected PreparedStatement getDeleteStatement(Connection connection, Question question) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(DELETE_QUERY);
         preparedStatement.setLong(1, question.getId());
         preparedStatement.setLong(2, question.getSubject().getId());
@@ -137,14 +124,14 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
     }
 
     @Override
-    PreparedStatement getFindByIdStatement(Connection connection, Long question_id) throws SQLException {
+    protected PreparedStatement getFindByIdStatement(Connection connection, Long question_id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY);
         preparedStatement.setLong(1, question_id);
         return preparedStatement;
     }
 
     @Override
-    PreparedStatement getFindAllStatement(Connection connection) throws SQLException {
+    protected PreparedStatement getFindAllStatement(Connection connection) throws SQLException {
         return connection.prepareStatement(FIND_ALL_QUERY);
     }
 
@@ -163,7 +150,7 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
     }
 
     @Override
-    Question extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
+    protected Question extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
         Question question = new Question();
         if (resultSet.next()) {
             question.setId(resultSet.getLong("q.question_id"));
@@ -178,8 +165,7 @@ public class QuestionDAOImpl extends AbstractDAOImpl<Question> implements Questi
         return question;
     }
 
-    @Override
-    Set<Question> extractSetOfEntityFromResultSet(ResultSet resultSet) throws SQLException {
-        return super.extractSetOfEntityFromResultSet(resultSet);
+    private static class QuestionDAOMySQLImplHolder {
+        private final static QuestionDAOMySQLImpl INSTANCE = new QuestionDAOMySQLImpl();
     }
 }

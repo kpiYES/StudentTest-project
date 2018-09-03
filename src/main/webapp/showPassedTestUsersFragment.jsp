@@ -134,12 +134,10 @@
             </table>
         </div>
     </c:forEach>
+    <form>
+        <input type="hidden" name="command" value="showListOfPassedTestsUsersFragment">
+        <button name="subjectId" value="${sessionScope.passedTest.test.subject.id}">Back</button>
+    </form>
 </div>
-
-
-<form>
-    <input type="hidden" name="command" value="showListOfPassedTestsUsersFragment">
-    <button name="subjectId" value="${sessionScope.passedTest.test.subject.id}">Back</button>
-</form>
 </body>
 </html>

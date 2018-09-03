@@ -1,51 +1,41 @@
 package com.app.dao;
 
-import com.app.dao.connection.DAOConnection;
-import com.app.dao.connection.MySQLConnection;
 import com.app.dao.mySQLImpl.*;
-import com.app.exceptions.InteractionDBException;
-import com.app.dao.connection.ConnectionSource;
-
-import java.sql.Connection;
 
 public class MySQLFactory extends DAOFactory {
 
-
-    private ConnectionSource connectionSource = ConnectionSource.getInstance();
-
-
     @Override
     public UserDAO getUserDAO() {
-        return new UserDAOImpl();
+        return UserDAOMySQLImpl.getInstance();
     }
 
     @Override
     public TestDAO getTestDAO() {
-        return new TestDAOImpl();
+        return TestDAOMySQLImpl.getInstance();
     }
 
     @Override
     public SubjectDAO getSubjectDAO() {
-        return new SubjectDAOImpl();
+        return SubjectDAOMySQLImpl.getInstance();
     }
 
     @Override
     public RoleDAO getRoleDAO() {
-        return new RoleDAOImpl();
+        return RoleDAOMySQLImpl.getInstance();
     }
 
     @Override
     public PassedTestDAO getPassedTestDAO() {
-        return new PassedTestDAOImpl();
+        return PassedTestDAOMySQLImpl.getInstance();
     }
 
     @Override
     public PassedQuestionDAO getPassedQuestionDAO() {
-        return new PassedQuestionDAOImpl();
+        return PassedQuestionDAOMySQLImpl.getInstance();
     }
 
     @Override
     public QuestionDAO getQuestionDAO() {
-        return new QuestionDAOImpl();
+        return QuestionDAOMySQLImpl.getInstance();
     }
 }

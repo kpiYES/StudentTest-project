@@ -9,7 +9,6 @@ import java.sql.SQLException;
 
 public class TransactionManager {
 
-
     public static void beginTransaction() {
         try {
             ConnectionSource.getConnection().setAutoCommit(false);

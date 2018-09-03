@@ -17,8 +17,9 @@ public class ServletDispatcher extends HttpServlet {
     protected void processRequest(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         CommandHelper commandHelper = new CommandHelper();
-        Command command = commandHelper.chooseCommand(req);
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher(command.execute(req, resp));
+        String page = commandHelper.startCommand(req, resp);
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher(page);
+
         if ((req.getAttribute("redirect"))!=null) {
             resp.sendRedirect((String) req.getAttribute("redirect"));
         }

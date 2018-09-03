@@ -17,8 +17,6 @@
 </head>
 <body>
 <c:import url="headerFragment.jsp"/>
-<c:set var="currentURL" value="${pageContext.request.requestURL}"/>
-<c:out value="${currentURL}"/>
 <div>
     <div class="admin_right_menu">
         <div class="admin_item_menu">
@@ -28,16 +26,14 @@
             <a href="dispatcher?command=showListOfSubjectsPassedTestsFragment">My passed tests </a>
         </div>
     </div>
-<div class="vertical-menus-block">
-    <c:if test="${requestScope.pageFragment!=null}">
-        <c:import url="${requestScope.pageFragment}"/>
+    <div class="vertical-menus-block">
+        <c:if test="${requestScope.pageFragment!=null}">
+            <c:import url="${requestScope.pageFragment}"/>
+        </c:if>
+    </div>
+    <c:if test="${requestScope.subSubPageFragment!=null}">
+        <c:import url="${requestScope.subSubPageFragment}"/>
     </c:if>
 </div>
-    <c:if test="${requestScope.subSubPageFragment!=null}">
-    <c:import url="${requestScope.subSubPageFragment}"/>
-    </c:if>
-    </div>
-
-
 </body>
 </html>

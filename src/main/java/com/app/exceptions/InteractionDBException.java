@@ -9,5 +9,4 @@ public class InteractionDBException extends RuntimeException {
     public InteractionDBException(final String s) {
         super(s);
     }
-
 }

@@ -5,8 +5,6 @@ import com.app.dto.UserDTO;
 import com.app.model.User;
 import com.app.service.ServiceFactory;
 import com.app.service.UserService;
-import com.app.service.impl.UserServiceImpl;
-import com.sun.org.apache.xpath.internal.SourceTree;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +16,7 @@ public class LogInCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-
+        System.out.println("COMMAND");
         User user = userService.findByMail(request.getParameter("email"));
 
         if (user.getMail() == null || !userService.validateUserPassword(request.getParameter("password"), user)) {

@@ -1,6 +1,7 @@
 package com.app.dao.mySQLImpl;
 
 import com.app.dao.UserDAO;
+import com.app.dao.connection.ConnectionSource;
 import com.app.exceptions.InteractionDBException;
 import com.app.model.Role;
 import com.app.model.User;
@@ -10,11 +11,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Set;
 
-public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
+public class UserDAOMySQLImpl extends AbstractDAOMySQLImpl<User> implements UserDAO {
 
-    private static final Logger logger = Logger.getLogger(UserDAOImpl.class);
+    private static final Logger logger = Logger.getLogger(UserDAOMySQLImpl.class);
 
     private static final String INSERT_QUERY = "INSERT INTO studenttest_app.user (user_id, role_id, first_name, last_name, mail, salt, hash) VALUES (NULL, ?, ?,?,?,?,?)";
 
@@ -28,9 +28,16 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
 
     private static final String FIND_BY_EMAIL_QUERY = "SELECT u.user_id, u.role_id, r.name, u.first_name, u.last_name, u.mail, u.salt, u.hash FROM studenttest_app.user u INNER JOIN studenttest_app.role r ON u.role_id = r.role_id WHERE u.mail = ?";
 
+    private UserDAOMySQLImpl() {
+    }
+
+    public static UserDAOMySQLImpl getInstance() {
+        return UserDAOMySQLImplHolder.INSTANCE;
+    }
 
     @Override
     public User findByMail(String mail) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getFindByMailStatement(connection, mail);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractEntityFromResultSet(resultSet);
@@ -41,7 +48,7 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
     }
 
     @Override
-    PreparedStatement getInsertStatement(Connection connection, User user) throws SQLException {
+    protected PreparedStatement getInsertStatement(Connection connection, User user) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
         preparedStatement.setLong(1, user.getRole().getId());
         preparedStatement.setString(2, user.getFirstName());
@@ -53,7 +60,7 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
     }
 
     @Override
-    PreparedStatement getUpdateStatement(Connection connection, User user) throws SQLException {
+    protected PreparedStatement getUpdateStatement(Connection connection, User user) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY);
         preparedStatement.setLong(1, user.getRole().getId());
         preparedStatement.setString(2, user.getFirstName());
@@ -66,7 +73,7 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
     }
 
     @Override
-    PreparedStatement getDeleteStatement(Connection connection, User user) throws SQLException {
+    protected PreparedStatement getDeleteStatement(Connection connection, User user) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(DELETE_QUERY);
         preparedStatement.setLong(1, user.getId());
         preparedStatement.setLong(2, user.getRole().getId());
@@ -77,14 +84,14 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
     }
 
     @Override
-    PreparedStatement getFindByIdStatement(Connection connection, Long user_id) throws SQLException {
+    protected PreparedStatement getFindByIdStatement(Connection connection, Long user_id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_QUERY);
         preparedStatement.setLong(1, user_id);
         return preparedStatement;
     }
 
     @Override
-    PreparedStatement getFindAllStatement(Connection connection) throws SQLException {
+    protected PreparedStatement getFindAllStatement(Connection connection) throws SQLException {
         return connection.prepareStatement(FIND_ALL_QUERY);
     }
 
@@ -95,7 +102,7 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
     }
 
     @Override
-    User extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
+    protected User extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
         User user = new User();
         if (resultSet.next()) {
             user.setId(resultSet.getLong("u.user_id"));
@@ -109,8 +116,8 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
         return user;
     }
 
-    @Override
-    Set<User> extractSetOfEntityFromResultSet(ResultSet resultSet) throws SQLException {
-        return super.extractSetOfEntityFromResultSet(resultSet);
+    private static class UserDAOMySQLImplHolder {
+        private final static UserDAOMySQLImpl INSTANCE = new UserDAOMySQLImpl();
     }
+
 }

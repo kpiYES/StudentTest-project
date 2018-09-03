@@ -5,7 +5,6 @@ import com.app.dao.connection.ConnectionSource;
 import com.app.exceptions.InteractionDBException;
 import org.apache.log4j.Logger;
 
-import javax.sql.DataSource;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,10 +13,9 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class AbstractDAOImpl<T extends Serializable> implements AbstractDAO<T> {
+public abstract class AbstractDAOMySQLImpl<T extends Serializable> implements AbstractDAO<T> {
 
-    private static final Logger logger = Logger.getLogger(AbstractDAOImpl.class);
-
+    private static final Logger logger = Logger.getLogger(AbstractDAOMySQLImpl.class);
 
     @Override
     public Long insert(T entity) {
@@ -25,8 +23,8 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
         try (PreparedStatement preparedStatement = getInsertStatement(connection, entity)) {
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
-                resultSet.next();
-                return resultSet.getLong(1);
+            resultSet.next();
+            return resultSet.getLong(1);
         } catch (SQLException e) {
             logger.error("InteractionDBException:Couldn't insert entity");
             throw new InteractionDBException("Couldn't insert entity", e);
@@ -35,6 +33,7 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
 
     @Override
     public void update(T entity) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getUpdateStatement(connection, entity)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -46,6 +45,7 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
 
     @Override
     public void delete(T entity) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getDeleteStatement(connection, entity)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -56,6 +56,7 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
 
     @Override
     public T findById(Long id) {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getFindByIdStatement(connection, id);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractEntityFromResultSet(resultSet);
@@ -67,6 +68,7 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
 
     @Override
     public Set<T> findAll() {
+        Connection connection = ConnectionSource.getConnection();
         try (PreparedStatement preparedStatement = getFindAllStatement(connection);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             return extractSetOfEntityFromResultSet(resultSet);
@@ -76,19 +78,19 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
         }
     }
 
-   abstract PreparedStatement getUpdateStatement(Connection connection, T entity) throws SQLException;
+    protected abstract PreparedStatement getUpdateStatement(Connection connection, T entity) throws SQLException;
 
-    abstract PreparedStatement getInsertStatement(Connection connection, T entity) throws SQLException;
+    protected abstract PreparedStatement getInsertStatement(Connection connection, T entity) throws SQLException;
 
-    abstract PreparedStatement getDeleteStatement(Connection connection, T entity) throws SQLException;
+    protected abstract PreparedStatement getDeleteStatement(Connection connection, T entity) throws SQLException;
 
-    abstract PreparedStatement getFindByIdStatement(Connection connection, Long entity_id) throws SQLException;
+    protected abstract PreparedStatement getFindByIdStatement(Connection connection, Long entity_id) throws SQLException;
 
-    abstract PreparedStatement getFindAllStatement(Connection connection) throws SQLException;
+    protected abstract PreparedStatement getFindAllStatement(Connection connection) throws SQLException;
 
-    abstract T extractEntityFromResultSet(ResultSet resultSet) throws SQLException;
+    protected abstract T extractEntityFromResultSet(ResultSet resultSet) throws SQLException;
 
-    Set<T> extractSetOfEntityFromResultSet(ResultSet resultSet) throws SQLException {
+    protected Set<T> extractSetOfEntityFromResultSet(ResultSet resultSet) throws SQLException {
         Set<T> entitySet = new HashSet<>();
         while (resultSet.next()) {
             resultSet.previous();

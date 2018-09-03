@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 public class ToShowUserFragmentCommand implements Command {
+
     private UserService userService = ServiceFactory.getUserService();
     private RoleService roleService = ServiceFactory.getRoleService();
-
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

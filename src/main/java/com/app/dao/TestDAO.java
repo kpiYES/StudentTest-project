@@ -20,5 +20,4 @@ public interface TestDAO {
     Set<Test> findAllBySubjectId(Long id);
 
     Set<Test> findAllByQuestionId(Long id);
-
 }

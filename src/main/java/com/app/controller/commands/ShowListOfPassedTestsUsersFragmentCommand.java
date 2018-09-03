@@ -21,5 +21,6 @@ public class ShowListOfPassedTestsUsersFragmentCommand implements Command {
         request.getSession().setAttribute("passedTestSet", passedTestSet);
         request.setAttribute("pageFragment", "showListOfSubjectsUsersFragment.jsp");
         request.setAttribute("subPageFragment", "showListOfPassedTestsUsersFragment.jsp");
-        return "admin.jsp";    }
+        return "admin.jsp";
+    }
 }

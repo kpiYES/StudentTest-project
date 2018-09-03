@@ -26,7 +26,6 @@ public class ShowQuestionQuestionsFragmentCommand implements Command {
         request.setAttribute("pageFragment", "showListOfSubjectsQuestionsFragment.jsp");
         request.setAttribute("subPageFragment", "showListOfQuestionsQuestionsFragment.jsp");
         request.setAttribute("subSubPageFragment", "showQuestionQuestionsFragment.jsp");
-
         return "admin.jsp";
     }
 }

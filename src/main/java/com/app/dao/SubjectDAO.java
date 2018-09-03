@@ -15,6 +15,4 @@ public interface SubjectDAO {
     Subject findById(Long subject_id);
 
     Set<Subject> findAll();
-
-    Subject findByName(String name);
 }

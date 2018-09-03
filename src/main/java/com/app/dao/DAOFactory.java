@@ -1,9 +1,6 @@
 package com.app.dao;
 
-
-import com.app.dao.connection.DAOConnection;
 import com.app.exceptions.InteractionDBException;
-import com.app.model.PassedTest;
 
 public abstract class DAOFactory {
 

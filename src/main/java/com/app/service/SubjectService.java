@@ -4,18 +4,10 @@ import com.app.model.Subject;
 
 import java.util.Set;
 
-public interface SubjectService extends Service {
-
-    Long insert(Subject subject);
-
-    void update(Subject subject);
-
-    void delete(Subject subject);
+public interface SubjectService {
 
     Subject findById(Long id);
 
     Set<Subject> findAll();
-
-    Subject findByName(String name);
 
 }

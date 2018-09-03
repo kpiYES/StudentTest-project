@@ -21,9 +21,8 @@ public class ShowTestTestsFragmentCommand implements Command {
         Test test = testService.findById(Long.parseLong(request.getParameter("testId")));
         Set<Question> questionSet = questionService.findAllByTestId(test.getId());
         test.setQuestionSet(questionSet);
-        request.getSession().setAttribute("test",test);
+        request.getSession().setAttribute("test", test);
         request.setAttribute("pageFragment", "showTestTestsFragment.jsp");
-
         return "admin.jsp";
     }
 }

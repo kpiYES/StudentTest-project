@@ -4,18 +4,6 @@ import com.app.service.impl.*;
 
 public class ServiceFactory {
 
-    private static ServiceFactory instance;
-
-    private ServiceFactory() {
-    }
-
-    public static ServiceFactory getInstance() {
-        if (instance == null) {
-            instance = new ServiceFactory();
-        }
-        return instance;
-    }
-
     public static UserService getUserService() {
         return UserServiceImpl.getInstance();
     }
@@ -41,4 +29,5 @@ public class ServiceFactory {
     }
 
     public static PassedQuestionService getPassedQuestionService() {return PassedQuestionServiceImpl.getInstance();}
+
 }

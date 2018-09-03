@@ -21,7 +21,6 @@ public class CreateQuestionCommand implements Command {
             return "admin.jsp";
         }
 
-
         Question question = new Question();
         question.setSubject((Subject) request.getSession().getAttribute("subject"));
         question.setQuery(request.getParameter("query"));
