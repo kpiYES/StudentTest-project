@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class TestMarkRating {
 
-
     public static Integer toRateMark(Map<Long, String> answersMap) {
 
         QuestionService questionService = ServiceFactory.getQuestionService();

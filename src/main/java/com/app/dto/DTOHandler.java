@@ -1,5 +1,6 @@
 package com.app.dto;
 
+import com.app.model.PassedTest;
 import com.app.model.User;
 
 import java.util.HashSet;
@@ -8,13 +9,18 @@ import java.util.Set;
 public class DTOHandler {
 
     public static UserDTO constructUserDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setMail(user.getMail());
-        userDTO.setRole(user.getRole());
-        return userDTO;
+        return UserDTO.newBuilder().id(user.getId()).
+                firstName(user.getFirstName()).lastName(user.getLastName()).
+                mail(user.getMail()).role(user.getRole()).build();
+    }
+
+    public static PassedTestDTO constructPassedTestDTO(PassedTest passedTest) {
+        PassedTestDTO passedTestDTO = new PassedTestDTO();
+        passedTestDTO.setId(passedTest.getId());
+        passedTestDTO.setUser(DTOHandler.constructUserDTO(passedTest.getUser()));
+        passedTestDTO.setTest(passedTest.getTest());
+        passedTestDTO.setMark(passedTest.getMark());
+        return passedTestDTO;
     }
 
     public static User constructUser(UserDTO userDTO) {

@@ -22,12 +22,12 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Subject findById(Long id) {
-            return subjectDAO.findById(id);
-        }
+        return subjectDAO.findById(id);
+    }
 
     @Override
     public Set<Subject> findAll() {
-            return subjectDAO.findAll();
+        return subjectDAO.findAll();
     }
 
     private static class SubjectServiceImplHolder {

@@ -22,7 +22,7 @@
 <div class="header">
     <div class="header_hello">
         <h2>Welcome <ut:myTag firstName="${sessionScope.currentUser.firstName}"
-                      lastName="${sessionScope.currentUser.lastName}"/></h2>
+                              lastName="${sessionScope.currentUser.lastName}"/></h2>
     </div>
     <div class="header_menu">
         <ul>

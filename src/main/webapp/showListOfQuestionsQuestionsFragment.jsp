@@ -14,23 +14,24 @@
 </head>
 <body>
 <div>
-<div class="vertical-menu">
-    <p class="list-title"><c:out value="${sessionScope.subject.name}"/></p>
+    <div class="vertical-menu">
+        <p class="list-title"><c:out value="${sessionScope.subject.name}"/></p>
 
-    <ul class="scroll-list">
-        <c:forEach var="question" items="${sessionScope.questionSet}">
-            <li>
-                <a href="dispatcher?command=showQuestionQuestionsFragment&questionId=${question.id}"><c:out value="${question.query}"/></a>
-            </li>
-        </c:forEach>
-    </ul>
-</div>
+        <ul class="scroll-list">
+            <c:forEach var="question" items="${sessionScope.questionSet}">
+                <li>
+                    <a href="dispatcher?command=showQuestionQuestionsFragment&questionId=${question.id}"><c:out
+                            value="${question.query}"/></a>
+                </li>
+            </c:forEach>
+        </ul>
+    </div>
 
-<div>
-    <form action="dispatcher" method="get">
-        <button name="command" value="createQuestionQuestionsFragment">Create new question</button>
-    </form>
-</div>
+    <div>
+        <form action="dispatcher" method="get">
+            <button name="command" value="createQuestionQuestionsFragment">Create new question</button>
+        </form>
+    </div>
 </div>
 
 

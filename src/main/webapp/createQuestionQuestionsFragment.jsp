@@ -6,7 +6,7 @@
   Time: 22:05
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title>Title</title>
@@ -28,7 +28,7 @@
             <option value="answer3">Answer 3</option>
             <option value="answer4">Answer 4</option>
         </select>
-        <input type="hidden" name="command" value="createQuestion" >
+        <input type="hidden" name="command" value="createQuestion">
         <input type="submit" value="Create question">
     </form>
 </div>

@@ -1,8 +1,5 @@
 package com.app.controller;
 
-import com.app.controller.commands.Command;
-import org.apache.log4j.Logger;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,18 +9,15 @@ import java.io.IOException;
 
 public class ServletDispatcher extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(ServletDispatcher.class);
-
     protected void processRequest(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         CommandHelper commandHelper = new CommandHelper();
         String page = commandHelper.startCommand(req, resp);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher(page);
 
-        if ((req.getAttribute("redirect"))!=null) {
+        if ((req.getAttribute("redirect")) != null) {
             resp.sendRedirect((String) req.getAttribute("redirect"));
-        }
-        else {
+        } else {
             requestDispatcher.forward(req, resp);
         }
     }

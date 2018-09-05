@@ -19,7 +19,6 @@ public class ShowTestToPassTestFragmentCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-//        Test test = testService.findByIdWithQuestions(Long.parseLong(request.getParameter("testId")));
         Test test = testService.findById(Long.parseLong(request.getParameter("testId")));
         Set<Question> questionSet = questionService.findAllByTestId(test.getId());
         test.setQuestionSet(questionSet);

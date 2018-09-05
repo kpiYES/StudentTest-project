@@ -18,16 +18,16 @@
     <p class="list-title">Tests</p>
 
 
-        <ul class="scroll-list">
-            <c:forEach var="test" items="${sessionScope.testSet}">
-                <li>
-                    <a href="dispatcher?command=showTestTestsFragment&testId=${test.id}"><c:out
-                            value="${test.name}"/></a>
-                </li>
-            </c:forEach>
-        </ul>
+    <ul class="scroll-list">
+        <c:forEach var="test" items="${sessionScope.testSet}">
+            <li>
+                <a href="dispatcher?command=showTestTestsFragment&testId=${test.id}"><c:out
+                        value="${test.name}"/></a>
+            </li>
+        </c:forEach>
+    </ul>
 
-    </div>
+</div>
 <div>
     <form action="dispatcher" method="get">
         <button name="command" value="createTestTestsFragment">Create new test</button>

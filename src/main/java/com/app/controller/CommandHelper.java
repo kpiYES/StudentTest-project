@@ -1,6 +1,11 @@
 package com.app.controller;
 
 import com.app.controller.commands.*;
+import com.app.controller.commands.admin.*;
+import com.app.controller.commands.general.LocaleCommand;
+import com.app.controller.commands.general.LogInCommand;
+import com.app.controller.commands.general.LogOutCommand;
+import com.app.controller.commands.general.RegistrationCommand;
 import com.app.controller.commands.student.*;
 import com.app.dao.connection.ConnectionSource;
 import com.app.exceptions.UnsupportedCommandException;
@@ -39,35 +44,33 @@ public class CommandHelper {
         commandsMap.put("showListOfTestsToPassTestFragment", new ShowListOfTestsToPassTestFragmentCommand());
         commandsMap.put("showTestToPassTestFragment", new ShowTestToPassTestFragmentCommand());
         commandsMap.put("passTestToPassTestFragment", new PassTestToPassTestFragmentCommand());
-        commandsMap.put("finishPassingToPassTestFragment", new FinishPassingToPassTestFragmentCommand());
         commandsMap.put("toStudentPage", new ToStudentPageCommand());
         commandsMap.put("showPassedTest", new ShowPassedTestCommand());
         commandsMap.put("showListOfPassedTestsFragment", new ShowListOfPassedTestsFragmentCommand());
         commandsMap.put("showListOfSubjectsPassedTestsFragment", new ShowListOfSubjectsPassedTestsFragmentCommand());
-        commandsMap.put("finishCreatingTestTestsFragment", new FinishCreatingTestTestsFragmentCommand());
         commandsMap.put("showListOfSubjectsUsersFragment", new ShowListOfSubjectsUsersFragmentCommand());
         commandsMap.put("showListOfPassedTestsUsersFragment", new ShowListOfPassedTestsUsersFragmentCommand());
         commandsMap.put("showPassedTestUsersFragment", new ShowPassedTestUsersFragmentCommand());
     }
 
     Command chooseCommand(HttpServletRequest request, HttpServletResponse response) {
-        final String commandSignature = (String) request.getAttribute("command");
+        final String commandSignature = request.getParameter("command");
         if (!commandsMap.containsKey(commandSignature)) {
             throw new UnsupportedCommandException(commandSignature);
         }
         return commandsMap.get(commandSignature);
     }
 
-    String startCommand(HttpServletRequest request, HttpServletResponse response){
+    String startCommand(HttpServletRequest request, HttpServletResponse response) {
         Command command = chooseCommand(request, response);
-        String result = null;
+        String page;
         try {
             ConnectionSource.bindConnection();
-            result = command.execute(request, response);
-        }finally {
+            page = command.execute(request, response);
+        } finally {
             ConnectionSource.unbindConnection();
         }
-        return result;
+        return page;
     }
 }
 

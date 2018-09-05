@@ -30,6 +30,7 @@ public class PassedQuestionServiceImpl implements PassedQuestionService {
     public List<Long> insertAll(Set<PassedQuestion> passedQuestionSet) {
         return passedQuestionDAO.insertAll(passedQuestionSet);
     }
+
     @Override
     public Set<PassedQuestion> findAllByPassedTestId(Long id) {
         return passedQuestionDAO.findAllByPassedTestId(id);

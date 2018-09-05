@@ -7,7 +7,6 @@ import java.io.IOException;
 
 public class UserNameTag extends TagSupport {
 
-
     private String firstName;
     private String lastName;
 
@@ -21,10 +20,10 @@ public class UserNameTag extends TagSupport {
 
     @Override
     public int doStartTag() throws JspException {
-        try{
+        try {
             JspWriter out = pageContext.getOut();
-            out.write(firstName +" "+ lastName);
-        }catch (IOException e){
+            out.write(firstName + " " + lastName);
+        } catch (IOException e) {
 
         }
         return SKIP_BODY;

@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-    
+
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>com.app.controller.ServletDispatcher</servlet-class>
@@ -17,7 +17,11 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
+    <error-page>
+        <location>/errorPage.jsp</location>
+    </error-page>
     <resource-ref>
+
         <description>DB Connection</description>
         <res-ref-name>jdbc/studentTest</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
@@ -28,19 +32,10 @@
         <filter-name>AuthenticationFilter</filter-name>
         <filter-class>com.app.controller.filter.AuthenticationFilter</filter-class>
     </filter>
+
     <filter-mapping>
-        <filter-name>AuthenticationFilter </filter-name>
+        <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/dispatcher</url-pattern>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>CommandFilter</filter-name>
-        <filter-class>com.app.controller.filter.CommandFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>CommandFilter</filter-name>
-        <url-pattern>/*</url-pattern>
     </filter-mapping>
 
     <filter>

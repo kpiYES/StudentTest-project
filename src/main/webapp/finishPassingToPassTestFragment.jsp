@@ -137,11 +137,11 @@
 
     </c:forEach>
 
-<form method="get" action="dispatcher">
-    <p>The result of the passed test was sent to the e-mail you specified.</p>
+    <form method="get" action="dispatcher">
+        <p>The result of the passed test was sent to the e-mail you specified.</p>
         <input type="hidden" name="command" value="toStudentPage">
-    <input type="submit" value="OK">
-</form>
+        <input type="submit" value="OK">
+    </form>
 
 </div>
 </body>

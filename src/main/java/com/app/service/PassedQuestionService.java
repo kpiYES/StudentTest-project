@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 public interface PassedQuestionService {
+
     List<Long> insertAll(Set<PassedQuestion> passedQuestionSet);
 
     Set<PassedQuestion> findAllByPassedTestId(Long id);

@@ -1,5 +1,6 @@
 package com.app.service;
 
+import com.app.model.Subject;
 import com.app.model.Test;
 
 import java.util.Set;
@@ -14,6 +15,11 @@ public interface TestService {
 
     Set<Test> findAllBySubjectId(Long id);
 
-    Set<Test> getFindAllByQuestionId(Long id);
+    Set<Test> findAllByQuestionId(Long id);
+
+    Test findByIdWithQuestions(Long id);
+
+    Test create(Set<Long> chosenQuestionsIdSet, Subject subject, String testName);
+
 
 }

@@ -20,15 +20,14 @@ public class RoleServiceImpl implements RoleService {
         return RoleServiceImplHolder.INSTANCE;
     }
 
-
     @Override
     public Set<Role> findAll() {
-            return roleDAO.findAll();
-        }
+        return roleDAO.findAll();
+    }
 
     @Override
     public Role findByName(String name) {
-            return roleDAO.findByName(name);
+        return roleDAO.findByName(name);
     }
 
     private static class RoleServiceImplHolder {

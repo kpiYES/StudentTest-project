@@ -6,7 +6,7 @@
   Time: 12:55
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title>Title</title>
@@ -17,7 +17,8 @@
     <ul class="scroll-list">
         <c:forEach var="passedTest" items="${sessionScope.passedTestSet}">
             <li>
-                <a href="dispatcher?command=showPassedTestUsersFragment&passedTestId=${passedTest.id}"><c:out value="${passedTest.test.name}"/></a>
+                <a href="dispatcher?command=showPassedTestUsersFragment&passedTestId=${passedTest.id}"><c:out
+                        value="${passedTest.test.name}"/></a>
             </li>
         </c:forEach>
     </ul>

@@ -5,8 +5,6 @@ import com.app.exceptions.InteractionDBException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-
-
 public class TransactionManager {
 
     public static void beginTransaction() {

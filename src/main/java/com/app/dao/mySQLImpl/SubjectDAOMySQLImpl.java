@@ -1,8 +1,6 @@
 package com.app.dao.mySQLImpl;
 
 import com.app.dao.SubjectDAO;
-import com.app.dao.connection.ConnectionSource;
-import com.app.exceptions.InteractionDBException;
 import com.app.model.Subject;
 import org.apache.log4j.Logger;
 

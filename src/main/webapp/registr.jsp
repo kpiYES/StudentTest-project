@@ -40,7 +40,7 @@
             <input type="password" name="confirmPassword" id="confirmPassword" size="30" required minlength="8">
         </div>
         <div class="field-form">
-        <input type="submit" id="submit" value="Submit">
+            <input type="submit" id="submit" value="Submit">
         </div>
     </form>
     <c:if test="${requestScope.errorMsg!=null}">

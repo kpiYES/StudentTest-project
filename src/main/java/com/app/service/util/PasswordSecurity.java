@@ -23,17 +23,17 @@ public class PasswordSecurity {
             byte[] hash = pbkdf2(chars, salt, HASH_BYTES);
             return toHex(salt) + ":" + toHex(hash);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-           throw  new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 
-    public static String getHashFromSaltedHash(String saltedPassword){
+    public static String getHashFromSaltedHash(String saltedPassword) {
         String[] strings = saltedPassword.split(":");
         return strings[1];
     }
 
-    public static String getSaltFromSaltedHash(String saltedPassword){
-       String[] strings = saltedPassword.split(":");
+    public static String getSaltFromSaltedHash(String saltedPassword) {
+        String[] strings = saltedPassword.split(":");
         return strings[0];
     }
 

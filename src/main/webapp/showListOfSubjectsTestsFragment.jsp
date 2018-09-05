@@ -16,18 +16,18 @@
 
 
 <div>
-<div class="vertical-menu">
-    <p class="list-title">Subjects</p>
+    <div class="vertical-menu">
+        <p class="list-title">Subjects</p>
 
-    <ul>
-        <c:forEach var="subject" items="${sessionScope.subjectSet}">
-            <li>
-                <a href="dispatcher?command=showListOfTestsTestsFragment&subjectId=${subject.id}"><c:out
-                        value="${subject.name}"/></a>
-            </li>
-        </c:forEach>
-    </ul>
-</div>
+        <ul>
+            <c:forEach var="subject" items="${sessionScope.subjectSet}">
+                <li>
+                    <a href="dispatcher?command=showListOfTestsTestsFragment&subjectId=${subject.id}"><c:out
+                            value="${subject.name}"/></a>
+                </li>
+            </c:forEach>
+        </ul>
+    </div>
 </div>
 <c:if test="${requestScope.subPageFragment!=null}">
     <c:import url="${requestScope.subPageFragment}"/>

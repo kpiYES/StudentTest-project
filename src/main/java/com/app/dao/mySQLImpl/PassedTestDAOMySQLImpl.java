@@ -26,8 +26,6 @@ public class PassedTestDAOMySQLImpl extends AbstractDAOMySQLImpl<PassedTest> imp
 
     private static final String FIND_ALL_QUERY = "SELECT pt.passed_test_id, pt.user_id, u.role_id, u.first_name, u.last_name, u.mail, u.salt, u.hash, r.name,  pt.test_id, t.subject_id, s.name, t.name, pt.mark FROM studenttest_app.passed_test pt INNER JOIN studenttest_app.user u ON pt.user_id = u.user_id INNER JOIN studenttest_app.role r ON u.role_id = r.role_id INNER JOIN studenttest_app.test t ON pt.test_id = t.test_id INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id";
 
-    private static final String FIND_BY_USER_ID_QUERY = "SELECT pt.passed_test_id, pt.user_id, u.role_id, u.first_name, u.last_name, u.mail, u.salt, u.hash, r.name,  pt.test_id, t.subject_id, s.name, t.name, pt.mark FROM studenttest_app.passed_test pt INNER JOIN studenttest_app.user u ON pt.user_id = u.user_id INNER JOIN studenttest_app.role r ON u.role_id = r.role_id INNER JOIN studenttest_app.test t ON pt.test_id = t.test_id INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id WHERE pt.user_id = ?";
-
     private static final String FIND_BY_USER_ID_AND_SUBJECT_ID_QUERY = "SELECT pt.passed_test_id, pt.user_id, u.role_id, u.first_name, u.last_name, u.mail, u.salt, u.hash, r.name,  pt.test_id, t.subject_id, s.name, t.name, pt.mark FROM studenttest_app.passed_test pt INNER JOIN studenttest_app.user u ON pt.user_id = u.user_id INNER JOIN studenttest_app.role r ON u.role_id = r.role_id INNER JOIN studenttest_app.test t ON pt.test_id = t.test_id INNER JOIN studenttest_app.subject s ON t.subject_id = s.subject_id WHERE pt.user_id = ? AND t.subject_id = ?";
 
     private PassedTestDAOMySQLImpl() {
@@ -35,18 +33,6 @@ public class PassedTestDAOMySQLImpl extends AbstractDAOMySQLImpl<PassedTest> imp
 
     public static PassedTestDAOMySQLImpl getInstance() {
         return PassedTestDAOMySQLImplHolder.INSTANCE;
-    }
-
-    @Override
-    public Set<PassedTest> findAllByUserId(Long id) {
-        Connection connection = ConnectionSource.getConnection();
-        try (PreparedStatement preparedStatement = getFindByUserIdStatement(connection, id);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            return extractSetOfEntityFromResultSet(resultSet);
-        } catch (SQLException e) {
-            logger.error("InteractionDBException:Couldn't find PassedTest by User Id");
-            throw new InteractionDBException("Couldn't find PassedTest by User Id", e);
-        }
     }
 
     @Override
@@ -102,12 +88,6 @@ public class PassedTestDAOMySQLImpl extends AbstractDAOMySQLImpl<PassedTest> imp
         return connection.prepareStatement(FIND_ALL_QUERY);
     }
 
-    private PreparedStatement getFindByUserIdStatement(Connection connection, Long id) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_USER_ID_QUERY);
-        preparedStatement.setLong(1, id);
-        return preparedStatement;
-    }
-
     private PreparedStatement getFindByUserIdAndSubjectIdStatement(Connection connection, Long userId, Long subjectId) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_USER_ID_AND_SUBJECT_ID_QUERY);
         preparedStatement.setLong(1, userId);
@@ -115,14 +95,17 @@ public class PassedTestDAOMySQLImpl extends AbstractDAOMySQLImpl<PassedTest> imp
         return preparedStatement;
     }
 
-    ///// Юзера доставать не полностью, для этого сделать билдер юзера
     @Override
     protected PassedTest extractEntityFromResultSet(ResultSet resultSet) throws SQLException {
         PassedTest passedTest = new PassedTest();
         if (resultSet.next()) {
             passedTest.setId(resultSet.getLong("pt.passed_test_id"));
-            passedTest.setUser(new User(resultSet.getLong("pt.user_id"), new Role(resultSet.getLong("u.role_id"), resultSet.getString("r.name")), resultSet.getString("u.first_name"), resultSet.getString("u.last_name"), resultSet.getString("u.mail"), resultSet.getString("u.salt"), resultSet.getString("u.hash")));
-            passedTest.setTest(new Test(resultSet.getLong("pt.test_id"), new Subject(resultSet.getLong("t.subject_id"), resultSet.getString("s.name")), resultSet.getString("t.name")));
+            passedTest.setUser(new User(resultSet.getLong("pt.user_id"), new Role(resultSet.getLong("u.role_id"),
+                    resultSet.getString("r.name")), resultSet.getString("u.first_name"),
+                    resultSet.getString("u.last_name"), resultSet.getString("u.mail"),
+                    resultSet.getString("u.salt"), resultSet.getString("u.hash")));
+            passedTest.setTest(new Test(resultSet.getLong("pt.test_id"), new Subject(resultSet.getLong("t.subject_id"),
+                    resultSet.getString("s.name")), resultSet.getString("t.name")));
             passedTest.setMark(resultSet.getInt("pt.mark"));
         }
         return passedTest;
@@ -131,5 +114,4 @@ public class PassedTestDAOMySQLImpl extends AbstractDAOMySQLImpl<PassedTest> imp
     private static class PassedTestDAOMySQLImplHolder {
         private final static PassedTestDAOMySQLImpl INSTANCE = new PassedTestDAOMySQLImpl();
     }
-
 }
